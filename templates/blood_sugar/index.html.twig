@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BloodSugar index{% endblock %}
+
+{% block body %}
+    <h1>BloodSugar index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Value</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for blood_sugar in blood_sugars %}
+            <tr>
+                <td>{{ blood_sugar.id }}</td>
+                <td>{{ blood_sugar.value }}</td>
+                <td>{{ blood_sugar.date ? blood_sugar.date|date('Y-m-d') : '' }}</td>
+                <td>{{ blood_sugar.time ? blood_sugar.time|date('H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_blood_sugar_show', {'id': blood_sugar.id}) }}">show</a>
+                    <a href="{{ path('app_blood_sugar_edit', {'id': blood_sugar.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_blood_sugar_new') }}">Create new</a>
+{% endblock %}

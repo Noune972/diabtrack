@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Insuline{% endblock %}
+
+{% block body %}
+    <h1>Insuline</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ insuline.id }}</td>
+            </tr>
+            <tr>
+                <th>Type_of_insuline</th>
+                <td>{{ insuline.typeOfInsuline }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ insuline.date ? insuline.date|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Hour</th>
+                <td>{{ insuline.hour }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_insuline_index') }}">back to list</a>
+
+    <a href="{{ path('app_insuline_edit', {'id': insuline.id}) }}">edit</a>
+
+    {{ include('insuline/_delete_form.html.twig') }}
+{% endblock %}

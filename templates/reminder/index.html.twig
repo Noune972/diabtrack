@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reminder index{% endblock %}
+
+{% block body %}
+    <h1>Reminder index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Type</th>
+                <th>Frequency</th>
+                <th>Time</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reminder in reminders %}
+            <tr>
+                <td>{{ reminder.id }}</td>
+                <td>{{ reminder.type }}</td>
+                <td>{{ reminder.frequency }}</td>
+                <td>{{ reminder.time ? reminder.time|date('H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_reminder_show', {'id': reminder.id}) }}">show</a>
+                    <a href="{{ path('app_reminder_edit', {'id': reminder.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_reminder_new') }}">Create new</a>
+{% endblock %}

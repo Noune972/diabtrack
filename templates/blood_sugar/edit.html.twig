@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit BloodSugar{% endblock %}
+
+{% block body %}
+    <h1>Edit BloodSugar</h1>
+
+    {{ include('blood_sugar/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_blood_sugar_index') }}">back to list</a>
+
+    {{ include('blood_sugar/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Insuline{% endblock %}
+
+{% block body %}
+    <h1>Create new Insuline</h1>
+
+    {{ include('insuline/_form.html.twig') }}
+
+    <a href="{{ path('app_insuline_index') }}">back to list</a>
+{% endblock %}

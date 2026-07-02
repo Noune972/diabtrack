@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Hba1c{% endblock %}
+
+{% block body %}
+    <h1>Edit Hba1c</h1>
+
+    {{ include('hba1c/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_hba1c_index') }}">back to list</a>
+
+    {{ include('hba1c/_delete_form.html.twig') }}
+{% endblock %}

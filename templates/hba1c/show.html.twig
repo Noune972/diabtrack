@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hba1c{% endblock %}
+
+{% block body %}
+    <h1>Hba1c</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ hba1c.id }}</td>
+            </tr>
+            <tr>
+                <th>Value</th>
+                <td>{{ hba1c.value }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ hba1c.date ? hba1c.date|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_hba1c_index') }}">back to list</a>
+
+    <a href="{{ path('app_hba1c_edit', {'id': hba1c.id}) }}">edit</a>
+
+    {{ include('hba1c/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SportingActivity index{% endblock %}
+
+{% block body %}
+    <h1>SportingActivity index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Type_of_activity</th>
+                <th>Duration</th>
+                <th>Calories</th>
+                <th>Date</th>
+                <th>Hour</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for sporting_activity in sporting_activities %}
+            <tr>
+                <td>{{ sporting_activity.id }}</td>
+                <td>{{ sporting_activity.typeOfActivity }}</td>
+                <td>{{ sporting_activity.duration }}</td>
+                <td>{{ sporting_activity.calories }}</td>
+                <td>{{ sporting_activity.date ? sporting_activity.date|date('Y-m-d') : '' }}</td>
+                <td>{{ sporting_activity.hour ? sporting_activity.hour|date('H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_sporting_activity_show', {'id': sporting_activity.id}) }}">show</a>
+                    <a href="{{ path('app_sporting_activity_edit', {'id': sporting_activity.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_sporting_activity_new') }}">Create new</a>
+{% endblock %}

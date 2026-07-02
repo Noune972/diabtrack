@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Hba1c{% endblock %}
+
+{% block body %}
+    <h1>Create new Hba1c</h1>
+
+    {{ include('hba1c/_form.html.twig') }}
+
+    <a href="{{ path('app_hba1c_index') }}">back to list</a>
+{% endblock %}
