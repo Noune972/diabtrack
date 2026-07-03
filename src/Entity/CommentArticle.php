@@ -1,7 +1,7 @@
 <?php
-
 namespace App\Entity;
 
+use App\Enum\CommentStatus;
 use App\Repository\CommentArticleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,6 +23,9 @@ class CommentArticle
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTime $hour = null;
 
+    #[ORM\Column(enumType: CommentStatus::class)]
+    private CommentStatus $status = CommentStatus::NON_VALID;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -36,7 +39,6 @@ class CommentArticle
     public function setContent(string $content): static
     {
         $this->content = $content;
-
         return $this;
     }
 
@@ -48,7 +50,6 @@ class CommentArticle
     public function setDate(\DateTime $date): static
     {
         $this->date = $date;
-
         return $this;
     }
 
@@ -60,7 +61,17 @@ class CommentArticle
     public function setHour(\DateTime $hour): static
     {
         $this->hour = $hour;
+        return $this;
+    }
 
+    public function getStatus(): CommentStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(CommentStatus $status): static
+    {
+        $this->status = $status;
         return $this;
     }
 }

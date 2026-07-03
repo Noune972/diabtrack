@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\Gender;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -44,8 +45,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $gender = null;
+    #[ORM\Column(enumType: Gender::class)]
+    private ?Gender $gender = null;
 
     #[ORM\Column]
     private ?int $weight = null;
@@ -167,12 +168,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getGender(): ?string
+    public function getGender(): ?Gender
     {
         return $this->gender;
     }
 
-    public function setGender(string $gender): static
+    public function setGender(Gender $gender): static
     {
         $this->gender = $gender;
 

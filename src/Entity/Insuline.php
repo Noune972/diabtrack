@@ -1,7 +1,7 @@
 <?php
-
 namespace App\Entity;
 
+use App\Enum\InsulineType;
 use App\Repository\InsulineRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,8 +14,8 @@ class Insuline
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $type_of_insuline = null;
+    #[ORM\Column(enumType: InsulineType::class)]
+    private ?InsulineType $type_of_insuline = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $date = null;
@@ -28,15 +28,14 @@ class Insuline
         return $this->id;
     }
 
-    public function getTypeOfInsuline(): ?string
+    public function getTypeOfInsuline(): ?InsulineType
     {
         return $this->type_of_insuline;
     }
 
-    public function setTypeOfInsuline(string $type_of_insuline): static
+    public function setTypeOfInsuline(InsulineType $type_of_insuline): static
     {
         $this->type_of_insuline = $type_of_insuline;
-
         return $this;
     }
 
@@ -48,7 +47,6 @@ class Insuline
     public function setDate(\DateTime $date): static
     {
         $this->date = $date;
-
         return $this;
     }
 
@@ -60,7 +58,6 @@ class Insuline
     public function setHour(int $hour): static
     {
         $this->hour = $hour;
-
         return $this;
     }
 }

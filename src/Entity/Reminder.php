@@ -1,7 +1,7 @@
 <?php
-
 namespace App\Entity;
 
+use App\Enum\ReminderType;
 use App\Repository\ReminderRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,8 +14,8 @@ class Reminder
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $type = null;
+    #[ORM\Column(enumType: ReminderType::class)]
+    private ?ReminderType $type = null;
 
     #[ORM\Column(length: 255)]
     private ?string $frequency = null;
@@ -28,15 +28,14 @@ class Reminder
         return $this->id;
     }
 
-    public function getType(): ?string
+    public function getType(): ?ReminderType
     {
         return $this->type;
     }
 
-    public function setType(string $type): static
+    public function setType(ReminderType $type): static
     {
         $this->type = $type;
-
         return $this;
     }
 
@@ -48,7 +47,6 @@ class Reminder
     public function setFrequency(string $frequency): static
     {
         $this->frequency = $frequency;
-
         return $this;
     }
 
@@ -60,7 +58,6 @@ class Reminder
     public function setTime(\DateTime $time): static
     {
         $this->time = $time;
-
         return $this;
     }
 }
