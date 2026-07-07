@@ -26,6 +26,10 @@ class Meal
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTime $hour = null;
 
+    #[ORM\ManyToOne(inversedBy: 'meal')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $patient = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +79,18 @@ class Meal
     public function setHour(\DateTime $hour): static
     {
         $this->hour = $hour;
+
+        return $this;
+    }
+
+    public function getPatient(): ?User
+    {
+        return $this->patient;
+    }
+
+    public function setPatient(?User $patient): static
+    {
+        $this->patient = $patient;
 
         return $this;
     }

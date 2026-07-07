@@ -3,6 +3,8 @@ namespace App\Entity;
 
 use App\Enum\ArticleStatus;
 use App\Repository\ArticleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,6 +33,20 @@ class Article
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
     private ?ArticleCategory $category = null;
+
+    /**
+     * @var Collection<int, CommentArticle>
+     */
+    #[ORM\OneToMany(targetEntity: CommentArticle::class, mappedBy: 'article')]
+    private Collection $comment_article;
+
+    #[ORM\ManyToOne(inversedBy: 'article')]
+    private ?ArticleCategory $articleCategory = null;
+
+    public function __construct()
+    {
+        $this->comment_article = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -94,6 +110,48 @@ class Article
     public function setCategory(?ArticleCategory $category): static
     {
         $this->category = $category;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CommentArticle>
+     */
+    public function getCommentArticle(): Collection
+    {
+        return $this->comment_article;
+    }
+
+    public function addCommentArticle(CommentArticle $commentArticle): static
+    {
+        if (!$this->comment_article->contains($commentArticle)) {
+            $this->comment_article->add($commentArticle);
+            $commentArticle->setArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentArticle(CommentArticle $commentArticle): static
+    {
+        if ($this->comment_article->removeElement($commentArticle)) {
+            // set the owning side to null (unless already changed)
+            if ($commentArticle->getArticle() === $this) {
+                $commentArticle->setArticle(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getArticleCategory(): ?ArticleCategory
+    {
+        return $this->articleCategory;
+    }
+
+    public function setArticleCategory(?ArticleCategory $articleCategory): static
+    {
+        $this->articleCategory = $articleCategory;
+
         return $this;
     }
 }

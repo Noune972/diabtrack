@@ -23,6 +23,10 @@ class Insuline
     #[ORM\Column]
     private ?int $hour = null;
 
+    #[ORM\ManyToOne(inversedBy: 'insuline')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $patient = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -58,6 +62,18 @@ class Insuline
     public function setHour(int $hour): static
     {
         $this->hour = $hour;
+        return $this;
+    }
+
+    public function getPatient(): ?User
+    {
+        return $this->patient;
+    }
+
+    public function setPatient(?User $patient): static
+    {
+        $this->patient = $patient;
+
         return $this;
     }
 }

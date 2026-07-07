@@ -26,6 +26,14 @@ class CommentArticle
     #[ORM\Column(enumType: CommentStatus::class)]
     private CommentStatus $status = CommentStatus::NON_VALID;
 
+    #[ORM\ManyToOne(inversedBy: 'comment_article')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $patient = null;
+
+    #[ORM\ManyToOne(inversedBy: 'comment_article')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Article $article = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -72,6 +80,30 @@ class CommentArticle
     public function setStatus(CommentStatus $status): static
     {
         $this->status = $status;
+        return $this;
+    }
+
+    public function getPatient(): ?User
+    {
+        return $this->patient;
+    }
+
+    public function setPatient(?User $patient): static
+    {
+        $this->patient = $patient;
+
+        return $this;
+    }
+
+    public function getArticle(): ?Article
+    {
+        return $this->article;
+    }
+
+    public function setArticle(?Article $article): static
+    {
+        $this->article = $article;
+
         return $this;
     }
 }

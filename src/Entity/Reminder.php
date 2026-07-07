@@ -23,6 +23,10 @@ class Reminder
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTime $time = null;
 
+    #[ORM\ManyToOne(inversedBy: 'reminder')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $patient = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -58,6 +62,18 @@ class Reminder
     public function setTime(\DateTime $time): static
     {
         $this->time = $time;
+        return $this;
+    }
+
+    public function getPatient(): ?User
+    {
+        return $this->patient;
+    }
+
+    public function setPatient(?User $patient): static
+    {
+        $this->patient = $patient;
+
         return $this;
     }
 }

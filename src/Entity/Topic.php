@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TopicRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,6 +27,21 @@ class Topic
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTime $hour = null;
+
+    #[ORM\ManyToOne(inversedBy: 'topic')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $patient = null;
+
+    /**
+     * @var Collection<int, Comment>
+     */
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'topic')]
+    private Collection $comment;
+
+    public function __construct()
+    {
+        $this->comment = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -75,6 +92,48 @@ class Topic
     public function setHour(\DateTime $hour): static
     {
         $this->hour = $hour;
+
+        return $this;
+    }
+
+    public function getPatient(): ?User
+    {
+        return $this->patient;
+    }
+
+    public function setPatient(?User $patient): static
+    {
+        $this->patient = $patient;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComment(): Collection
+    {
+        return $this->comment;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comment->contains($comment)) {
+            $this->comment->add($comment);
+            $comment->setTopic($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comment->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getTopic() === $this) {
+                $comment->setTopic(null);
+            }
+        }
 
         return $this;
     }

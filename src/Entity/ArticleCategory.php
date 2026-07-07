@@ -24,9 +24,16 @@ class ArticleCategory
     #[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'category')]
     private Collection $articles;
 
+    /**
+     * @var Collection<int, Article>
+     */
+    #[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'articleCategory')]
+    private Collection $article;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
+        $this->article = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -74,5 +81,13 @@ class ArticleCategory
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Article>
+     */
+    public function getArticle(): Collection
+    {
+        return $this->article;
     }
 }

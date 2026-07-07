@@ -20,6 +20,10 @@ class Hba1c
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $date = null;
 
+    #[ORM\ManyToOne(inversedBy: 'HBA1C')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $patient = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +49,18 @@ class Hba1c
     public function setDate(\DateTime $date): static
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    public function getPatient(): ?User
+    {
+        return $this->patient;
+    }
+
+    public function setPatient(?User $patient): static
+    {
+        $this->patient = $patient;
 
         return $this;
     }

@@ -23,6 +23,13 @@ class BloodSugar
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTime $time = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $relation = null;
+
+    #[ORM\ManyToOne(inversedBy: 'bloodSugars')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $patient = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +67,30 @@ class BloodSugar
     public function setTime(\DateTime $time): static
     {
         $this->time = $time;
+
+        return $this;
+    }
+
+    public function getRelation(): ?string
+    {
+        return $this->relation;
+    }
+
+    public function setRelation(string $relation): static
+    {
+        $this->relation = $relation;
+
+        return $this;
+    }
+
+    public function getPatient(): ?User
+    {
+        return $this->patient;
+    }
+
+    public function setPatient(?User $patient): static
+    {
+        $this->patient = $patient;
 
         return $this;
     }
