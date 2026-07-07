@@ -9,7 +9,7 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\User
-                property: uuid
+                property: email
         # used to reload user from session & other features (e.g. switch_user)
 
     firewalls:
@@ -24,6 +24,11 @@ security:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
+
+            two_factor:
+            auth_form_path: 2fa_login
+            check_path: 2fa_login_check
+
             logout:
                 path: app_logout
                 # where to redirect after logout
