@@ -14,8 +14,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_UUID', fields: ['uuid'])]
-#[UniqueEntity(fields: ['uuid'], message: 'There is already an account with this uuid')]
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -24,7 +24,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
-    private ?string $uuid = null;
+    private ?string $email = null;
 
     /**
      * @var list<string> The user roles
@@ -44,8 +44,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $email = null;
 
     #[ORM\Column(enumType: Gender::class)]
     private ?Gender $gender = null;
@@ -54,8 +52,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $weight = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTime $date_of_birth = null;
-
+    private ?\DateTimeInterface $dateOfBirth = null;
     #[ORM\Column]
     private bool $isVerified = false;
 
@@ -108,9 +105,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $comment;
 
     /**
-     * @var Collection<int, commentArticle>
+     * @var Collection<int, CommentArticle>
      */
-    #[ORM\OneToMany(targetEntity: commentArticle::class, mappedBy: 'patient')]
+    #[ORM\OneToMany(targetEntity: CommentArticle::class, mappedBy: 'patient')]
     private Collection $comment_article;
 
     public function __construct()
@@ -131,18 +128,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id;
     }
 
-    public function getUuid(): ?string
-    {
-        return $this->uuid;
-    }
-
-    public function setUuid(string $uuid): static
-    {
-        $this->uuid = $uuid;
-
-        return $this;
-    }
-
     /**
      * A visual identifier that represents this user.
      *
@@ -150,7 +135,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->uuid;
+        return (string) $this->email;
     }
 
     /**
@@ -263,12 +248,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getDateOfBirth(): ?\DateTime
     {
-        return $this->date_of_birth;
+        return $this->dateOfBirth;
     }
 
     public function setDateOfBirth(\DateTime $date_of_birth): static
     {
-        $this->date_of_birth = $date_of_birth;
+        $this->dateOfBirth = $date_of_birth;
 
         return $this;
     }
@@ -526,7 +511,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, commentArticle>
+     * @return Collection<int, CommentArticle>
      */
     public function getCommentArticle(): Collection
     {
