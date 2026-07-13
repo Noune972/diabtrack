@@ -1,10 +1,2 @@
 @import "tailwindcss";
 
-.form-text {
-    color: #9ca3af !important;
-    font-size: 0.8rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 9999px;
-    padding: 2px 10px;
-    display: inline-block;
-}

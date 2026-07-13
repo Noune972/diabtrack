@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+{% block title %}Accueil{% endblock %}
+{% block body %}
+<div class="h-screen flex flex-col overflow-hidden relative">
+
+  {# Logo #}
+  <img src="{{ asset('images/logo.png') }}" alt="logo" class="absolute top-6 left-6 w-[30rem] h-auto z-10">
+
+  {# Contenu principal #}
+  <div class="flex-1 flex flex-col min-h-0 bg-gray-50">
+
+    {# Ligne haute : mascotte + texte #}
+    <div class="flex-1 flex items-center min-h-0 overflow-hidden">
+
+      {# Mascotte à gauche, plus grosse #}
+      <div class="flex-1 flex items-center justify-center min-h-0">
+        <img src="{{ asset('images/mascotte.png') }}" alt="mascotte" class="max-w-full max-h-[70vh] w-auto h-auto">
+      </div>
+
+      {# Texte au milieu #}
+      <div class="flex-1 flex flex-col items-center justify-center text-center gap-4 px-8">
+        <h1 class="text-5xl font-black uppercase tracking-wider leading-tight italic">
+        <span class="text-[#48742C]">Bienvenue </span>
+        <span class="text-gray-900">sur </span>
+          <span class="text-[#48742C]">Diabtrack </span>
+          <span class="text-gray-900">l'appli<br> utile pour le suivi du<br></span>
+          <span class="text-[#48742C]">diabète de type 2</span>
+        </h1>
+        <p class="text-gray-500 text-sm max-w-sm">
+          Suivez votre glycémie, vos repas, votre insuline, votre activité sportive, et bien plus encore le tout au même endroit.
+        </p>
+      </div>
+
+    </div>
+
+    {# Boutons connexion et déconnexion #}
+   <div class="flex justify-center gap-4 pb-16">
+  <a href="{{ path('app_login') }}" class="bg-blue-900 text-white font-semibold py-3 px-12 rounded-xl text-base hover:bg-blue-800 transition min-w-[200px] text-center">
+    Se connecter
+  </a>
+
+  <a href="{{ path('app_register') }}" class="border-2 border-[#48742C] text-[#48742C] font-semibold py-3 px-12 rounded-xl text-base hover:bg-[#48742C] hover:text-white transition min-w-[200px] text-center">
+    Créer un compte
+  </a>
+</div>
+  </div>
+
+</div>
+{% endblock %}

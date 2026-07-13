@@ -1,22 +1,29 @@
 {% extends 'base.html.twig' %}
 {% block title %}Register{% endblock %}
 {% block body %}
-<div class="h-screen flex flex-col overflow-hidden">
+<div class="min-h-screen flex flex-col relative">
+
+  {# Logo #}
+  <a href="{{ path('app_home') }}">
+ <img src="{{ asset('images/logo.png') }}" alt="logo" class="absolute top-6 left-6 w-[30rem] h-auto z-5">
+</a>
   {# Contenu principal #}
-  <div class="flex-1 flex overflow-hidden">
+  <div class="flex-1 flex">
     {# Colonne gauche : titre + mascotte #}
-    <div class="flex-1 flex flex-col items-center justify-center bg-gray-50 gap-8">
+    <div class="flex-1 flex flex-col items-center justify-center bg-gray-50 gap-8 py-12">
       <h1 class="text-5xl font-black uppercase tracking-wider text-center leading-tight italic">
         <span class="text-[#48742C]">Créer</span>
         <span class="text-gray-900"> un </span>
         <span class="text-[#48742C]">compte</span>
       </h1>
-      <img src="{{ asset('images/mascotte.png') }}" alt="mascotte" class="w-[65rem]">
+      
+      <img src="{{ asset('images/mascotte.png') }}" alt="mascotte" class="w-[58rem] max-w-full h-auto">
+      
     </div>
 
     {# Colonne droite : formulaire #}
-    <div class="flex-1 flex items-center justify-center bg-gray-50 p-8">
-      <div class="bg-white rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.15)] p-10 w-full max-w-md">
+    <div class="flex-1 flex justify-center bg-gray-50 p-8">
+      <div class="bg-white rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.15)] p-10 w-full max-w-md my-8">
 
         {% for flash_error in app.flashes('verify_email_error') %}
           <div class="bg-red-100 text-red-700 rounded-lg px-4 py-3 mb-4 text-sm">
@@ -26,28 +33,57 @@
 
         {{ form_errors(registrationForm) }}
         {{ form_start(registrationForm, {'attr': {'class': 'flex flex-col gap-4'}}) }}
-          {{ form_row(registrationForm.name) }}
-          {{ form_row(registrationForm.firstname) }}
-          {{ form_row(registrationForm.email) }}
-          {{ form_row(registrationForm.gender) }}
-          {{ form_row(registrationForm.weight) }}
-          {{ form_row(registrationForm.dateOfBirth) }}
-          {{ form_row(registrationForm.plainPassword, { label: 'Mot de passe' }) }}
-          {{ form_row(registrationForm.agreeTerms) }}
+
+          <div class="flex flex-col gap-1">
+            {{ form_label(registrationForm.name, 'Nom') }}
+            {{ form_widget(registrationForm.name, {'attr': {'class': 'form-control border rounded-lg px-3 py-2', 'placeholder': 'Votre nom'}}) }}
+          </div>
+
+          <div class="flex flex-col gap-1">
+            {{ form_label(registrationForm.firstname, 'Prénom') }}
+            {{ form_widget(registrationForm.firstname, {'attr': {'class': 'form-control border rounded-lg px-3 py-2', 'placeholder': 'Votre prénom'}}) }}
+          </div>
+
+          <div class="flex flex-col gap-1">
+            {{ form_label(registrationForm.email, 'Email') }}
+            {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control border rounded-lg px-3 py-2', 'placeholder': 'exemple@email.com'}}) }}
+          </div>
+
+          <div class="flex flex-col gap-1">
+            {{ form_label(registrationForm.gender, 'Genre') }}
+            {{ form_widget(registrationForm.gender, {'attr': {'class': 'form-control border rounded-lg px-3 py-2'}}) }}
+          </div>
+
+          <div class="flex flex-col gap-1">
+            {{ form_label(registrationForm.weight, 'Poids') }}
+            {{ form_widget(registrationForm.weight, {'attr': {'class': 'form-control border rounded-lg px-3 py-2', 'placeholder': 'Votre poids en kg'}}) }}
+          </div>
+
+          <div class="flex flex-col gap-1">
+            {{ form_label(registrationForm.dateOfBirth, 'Date de naissance') }}
+            {{ form_widget(registrationForm.dateOfBirth, {'attr': {'class': 'form-control border rounded-lg px-3 py-2'}}) }}
+          </div>
+
+          <div class="flex flex-col gap-1">
+            {{ form_label(registrationForm.plainPassword, 'Mot de passe') }}
+            {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control border rounded-lg px-3 py-2', 'placeholder': '••••••••'}}) }}
+          </div>
+
+          <div class="flex items-center gap-2">
+            {{ form_widget(registrationForm.agreeTerms) }}
+            {{ form_label(registrationForm.agreeTerms) }}
+          </div>
 
           <button type="submit" class="w-full bg-blue-900 text-white font-semibold py-3 rounded-xl border-none cursor-pointer mt-2 text-base">
             Créer un compte
           </button>
 
-          <a href="#" class="block text-center mt-3 text-sm text-[#48742C] underline">
-            Mot de passe oublié ?
-          </a>
         {{ form_end(registrationForm) }}
       </div>
     </div>
   </div>
 
   {# Bande verte horizontale en bas #}
-  <div class="h-[12vh] bg-[#48742C] w-full flex-shrink-0"></div>
+  {#<div class="bg-[#48742C] w-full" style="height: 250px;"></div>#}
 </div>
 {% endblock %}
