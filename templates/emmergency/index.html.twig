@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Urgences - DiabTrack{% endblock %}
+
+{% block body %}
+
+<section class="min-h-screen bg-gray-50 py-16 px-8">
+
+    <div class="max-w-6xl mx-auto">
+
+        <a href="{{ path('app_home') }}" class="inline-block mb-8 text-blue-600 hover:text-blue-800 font-semibold">
+        <img src="{{ asset('images/logo.png') }}" alt="logo" class="w-42 max-w-3xl mx-auto mb-12 ml-5 rounded-3xl shadow-xl">
+        </a>
+
+        <h2 class="text-5xl text-red-900 font-bold text-center uppercase mb-8">
+    <a href="tel:15" class="hover:text-red-900 transition">
+        📞 Cliquez ici pour appeler le 15
+    </a>
+</h2>
+        <h1 class="text-3xl ! text-red-900 font-bold text-center uppercase mb-16">
+            Les signes qui doivent vous alerter
+        </h1>
+
+        {# HYPOGLYCÉMIE #}
+        <div class="grid md:grid-cols-2 gap-12 items-center mb-20">
+
+            <div class="flex justify-center">
+                <img
+                    src="{{ asset('images/hypoglycemie.png') }}"
+                    alt="Hypoglycémie"
+                    class="w-full max-w-md rounded-2xl shadow-xl">
+            </div>
+
+            <div>
+
+                <h2 class="text-3xl font-bold text-[#2c4374] mb-6">
+                    Hypoglycémie
+                </h2>
+
+                <p class="text-gray-700 leading-8 text-lg">
+                    L'hypoglycémie correspond à une baisse anormale du taux de sucre dans le sang,
+                    généralement en dessous de <strong>0,70 g/L</strong>. Elle peut apparaître après
+                    un effort physique important, un repas insuffisant ou retardé, ou encore à la
+                    suite d'une dose excessive d'insuline ou d'un traitement antidiabétique.
+                </p>
+
+                <p class="text-gray-700 leading-8 text-lg mt-6">
+                    Les signes les plus fréquents sont des tremblements, une sensation de faim,
+                    des sueurs froides, des palpitations, une fatigue importante, des troubles de
+                    la concentration ou encore une confusion. En cas de symptômes, il est conseillé
+                    de consommer rapidement environ 15 g de sucre rapide puis de contrôler sa glycémie.
+                    Si la personne perd connaissance, contactez immédiatement les secours.
+                </p>
+
+            </div>
+
+        </div>
+
+        {# HYPERGLYCÉMIE #}
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+
+            <div class="flex justify-center">
+                <img
+                    src="{{ asset('images/hyperglycemie.png') }}"
+                    alt="Hyperglycémie"
+                    class="w-full max-w-md rounded-2xl shadow-xl">
+            </div>
+
+            <div>
+
+                <h2 class="text-3xl font-bold text-red-900 mb-6">
+                    Hyperglycémie
+                </h2>
+
+                <p class="text-gray-700 leading-8 text-lg">
+                    L'hyperglycémie correspond à un taux de sucre dans le sang trop élevé,
+                    généralement supérieur à <strong>1,80 g/L après un repas</strong>. Elle peut
+                    être provoquée par un oubli d'insuline, une alimentation trop riche en glucides,
+                    une infection, le stress ou un manque d'activité physique.
+                </p>
+
+                <p class="text-gray-700 leading-8 text-lg mt-6">
+                    Les principaux symptômes sont une soif importante, des envies fréquentes
+                    d'uriner, une fatigue inhabituelle, une vision trouble et une bouche sèche.
+                    Si l'hyperglycémie persiste ou s'accompagne de vomissements, de douleurs
+                    abdominales ou d'une respiration difficile, il est nécessaire de consulter
+                    rapidement un médecin ou d'appeler les secours.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
