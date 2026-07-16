@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réinitialiser le mot de passe{% endblock %}
+
+{% block body %}
+<section class="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+
+    <div class="w-full max-w-lg bg-white rounded-3xl shadow-2xl p-10">
+
+        <div class="text-center mb-8">
+            <h1 class="text-6xl font-black uppercase tracking-wide text-[#48742C] mb-3">
+                Nouveau mot de passe
+            </h1>
+
+            <p class="text-gray-500 text-base leading-relaxed">
+                Choisissez un nouveau mot de passe sécurisé pour protéger votre compte DiabTrack.
+            </p>
+        </div>
+
+        {{ form_start(resetForm, {
+            attr: {
+                class: 'space-y-6'
+            }
+        }) }}
+
+            <div>
+                {{ form_row(resetForm.plainPassword) }}
+            </div>
+
+            <button
+                type="submit"
+                class="w-full bg-[#48742C] hover:bg-[#3d6224] transition-all duration-300 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl items-align-center text-lg">
+                Réinitialiser le mot de passe
+            </button>
+
+        {{ form_end(resetForm) }}
+
+    </div>
+
+</section>
+{% endblock %}

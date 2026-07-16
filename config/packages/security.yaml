@@ -33,11 +33,17 @@ security:
                 path: app_logout
 
     access_control:
-        - { path: ^/2fa, roles: IS_AUTHENTICATED_2FA_IN_PROGRESS }
-        - { path: ^/login, roles: PUBLIC_ACCESS }
-        - { path: ^/register, roles: PUBLIC_ACCESS }
-        - { path: ^/test-mail, roles: PUBLIC_ACCESS }
-        - { path: ^/, roles: ROLE_USER }
+    # Pages publiques
+    - { path: ^/$, roles: PUBLIC_ACCESS }
+    - { path: ^/login, roles: PUBLIC_ACCESS }
+    - { path: ^/register, roles: PUBLIC_ACCESS }
+    - { path: ^/reset-password, roles: PUBLIC_ACCESS }
+
+    # 2FA
+    - { path: ^/2fa, roles: IS_AUTHENTICATED_2FA_IN_PROGRESS }
+
+    # Tout le reste nécessite un compte
+    - { path: ^/, roles: ROLE_USER }
 
 when@test:
     security:

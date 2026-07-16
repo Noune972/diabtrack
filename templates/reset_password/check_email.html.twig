@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Email envoyé{% endblock %}
+
+{% block body %}
+
+<section class="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+
+
+    <div class="w-full max-w-xl bg-white rounded-3xl shadow-2xl p-10">
+
+        <div class="flex justify-center mb-6">
+
+            <div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
+
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="w-8 h-8 text-[#48742C]"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke="currentColor"
+                     stroke-width="2">
+
+                    <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+
+            </div>
+
+        </div>
+
+        <h1 class="text-4xl font-black uppercase tracking-wide text-center text-[#48742C] mb-6">
+            Email envoyé
+        </h1>
+
+        <p class="text-gray-600 text-center leading-7 text-lg">
+            Si un compte correspond à l'adresse e-mail saisie,
+            un lien de réinitialisation vient de vous être envoyé.
+        </p>
+
+        <div class="mt-6 bg-green-50 border border-green-200 rounded-xl p-5">
+
+            <p class="text-center text-[#48742C] font-semibold">
+                ⏳ Ce lien expirera dans
+                <strong>
+                    {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}
+                </strong>.
+            </p>
+
+        </div>
+
+        <div class="mt-8">
+
+            <p class="text-center text-gray-500 leading-7">
+
+                Vous ne trouvez pas l'e-mail ?
+
+                <br><br>
+
+                Vérifiez votre dossier <strong>Spam / Courriers indésirables</strong>.
+
+                <br>
+
+                Sinon, vous pouvez demander un nouveau lien.
+
+            </p>
+
+        </div>
+
+        <div class="mt-10 flex justify-center">
+
+            <a href="{{ path('app_forgot_password_request') }}"
+               class="inline-flex items-center justify-center bg-[#48742C] hover:bg-[#3d6224] transition-all duration-300 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl">
+
+                Renvoyer un lien
+
+            </a>
+
+        </div>
+
+        <div class="mt-6 text-center">
+
+            <a href="{{ path('app_login') }}"
+               class="text-[#48742C] hover:underline font-semibold">
+
+                ← Retour à la connexion
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

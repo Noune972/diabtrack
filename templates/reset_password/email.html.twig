@@ -1,0 +1,13 @@
+<img src="{{ asset('images/logo.png') }}"
+         alt="DiabTrack"
+         class="absolute top-6 left-6 w-72 h-auto">
+
+<h1>Bonjour</h1>
+
+<p> Afin de réinitialiser votre mot de passe DIABTRACK, veuillez cliquer sur le lien suivant :</p>
+
+<a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+
+<p>Ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.</p>
+
+
