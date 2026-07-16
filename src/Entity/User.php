@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 use App\Enum\Gender;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFactorInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -56,6 +57,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $isVerified = false;
 
+    #[ORM\Column(length: 6, nullable: true)]
+     private ?string $emailAuthCode = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+     private ?\DateTimeInterface $emailAuthCodeCreatedAt = null;
+     
     /**
      * @var Collection<int, BloodSugar>
      */
@@ -110,6 +117,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: CommentArticle::class, mappedBy: 'patient')]
     private Collection $comment_article;
 
+ 
+
+    public function getEmailAuthRecipient(): string
+    {
+        return $this->email; 
+    }   
+
+ public function getEmailAuthCodeCreatedAt(): ?\DateTimeInterface
+{
+    return $this->emailAuthCodeCreatedAt;
+}
+
+public function setEmailAuthCodeCreatedAt(?\DateTimeInterface $date): static
+{
+    $this->emailAuthCodeCreatedAt = $date;
+
+    return $this;
+}   
+
+
+    public function isEmailAuthEnabled(): bool
+{
+    return true;
+}
+
+public function getEmailAuthCode(): string
+{
+    if (null === $this->emailAuthCode) {
+        throw new \LogicException('The email authentication code was not set');
+    }
+
+    return $this->emailAuthCode;
+}
+
+/**
+ * Enregistre le code temporaire.
+ */
+public function setEmailAuthCode(?string $authCode): void
+{
+    $this->emailAuthCode = $authCode;
+    $this->emailAuthCodeCreatedAt = new \DateTime(); // Enregistre le moment de la création du code
+}
     public function __construct()
     {
         $this->bloodSugars = new ArrayCollection();

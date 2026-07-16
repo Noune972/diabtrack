@@ -1,0 +1,13 @@
+
+
+# config/packages/scheb_2fa.yaml
+scheb_two_factor:
+    security_tokens:
+        - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
+        - Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken
+
+    email:
+        enabled: true
+        sender_email: 'nonetheless338@gmail.com'
+        sender_name: 'DiabTrack'
+        digits: 6
