@@ -69,10 +69,40 @@
             {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control border rounded-lg px-3 py-2', 'placeholder': '••••••••'}}) }}
           </div>
 
-          <div class="flex items-center gap-2">
-            {{ form_widget(registrationForm.agreeTerms) }}
-            {{ form_label(registrationForm.agreeTerms) }}
-          </div>
+          <div class="flex items-start gap-3 mt-2">
+
+    {{ form_widget(registrationForm.agreeTerms, {
+        attr: {
+            class: 'mt-1 h-5 w-5 rounded border-gray-300 text-[#48742C] focus:ring-[#48742C]'
+        }
+    }) }}
+
+    <label for="{{ registrationForm.agreeTerms.vars.id }}"
+           class="text-sm text-gray-600 leading-relaxed">
+
+        J'ai lu et j'accepte les
+
+        <a href="{{ path('app_mentions_legales') }}"
+           target="_blank"
+           class="font-semibold text-[#48742C] underline hover:text-[#3d6224] transition">
+            Mentions légales
+        </a>
+
+        ainsi que les
+
+        <a href="{{ path('app_cgu') }}"
+           target="_blank"
+           class="font-semibold text-[#48742C] underline hover:text-[#3d6224] transition">
+            Conditions Générales d'Utilisation (CGU)
+        </a>.
+
+    </label>
+
+</div>
+
+<div class="text-sm text-red-600">
+    {{ form_errors(registrationForm.agreeTerms) }}
+</div>
 
           <button type="submit" class="w-full bg-blue-900 text-white font-semibold py-3 rounded-xl border-none cursor-pointer mt-2 text-base">
             Créer un compte

@@ -69,7 +69,7 @@ class RegistrationFormType extends AbstractType
 ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
-                'label' => "J'accepte les mentions légales et les CGU",
+                'label' => "J'ai lu et j'accepte les mentions légales et les CGU",
                 'constraints' => [
                     new IsTrue(
                         message: 'Vous devez accepter les mentions légales et les CGU.',
