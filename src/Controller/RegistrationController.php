@@ -38,13 +38,13 @@ class RegistrationController extends AbstractController
 
             $entityManager->persist($user);
             $entityManager->flush();
-
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
                     ->from(new Address('perfectissima@hotmail.com', 'Send my Mail'))
                     ->to((string) $user->getEmail())
                     ->subject('Veuillez confirmer votre email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
+                    
             );
 
             return $security->login($user, 'form_login', 'main');

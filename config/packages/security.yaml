@@ -21,7 +21,7 @@ security:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
-                default_target_path: app_home
+                default_target_path: 2fa_login
 
             two_factor:
                 prepare_on_login: true
@@ -46,7 +46,7 @@ security:
     - { path: ^/cgu, roles: PUBLIC_ACCESS }
 
     # Tout le reste nécessite un compte
-    - { path: ^/, roles: ROLE_USER }
+    - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:
     security:
