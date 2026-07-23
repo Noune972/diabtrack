@@ -24,7 +24,7 @@ class BloodSugar
     private ?\DateTime $time = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $relation = null;
+    private ?string $relation = null; // stocke la classification: hypoglycemie / normale / hyperglycemie
 
     #[ORM\ManyToOne(inversedBy: 'bloodSugars')]
     #[ORM\JoinColumn(nullable: false)]
@@ -93,5 +93,29 @@ class BloodSugar
         $this->patient = $patient;
 
         return $this;
+    }
+
+    /**
+     * Calcule et enregistre automatiquement la classification
+     * selon les seuils standards (à jeun) :
+     *  - Hypoglycémie  : < 70 mg/dL
+     *  - Normale       : 70–110 mg/dL
+     *  - Hyperglycémie : > 110 mg/dL
+     */
+    public function calculerClassification(): string
+    {
+        $valeur = (float) $this->value;
+
+        if ($valeur <= 70) {
+            $classification = 'hypoglycemie';
+        } elseif ($valeur <= 110) {
+            $classification = 'normale';
+        } else {
+            $classification = 'hyperglycemie';
+        }
+
+        $this->relation = $classification;
+
+        return $classification;
     }
 }

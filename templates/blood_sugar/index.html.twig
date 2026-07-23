@@ -1,39 +1,149 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}BloodSugar index{% endblock %}
+{% block title %}Ma glycémie{% endblock %}
 
 {% block body %}
-    <h1>BloodSugar index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Value</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for blood_sugar in blood_sugars %}
-            <tr>
-                <td>{{ blood_sugar.id }}</td>
-                <td>{{ blood_sugar.value }}</td>
-                <td>{{ blood_sugar.date ? blood_sugar.date|date('Y-m-d') : '' }}</td>
-                <td>{{ blood_sugar.time ? blood_sugar.time|date('H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_blood_sugar_show', {'id': blood_sugar.id}) }}">show</a>
-                    <a href="{{ path('app_blood_sugar_edit', {'id': blood_sugar.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
+
+<a href="{{ path('app_home') }}">
+    <img src="{{ asset('images/logo.png') }}" alt="logo" class="absolute top-6 left-6 w-[30rem] h-auto z-5">
+</a>
+
+{% set last = blood_sugars|first %}
+{% set scaleMax = 334 %}
+{% set pct = last ? (min(100, max(0, (last.value / scaleMax * 100)))) : null %}
+
+<div class="font-body bg-gradient-to-b min-h-screen py-6 px-3 ">
+<div class="max-w-sm mx-auto bg-white rounded-[2rem] shadow-2xl shadow-green-900/10 overflow-hidden ring-1 ring-black/5">
+
+    {# ===== Header ===== #}
+    <div class="sticky top-0 z-10 bg-[#48742C] px-6 pt-6 pb-8">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-white text-4xl font-bold tracking-wide font-body">Bonjour</p>
+                <h2 class="font-display text-4xl font-extrabold text-white leading-tight">
+                    {{ app.user.firstname }}
+                </h2>
+            </div>
+           
+        </div>
+
+        <div class="mt-5">
+            <p class="font-display text-lg font-extrabold text-white">
+                Suivre ma <span class="text-white">glycémie</span>
+            </p>
+            <p class="text-white text-xs font-medium">Historique complet</p>
+        </div>
+    </div>
+
+    <div class="px-5 -mt-4 space-y-4 pb-6">
+
+        {% for message in app.flashes('success') %}
+            <div class="bg-[#48742C] text-white text-sm font-semibold rounded-2xl px-4 py-3 shadow-lg shadow-green-900/20">
+                ✅ {{ message }}
+            </div>
         {% endfor %}
-        </tbody>
-    </table>
 
-    <a href="{{ path('app_blood_sugar_new') }}">Create new</a>
+        {#Dernière mesure#}
+        <div class="bg-white rounded-3xl shadow-lg shadow-gray-200 ring-1 ring-gray-100 p-5">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold uppercase tracking-wide text-gray-400">Dernière mesure</span>
+                {% if last %}
+                    <span class="text-xs font-semibold text-gray-400">{{ last.date|date('d/m') }} · {{ last.time|date('H:i') }}</span>
+                {% endif %}
+            </div>
+
+            {% if last %}
+                <div class="flex items-end gap-2 mb-4">
+                    <span class="font-display text-5xl font-extrabold text-gray-900">{{ last.value }}</span>
+                    <span class="text-gray-400 font-semibold mb-1.5">mg/dL</span>
+                    <span class="ml-auto mb-1.5">
+                        {% if last.relation == 'hypoglycemie' %}
+                            <span class="inline-flex items-center gap-1 bg-blue-50 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-full">🔵 Hypo</span>
+                        {% elseif last.relation == 'hyperglycemie' %}
+                            <span class="inline-flex items-center gap-1 bg-red-50 text-red-700 text-xs font-bold px-2.5 py-1 rounded-full">🔴 Hyper</span>
+                        {% else %}
+                            <span class="inline-flex items-center gap-1 bg-green-50 text-green-700 text-xs font-bold px-2.5 py-1 rounded-full">🟢 Normale</span>
+                        {% endif %}
+                    </span>
+                </div>
+
+               
+            {% else %}
+                <p class="text-gray-400 italic text-sm py-4 text-center">Aucune mesure pour l'instant — enregistre la première ci-dessous 👇</p>
+            {% endif %}
+        </div>
+
+   
+
+        {# Formulaire de saisie #}
+        <div class="bg-white rounded-3xl shadow-lg shadow-gray-200 ring-1 ring-gray-100 p-5">
+            <p class="text-xs font-bold uppercase tracking-wide text-gray-400 mb-3">Nouvelle mesure</p>
+
+            {{ form_start(form, {'attr': {'class': 'space-y-3'}}) }}
+                <div>
+                    {{ form_widget(form.value, {'attr': {
+                        'class': 'w-full text-center font-display text-3xl font-extrabold border-2 border-gray-100 focus:border-[#48742C] rounded-2xl px-3 py-3 bg-gray-50 focus:bg-white outline-none transition',
+                        'placeholder': '95'
+                    }}) }}
+                    {{ form_errors(form.value) }}
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        {{ form_widget(form.date, {'attr': {'class': 'w-full border-2 border-gray-100 focus:border-[#48742C] rounded-2xl px-3 py-2.5 bg-gray-50 focus:bg-white outline-none text-sm transition'}}) }}
+                        {{ form_errors(form.date) }}
+                    </div>
+                    <div>
+                        {{ form_widget(form.time, {'attr': {'class': 'w-full border-2 border-gray-100 focus:border-[#48742C] rounded-2xl px-3 py-2.5 bg-gray-50 focus:bg-white outline-none text-sm transition'}}) }}
+                        {{ form_errors(form.time) }}
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-blue-900 hover:bg-blue-800 active:scale-[0.98] text-white font-display font-bold rounded-2xl py-3.5 shadow-lg shadow-blue-900/30 transition">
+                    Enregistrer une glycémie
+                </button>
+            {{ form_end(form) }}
+        </div>
+
+        {# ===== Historique complet avec actions ===== #}
+        <div class="bg-white rounded-3xl shadow-lg shadow-gray-200 ring-1 ring-gray-100 p-5">
+            <p class="text-xs font-bold uppercase tracking-wide text-gray-400 mb-3">Historique complet</p>
+
+            {% if blood_sugars|length > 0 %}
+                <div class="space-y-1">
+                    {% for blood_sugar in blood_sugars %}
+                        <div class="flex items-center gap-3 py-2.5 {% if not loop.last %}border-b border-gray-50{% endif %}">
+                            <span class="w-2.5 h-2.5 rounded-full shrink-0
+                                {% if blood_sugar.relation == 'hypoglycemie' %}bg-blue-600
+                                {% elseif blood_sugar.relation == 'hyperglycemie' %}bg-red-700
+                                {% else %}bg-[#48742C]{% endif %}">
+                            </span>
+                            <div class="flex-1">
+                                <p class="text-sm font-bold text-gray-900">{{ blood_sugar.value }} <span class="font-medium text-gray-400 text-xs">mg/dL</span></p>
+                                <p class="text-xs text-gray-400">{{ blood_sugar.date|date('d/m/Y') }} à {{ blood_sugar.time|date('H:i') }}</p>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs shrink-0">
+                                <a href="{{ path('app_blood_sugar_show', {'id': blood_sugar.id}) }}" class="text-blue-700 font-semibold hover:underline">Voir</a>
+                                <a href="{{ path('app_blood_sugar_edit', {'id': blood_sugar.id}) }}" class="text-gray-600 font-semibold hover:underline">Modifier</a>
+
+                                <form method="post" action="{{ path('app_blood_sugar_delete', {'id': blood_sugar.id}) }}"
+                                    onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"
+                                    style="display:inline;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ blood_sugar.id) }}">
+                                    <button class="text-red-700 font-semibold hover:underline">Supprimer</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-gray-400 italic text-sm py-2">Aucune mesure enregistrée pour le moment.</p>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+</div>
 {% endblock %}
