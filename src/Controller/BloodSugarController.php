@@ -1,5 +1,5 @@
 <?php
-
+// src/Controller/BloodSugarController.php
 namespace App\Controller;
 
 use App\Entity\BloodSugar;
@@ -10,35 +10,43 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/blood/sugar')]
-final class BloodSugarController extends AbstractController
+#[IsGranted('ROLE_USER')]
+class BloodSugarController extends AbstractController
 {
-    #[Route(name: 'app_blood_sugar_index', methods: ['GET'])]
-    public function index(BloodSugarRepository $bloodSugarRepository): Response
-    {
-        return $this->render('blood_sugar/index.html.twig', [
-            'blood_sugars' => $bloodSugarRepository->findAll(),
-        ]);
-    }
-
-    #[Route('/new', name: 'app_blood_sugar_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('', name: 'app_blood_sugar_index', methods: ['GET', 'POST'])]
+    public function index(Request $request, EntityManagerInterface $em, BloodSugarRepository $repository): Response
     {
         $bloodSugar = new BloodSugar();
+        $now = new \DateTime();
+        $bloodSugar->setDate($now);
+        $bloodSugar->setTime($now);
+
         $form = $this->createForm(BloodSugarType::class, $bloodSugar);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($bloodSugar);
-            $entityManager->flush();
+            $bloodSugar->setPatient($this->getUser());
+            $bloodSugar->calculerClassification();
 
-            return $this->redirectToRoute('app_blood_sugar_index', [], Response::HTTP_SEE_OTHER);
+            $em->persist($bloodSugar);
+            $em->flush();
+
+            $this->addFlash('success', 'Mesure enregistrée avec succès.');
+
+            return $this->redirectToRoute('app_blood_sugar_index');
         }
 
-        return $this->render('blood_sugar/new.html.twig', [
-            'blood_sugar' => $bloodSugar,
+        $bloodSugars = $repository->findBy(
+            ['patient' => $this->getUser()],
+            ['date' => 'DESC', 'time' => 'DESC']
+        );
+
+        return $this->render('blood_sugar/index.html.twig', [
             'form' => $form,
+            'blood_sugars' => $bloodSugars,
         ]);
     }
 
@@ -51,15 +59,18 @@ final class BloodSugarController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_blood_sugar_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, BloodSugar $bloodSugar, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, BloodSugar $bloodSugar, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(BloodSugarType::class, $bloodSugar);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $bloodSugar->calculerClassification();
+            $em->flush();
 
-            return $this->redirectToRoute('app_blood_sugar_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Mesure mise à jour.');
+
+            return $this->redirectToRoute('app_blood_sugar_index');
         }
 
         return $this->render('blood_sugar/edit.html.twig', [
@@ -68,14 +79,14 @@ final class BloodSugarController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_blood_sugar_delete', methods: ['POST'])]
-    public function delete(Request $request, BloodSugar $bloodSugar, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/delete', name: 'app_blood_sugar_delete', methods: ['POST'])]
+    public function delete(Request $request, BloodSugar $bloodSugar, EntityManagerInterface $em): Response
     {
         if ($this->isCsrfTokenValid('delete'.$bloodSugar->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($bloodSugar);
-            $entityManager->flush();
+            $em->remove($bloodSugar);
+            $em->flush();
         }
 
-        return $this->redirectToRoute('app_blood_sugar_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_blood_sugar_index');
     }
 }
