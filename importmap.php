@@ -27,4 +27,10 @@ return [
     '@hotwired/stimulus' => ['version' => '3.2.2'],
     '@symfony/stimulus-bundle' => ['path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js'],
     '@hotwired/turbo' => ['version' => '8.0.23'],
+    'chartjs-plugin-annotation' => ['version' => '3.1.0'],
+    'chart.js' => ['version' => '4.5.1'],
+    'chart.js/helpers' => ['version' => '4.4.5'],
+    '@kurkle/color' => ['version' => '0.3.4'],
+    'chartjs-adapter-date-fns' => ['version' => '3.0.0'],
+    'date-fns' => ['version' => '4.4.0'],
 ];
