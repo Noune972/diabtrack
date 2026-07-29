@@ -13,7 +13,7 @@
             </tr>
             <tr>
                 <th>Value</th>
-                <td>{{ meal.value }}</td>
+                <td>{{ meal.dishName }}</td>
             </tr>
             <tr>
                 <th>Calories</th>
@@ -30,9 +30,9 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_meal_index') }}">back to list</a>
+    <a href="{{ path('app_meal_index') }}">Retour à la liste</a>
 
-    <a href="{{ path('app_meal_edit', {'id': meal.id}) }}">edit</a>
+    <a href="{{ path('app_meal_edit', {'id': meal.id}) }}">Modifier</a>
 
     {{ include('meal/_delete_form.html.twig') }}
 {% endblock %}

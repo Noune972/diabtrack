@@ -1,8 +1,9 @@
 import './stimulus_bootstrap.js';
 
-import Chart from 'chart.js/auto';
+import { Chart, registerables } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
-Chart.register(annotationPlugin);
+Chart.register(...registerables);
+
 
 window.Chart = Chart;
 /*

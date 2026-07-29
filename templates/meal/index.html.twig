@@ -1,32 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Meal index{% endblock %}
+{% block title %}Détail des plats{% endblock %}
 
 {% block body %}
-    <h1>Meal index</h1>
+    <h1>Détail des plats</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Value</th>
+                <th>Plat</th>
                 <th>Calories</th>
                 <th>Date</th>
-                <th>Hour</th>
-                <th>actions</th>
+                <th>Heure</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for meal in meals %}
             <tr>
                 <td>{{ meal.id }}</td>
-                <td>{{ meal.value }}</td>
+                <td>{{ meal.dishName }}</td>
                 <td>{{ meal.calories }}</td>
                 <td>{{ meal.date ? meal.date|date('Y-m-d') : '' }}</td>
                 <td>{{ meal.hour ? meal.hour|date('H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_meal_show', {'id': meal.id}) }}">show</a>
-                    <a href="{{ path('app_meal_edit', {'id': meal.id}) }}">edit</a>
+                    <a href="{{ path('app_meal_show', {'id': meal.id}) }}">Détail</a>
+                    <a href="{{ path('app_meal_edit', {'id': meal.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -37,5 +37,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_meal_new') }}">Create new</a>
+    <a href="{{ path('app_meal_new') }}">Ajouter un nouveau plat</a>
 {% endblock %}

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MealRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,40 +16,64 @@ class Meal
     #[ORM\Column]
     private ?int $id = null;
 
+    /**
+     * Nom du repas ou du plat.
+     * Exemple : Déjeuner, Salade César, Poulet rôti...
+     */
     #[ORM\Column(length: 255)]
-    private ?string $value = null;
+    private ?string $dishName = null;
 
+    /**
+     * Calories totales du repas.
+     * Elles sont recalculées automatiquement.
+     */
     #[ORM\Column]
-    private ?int $calories = null;
+    private int $calories = 0;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTime $date = null;
+    private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTime $hour = null;
+    private ?\DateTimeInterface $hour = null;
 
     #[ORM\ManyToOne(inversedBy: 'meal')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $patient = null;
+
+    /**
+     * @var Collection<int, MealItem>
+     */
+    #[ORM\OneToMany(
+        mappedBy: 'meal',
+        targetEntity: MealItem::class,
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
+    private Collection $mealItems;
+
+    public function __construct()
+    {
+        $this->mealItems = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getValue(): ?string
+    public function getDishName(): ?string
     {
-        return $this->value;
+        return $this->dishName;
     }
 
-    public function setValue(string $value): static
+    public function setDishName(string $dishName): static
     {
-        $this->value = $value;
+        $this->dishName = $dishName;
 
         return $this;
     }
 
-    public function getCalories(): ?int
+    public function getCalories(): int
     {
         return $this->calories;
     }
@@ -59,24 +85,46 @@ class Meal
         return $this;
     }
 
-    public function getDate(): ?\DateTime
+    /**
+     * Calcule automatiquement les calories du repas.
+     */
+    public function getTotalCalories(): float
+    {
+        $total = 0;
+
+        foreach ($this->mealItems as $mealItem) {
+            $total += $mealItem->getCalories();
+        }
+
+        return round($total, 1);
+    }
+
+    /**
+     * Met à jour le champ calories.
+     */
+    public function updateCalories(): void
+    {
+        $this->calories = (int) round($this->getTotalCalories());
+    }
+
+    public function getDate(): ?\DateTimeInterface
     {
         return $this->date;
     }
 
-    public function setDate(\DateTime $date): static
+    public function setDate(\DateTimeInterface $date): static
     {
         $this->date = $date;
 
         return $this;
     }
 
-    public function getHour(): ?\DateTime
+    public function getHour(): ?\DateTimeInterface
     {
         return $this->hour;
     }
 
-    public function setHour(\DateTime $hour): static
+    public function setHour(\DateTimeInterface $hour): static
     {
         $this->hour = $hour;
 
@@ -91,6 +139,39 @@ class Meal
     public function setPatient(?User $patient): static
     {
         $this->patient = $patient;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MealItem>
+     */
+    public function getMealItems(): Collection
+    {
+        return $this->mealItems;
+    }
+
+    public function addMealItem(MealItem $mealItem): static
+    {
+        if (!$this->mealItems->contains($mealItem)) {
+            $this->mealItems->add($mealItem);
+            $mealItem->setMeal($this);
+        }
+
+        $this->updateCalories();
+
+        return $this;
+    }
+
+    public function removeMealItem(MealItem $mealItem): static
+    {
+        if ($this->mealItems->removeElement($mealItem)) {
+            if ($mealItem->getMeal() === $this) {
+                $mealItem->setMeal(null);
+            }
+        }
+
+        $this->updateCalories();
 
         return $this;
     }

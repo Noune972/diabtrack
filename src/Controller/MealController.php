@@ -10,15 +10,22 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/meal')]
+#[IsGranted('ROLE_USER')]
 final class MealController extends AbstractController
 {
     #[Route(name: 'app_meal_index', methods: ['GET'])]
     public function index(MealRepository $mealRepository): Response
     {
+        $meals = $mealRepository->findBy(
+            ['patient' => $this->getUser()],
+            ['date' => 'DESC', 'hour' => 'DESC']
+        );
+
         return $this->render('meal/index.html.twig', [
-            'meals' => $mealRepository->findAll(),
+            'meals' => $meals,
         ]);
     }
 
@@ -26,12 +33,29 @@ final class MealController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $meal = new Meal();
+        $now = new \DateTime();
+        $meal->setDate($now);
+        $meal->setHour($now);
+
         $form = $this->createForm(MealType::class, $meal);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $meal->setPatient($this->getUser());
+
+            foreach ($meal->getMealItems() as $mealItem) {
+                $mealItem->calculateCalories();
+            }
+            $meal->updateCalories();
+
             $entityManager->persist($meal);
             $entityManager->flush();
+
+            $this->addFlash('success', sprintf(
+                'Repas enregistré : %s (%d kcal)',
+                $meal->getDishName(),
+                $meal->getCalories()
+            ));
 
             return $this->redirectToRoute('app_meal_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -57,7 +81,14 @@ final class MealController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($meal->getMealItems() as $mealItem) {
+                $mealItem->calculateCalories();
+            }
+            $meal->updateCalories();
+
             $entityManager->flush();
+
+            $this->addFlash('success', 'Repas mis à jour.');
 
             return $this->redirectToRoute('app_meal_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -68,7 +99,7 @@ final class MealController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_meal_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'app_meal_delete', methods: ['POST'])]
     public function delete(Request $request, Meal $meal, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$meal->getId(), $request->getPayload()->getString('_token'))) {
