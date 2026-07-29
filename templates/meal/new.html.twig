@@ -3,9 +3,96 @@
 {% block title %}New Meal{% endblock %}
 
 {% block body %}
-    <h1>Create new Meal</h1>
+<div class="max-w-2xl mx-auto py-8 px-4">
+<img src="{{ asset('images/ajout_plat.jpg') }}" alt="Meal" class=" mb-4">
+<h1 class="text-2xl font-bold mb-6">Ajouter un nouveau repas</h1>
 
-    {{ include('meal/_form.html.twig') }}
+    {{ form_start(form, {'attr': {'id': 'meal-form'}}) }}
+<div class="mb-4">
+            {{ form_label(form.dishName) }}
+            {{ form_widget(form.dishName, {'attr': {'class': 'border rounded px-3 py-2 w-full'}}) }}
+            {{ form_errors(form.dishName) }}
+</div>
 
-    <a href="{{ path('app_meal_index') }}">back to list</a>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div>
+                {{ form_label(form.date) }}
+                {{ form_widget(form.date, {'attr': {'class': 'border rounded px-3 py-2 w-full'}}) }}
+                {{ form_errors(form.date) }}
+</div>
+<div>
+                {{ form_label(form.hour) }}
+                {{ form_widget(form.hour, {'attr': {'class': 'border rounded px-3 py-2 w-full'}}) }}
+                {{ form_errors(form.hour) }}
+</div>
+</div>
+
+<h2 class="text-lg font-bold mb-3">Plats de ce repas</h2>
+
+<div id="meal-items-list"
+data-prototype="{{ form_widget(form.mealItems.vars.prototype)|e('html_attr') }}"
+data-index="{{ form.mealItems|length }}"
+class="space-y-3 mb-4">
+
+            {% for mealItemForm in form.mealItems %}
+<div class="meal-item-row flex items-end gap-3 bg-gray-50 rounded-xl p-3">
+<div class="flex-1">
+                        {{ form_widget(mealItemForm.alimentReference, {'attr': {'class': 'border rounded px-3 py-2 w-full'}}) }}
+</div>
+<div class="w-28">
+                        {{ form_widget(mealItemForm.quantity, {'attr': {'class': 'border rounded px-3 py-2 w-full'}}) }}
+</div>
+<button type="button" class="remove-meal-item text-red-600 font-bold px-2 py-2">✕</button>
+</div>
+            {% endfor %}
+</div>
+
+<button type="button" id="add-meal-item"
+class="bg-gray-200 hover:bg-gray-300 text-sm font-semibold rounded-lg px-4 py-2 mb-6">
+            + Ajouter un plat
+</button>
+
+<button type="submit"
+class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold rounded-xl py-3">
+            Enregistrer le repas
+</button>
+    {{ form_end(form) }}
+
+<a href="{{ path('app_meal_index') }}" class="block text-center mt-4 text-gray-600">retourner à la liste</a>
+</div>
+
+<script>
+    function initMealForm() {
+        const list = document.getElementById('meal-items-list');
+        const addButton = document.getElementById('add-meal-item');
+
+        if (!list || !addButton) {
+            return; // la page ne contient pas ce formulaire
+        }
+
+        addButton.addEventListener('click', function () {
+            const index = list.dataset.index;
+            const prototype = list.dataset.prototype.replace(/__name__/g, index);
+
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('meal-item-row', 'flex', 'items-end', 'gap-3', 'bg-gray-50', 'rounded-xl', 'p-3');
+            wrapper.innerHTML = `
+                <div class="flex-1">${prototype}</div>
+                <button type="button" class="remove-meal-item text-red-600 font-bold px-2 py-2">✕</button>
+            `;
+
+            list.appendChild(wrapper);
+            list.dataset.index = parseInt(index) + 1;
+        });
+
+        list.addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-meal-item')) {
+                e.target.closest('.meal-item-row').remove();
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', initMealForm);
+    document.addEventListener('turbo:load', initMealForm);
+</script>
 {% endblock %}
