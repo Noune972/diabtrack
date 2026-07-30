@@ -19,6 +19,32 @@
         {% endif %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+    <header class="flex items-center justify-between w-full bg-gray-50 px-8 py-4">
+
+    {% if app.user %}
+        <a href="{{ path('app_home') }}" class="flex-shrink-0">
+            <img
+                src="{{ asset('images/logo.svg') }}"
+                alt="Logo DiabTrack"
+                class="h-16 w-auto">
+        </a>
+
+        <div class="text-right">
+            <p class="text-black font-semibold tracking-wide text-4xl">
+                Bonjour
+            </p>
+
+            <h2 class="font-display font-extrabold text-[#48742C] leading-tight text-4xl">
+                {{ app.user.firstname }}
+            </h2>
+        </div>
+    {% endif %}
+
+</header>
+
+</header>
+        {% block body %}
+        
+        {% endblock %}
     </body>
 </html>
