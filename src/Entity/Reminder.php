@@ -24,7 +24,7 @@ class Reminder
     private ?\DateTime $time = null;
 
     #[ORM\ManyToOne(inversedBy: 'reminder')]
-    #[ORM\JoinColumn(nullable: false)]
+   #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $patient = null;
 
     public function getId(): ?int

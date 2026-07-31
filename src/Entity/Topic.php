@@ -29,7 +29,7 @@ class Topic
     private ?\DateTime $hour = null;
 
     #[ORM\ManyToOne(inversedBy: 'topic')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $patient = null;
 
     /**

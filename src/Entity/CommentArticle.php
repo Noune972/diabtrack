@@ -27,11 +27,11 @@ class CommentArticle
     private CommentStatus $status = CommentStatus::NON_VALID;
 
     #[ORM\ManyToOne(inversedBy: 'comment_article')]
-    #[ORM\JoinColumn(nullable: false)]
+   #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $patient = null;
 
     #[ORM\ManyToOne(inversedBy: 'comment_article')]
-    #[ORM\JoinColumn(nullable: false)]
+   #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Article $article = null;
 
     public function getId(): ?int

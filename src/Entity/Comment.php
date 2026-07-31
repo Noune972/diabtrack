@@ -20,11 +20,11 @@ class Comment
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\ManyToOne(inversedBy: 'comment')]
-    #[ORM\JoinColumn(nullable: false)]
+   #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $patient = null;
 
     #[ORM\ManyToOne(inversedBy: 'comment')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Topic $topic = null;
 
     public function getId(): ?int

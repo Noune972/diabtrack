@@ -30,7 +30,7 @@ class SportingActivity
     private ?\DateTime $hour = null;
 
     #[ORM\ManyToOne(inversedBy: 'sportingActivitys')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $patient = null;
 
     public function getId(): ?int
