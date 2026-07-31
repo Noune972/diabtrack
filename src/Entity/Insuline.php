@@ -24,7 +24,7 @@ class Insuline
     private ?int $hour = null;
 
     #[ORM\ManyToOne(inversedBy: 'insuline')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $patient = null;
 
     public function getId(): ?int

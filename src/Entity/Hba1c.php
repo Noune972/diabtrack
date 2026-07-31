@@ -21,7 +21,7 @@ class Hba1c
     private ?\DateTime $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'HBA1C')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $patient = null;
 
     public function getId(): ?int
