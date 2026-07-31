@@ -142,6 +142,7 @@ public function setEmailAuthCodeCreatedAt(?\DateTimeInterface $date): static
     return true;
 }
 
+
 public function getEmailAuthCode(): string
 {
     if (null === $this->emailAuthCode) {

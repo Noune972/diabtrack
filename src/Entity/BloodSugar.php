@@ -27,7 +27,7 @@ class BloodSugar
     private ?string $relation = null; // stocke la classification: hypoglycemie / normale / hyperglycemie
 
     #[ORM\ManyToOne(inversedBy: 'bloodSugars')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $patient = null;
 
     public function getId(): ?int
