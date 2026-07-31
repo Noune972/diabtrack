@@ -37,7 +37,7 @@ class Meal
     private ?\DateTimeInterface $hour = null;
 
     #[ORM\ManyToOne(inversedBy: 'meal')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $patient = null;
 
     /**

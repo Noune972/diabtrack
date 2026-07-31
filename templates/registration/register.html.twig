@@ -1,29 +1,28 @@
 {% extends 'base.html.twig' %}
 {% block title %}Register{% endblock %}
 {% block body %}
-<div class="min-h-screen flex flex-col relative">
+<main class="flex flex-col relative">
 
-  {# Logo #}
-  <a href="{{ path('app_home') }}">
- <img src="{{ asset('images/logo.png') }}" alt="logo" class="absolute top-6 left-6 w-[30rem] h-auto z-5">
-</a>
+  
   {# Contenu principal #}
-  <div class="flex-1 flex">
-    {# Colonne gauche : titre + mascotte #}
-    <div class="flex-1 flex flex-col items-center justify-center bg-gray-50 gap-8 py-12">
+  <div class="flex-1 flex ">
+
+    
+    
+    <div class="flex-1 flex flex-col items-center justify-center bg-gray-50 gap-8">
       <h1 class="text-5xl font-black uppercase tracking-wider text-center leading-tight italic">
         <span class="text-[#48742C]">Créer</span>
         <span class="text-gray-900"> un </span>
         <span class="text-[#48742C]">compte</span>
       </h1>
       
-      <img src="{{ asset('images/mascotte.png') }}" alt="mascotte" class="w-[58rem] max-w-full h-auto">
+      <img src="{{ asset('images/mascotte.png') }}" alt="mascotte" class=" max-w-full h-auto">
       
     </div>
 
     {# Colonne droite : formulaire #}
-    <div class="flex-1 flex justify-center bg-gray-50 p-8">
-      <div class="bg-white rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.15)] p-10 w-full max-w-md my-8">
+    <div class="flex-1 flex justify-center bg-gray-50">
+      <div class="bg-white rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.15)] p-10 w-full max-w-md">
 
         {% for flash_error in app.flashes('verify_email_error') %}
           <div class="bg-red-100 text-red-700 rounded-lg px-4 py-3 mb-4 text-sm">
@@ -85,5 +84,5 @@
 
   {# Bande verte horizontale en bas #}
   {#<div class="bg-[#48742C] w-full" style="height: 250px;"></div>#}
-</div>
+</main>
 {% endblock %}
