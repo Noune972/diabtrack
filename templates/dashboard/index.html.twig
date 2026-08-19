@@ -5,10 +5,158 @@
 {% block body %}
 
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<section class="min-h-screen bg-gray-50 py-12 px-4">
+    <div class="max-w-3xl mx-auto">
 
-  Dashboard en cours...
-    
-</div>
+
+        <div class="flex flex-col gap-6">
+
+            {# ---------------------------------------------------- #}
+            {# 1. GLYCÉMIE #}
+            {# ---------------------------------------------------- #}
+            <article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="flex flex-col md:flex-row">
+                    <div class="md:w-1/3 bg-red-50 flex items-center justify-center p-6">
+                        
+                        <img src="{{ asset('images/glycemie2.png') }}"
+                             alt="Suivi de la glycémie"
+                             class="w-full max-w-[180px] h-auto object-contain">
+                    </div>
+                    <div class="md:w-2/3 p-6 flex flex-col justify-between">
+                        <div>
+                            <h2 class="text-xl font-semibold text-gray-800 mb-2">
+                                Suivre ma glycémie
+                            </h2>
+                            <p class="text-gray-500 text-sm mb-4">
+                                Enregistrez vos mesures et visualisez leur évolution dans le temps.
+                            </p>
+                        </div>
+                        <a href="{{ path('app_blood_sugar_index') }}"
+                           class="self-start inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-medium px-5 py-2.5 rounded-xl transition">
+                            Voir
+                            <span aria-hidden="true">&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            {# ---------------------------------------------------- #}
+            {# 2. NUTRITION #}
+            {# ---------------------------------------------------- #}
+            <article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="flex flex-col md:flex-row">
+                    <div class="md:w-1/3 bg-green-50 flex items-center justify-center p-6">
+                    
+                        <img src="{{ asset('images/nutrition.png') }}"
+                             alt="Suivi de la nutrition"
+                             class="w-full max-w-[180px] h-auto object-contain">
+                    </div>
+                    <div class="md:w-2/3 p-6 flex flex-col justify-between">
+                        <div>
+                            <h2 class="text-xl font-semibold text-gray-800 mb-2">
+                                Suivre ma nutrition
+                            </h2>
+                            <p class="text-gray-500 text-sm mb-4">
+                                Notez vos repas et suivez vos apports caloriques au quotidien.
+                            </p>
+                        </div>
+                        <a href="{{ path('app_meal_new') }}"
+                           class="self-start inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-medium px-5 py-2.5 rounded-xl transition">
+                            Voir
+                            <span aria-hidden="true">&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            {# ---------------------------------------------------- #}
+            {# 3. ACTIVITÉS PHYSIQUES #}
+            {# ---------------------------------------------------- #}
+            <article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="flex flex-col md:flex-row">
+                    <div class="md:w-1/3 bg-blue-50 flex items-center justify-center p-6">
+                        
+                        <img src="{{ asset('images/sport.jpg') }}"
+                             alt="Suivi des activités physiques"
+                             class="w-full max-w-[180px] h-auto object-contain">
+                    </div>
+                    <div class="md:w-2/3 p-6 flex flex-col justify-between">
+                        <div>
+                            <h2 class="text-xl font-semibold text-gray-800 mb-2">
+                                Suivre mes activités physiques
+                            </h2>
+                            <p class="text-gray-500 text-sm mb-4">
+                                Enregistrez vos séances de sport et suivez leur effet sur votre glycémie.
+                            </p>
+                        </div>
+                        <a href="{{ path('app_sporting_activity_index') }}"
+                           class="self-start inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-xl transition">
+                            Voir
+                            <span aria-hidden="true">&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            {# ---------------------------------------------------- #}
+            {# 4. INSULINE #}
+            {# ---------------------------------------------------- #}
+            <article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="flex flex-col md:flex-row">
+                    <div class="md:w-1/3 bg-amber-50 flex items-center justify-center p-6">
+                        
+                        <img src="{{ asset('images/insuline.png') }}"
+                             alt="Suivi de l'insuline"
+                             class="w-full max-w-[180px] h-auto object-contain">
+                    </div>
+                    <div class="md:w-2/3 p-6 flex flex-col justify-between">
+                        <div>
+                            <h2 class="text-xl font-semibold text-gray-800 mb-2">
+                                Suivre mon insuline
+                            </h2>
+                            <p class="text-gray-500 text-sm mb-4">
+                                Enregistrez vos injections d'insuline lente ou rapide et leur dosage.
+                            </p>
+                        </div>
+                        <a href="{{ path('app_insuline_index') }}"
+                           class="self-start inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white font-medium px-5 py-2.5 rounded-xl transition">
+                            Voir
+                            <span aria-hidden="true">&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            {# ---------------------------------------------------- #}
+            {# 5. HÉMOGLOBINE GLYQUÉE #}
+            {# ---------------------------------------------------- #}
+            <article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="flex flex-col md:flex-row">
+                    <div class="md:w-1/3 bg-purple-50 flex items-center justify-center p-6">
+                      
+                        <img src="{{ asset('images/hba1c.png') }}"
+                             alt="Suivi de l'hémoglobine glyquée"
+                             class="w-full max-w-[180px] h-auto object-contain">
+                    </div>
+                    <div class="md:w-2/3 p-6 flex flex-col justify-between">
+                        <div>
+                            <h2 class="text-xl font-semibold text-gray-800 mb-2">
+                                Suivre mon hémoglobine glyquée
+                            </h2>
+                            <p class="text-gray-500 text-sm mb-4">
+                                Enregistrez votre taux d'HbA1c et suivez votre équilibre glycémique sur le long terme.
+                            </p>
+                        </div>
+                        <a href="{{ path('app_hba1c_index') }}"
+                           class="self-start inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-medium px-5 py-2.5 rounded-xl transition">
+                            Voir
+                            <span aria-hidden="true">&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </div>
+</section>
 {% endblock %}
