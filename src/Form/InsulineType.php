@@ -17,22 +17,42 @@ use Symfony\Component\Validator\Constraints\Range;
 
 class InsulineType extends AbstractType
 {
+    private const INPUT_CLASS = 'w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600';
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('date', DateType::class, [
+                'label' => false,
+                'widget' => 'single_text', // <input type="date"> natif, stylable en Tailwind directement
+                'html5' => true,
+                'constraints' => [
+                    new NotBlank(message: 'Merci de renseigner la date.'),
+                ],
+                'attr' => ['class' => self::INPUT_CLASS],
+            ])
+            ->add('hour', IntegerType::class, [
+                'label' => false,
+                'constraints' => [
+                    new NotBlank(message: "Merci de renseigner l'heure."),
+                    new Range(min: 0, max: 23, notInRangeMessage: "L'heure doit être comprise entre 0 et 23."),
+                ],
+                'attr' => [
+                    'placeholder' => 'HH',
+                    'class' => self::INPUT_CLASS,
+                ],
+            ])
             ->add('type_of_insuline', EnumType::class, [
                 'class' => InsulineTypeEnum::class,
-                'label' => "Type d'insuline",
-                'placeholder' => 'Choisir un type',
+                'label' => false,
+                'placeholder' => 'Lente',
                 'constraints' => [
                     new NotBlank(message: "Merci de préciser le type d'insuline."),
                 ],
-                'attr' => [
-                    'class' => 'w-full rounded-xl border-gray-300 focus:border-amber-500 focus:ring-amber-500',
-                ],
+                'attr' => ['class' => self::INPUT_CLASS . ' text-gray-500'],
             ])
             ->add('dose', NumberType::class, [
-                'label' => 'Dose (en unités)',
+                'label' => false,
                 'scale' => 2,
                 'html5' => true,
                 'constraints' => [
@@ -40,33 +60,9 @@ class InsulineType extends AbstractType
                     new Positive(message: 'La dose doit être supérieure à 0.'),
                 ],
                 'attr' => [
-                    'placeholder' => 'ex. 12.5',
+                    'placeholder' => '25 U',
                     'step' => '0.5',
-                    'class' => 'w-full rounded-xl border-gray-300 focus:border-amber-500 focus:ring-amber-500',
-                ],
-            ])
-            ->add('date', DateType::class, [
-                'label' => "Date de l'injection",
-                'widget' => 'single_text',
-                'input' => 'datetime',
-                'constraints' => [
-                    new NotBlank(message: 'Merci de renseigner la date.'),
-                ],
-                'attr' => [
-                    'class' => 'w-full rounded-xl border-gray-300 focus:border-amber-500 focus:ring-amber-500',
-                ],
-            ])
-            ->add('hour', IntegerType::class, [
-                'label' => "Heure de l'injection (0-23)",
-                'constraints' => [
-                    new NotBlank(message: "Merci de renseigner l'heure."),
-                    new Range(min: 0, max: 23, notInRangeMessage: "L'heure doit être comprise entre 0 et 23."),
-                ],
-                'attr' => [
-                    'placeholder' => 'ex. 8',
-                    'min' => 0,
-                    'max' => 23,
-                    'class' => 'w-full rounded-xl border-gray-300 focus:border-amber-500 focus:ring-amber-500',
+                    'class' => self::INPUT_CLASS,
                 ],
             ])
         ;
