@@ -1,37 +1,85 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hba1c index{% endblock %}
+{% block title %}Mon HbA1c - DiabTrack{% endblock %}
 
 {% block body %}
-    <h1>Hba1c index</h1>
+<section class="min-h-screen bg-white py-10 px-4">
+    <div class="max-w-md mx-auto">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Value</th>
-                <th>Date</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for hba1c in hba1cs %}
-            <tr>
-                <td>{{ hba1c.id }}</td>
-                <td>{{ hba1c.value }}</td>
-                <td>{{ hba1c.date ? hba1c.date|date('Y-m-d') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_hba1c_show', {'id': hba1c.id}) }}">show</a>
-                    <a href="{{ path('app_hba1c_edit', {'id': hba1c.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
+       
+        <h1 class="text-3xl mb-8">
+            <span class="font-extrabold italic text-gray-900">AJOUT</span>
+            <span class="font-extrabold italic text-green-700">HBA1C</span>
+        </h1>
+
+        {# Photo d'illustration - remplace le chemin par ton propre asset #}
+        <div class="overflow-hidden">
+            <img src="{{ asset('images/hba1c2.png') }}"
+                 alt="Illustration prise de sang HbA1c"
+                 class="w-full h-full object-cover">
+        </div>
+
+        {% for message in app.flashes('success') %}
+            <div class="bg-green-50 text-green-700 border border-green-200 rounded-xl px-4 py-3 mb-6 text-sm">
+                {{ message }}
+            </div>
         {% endfor %}
-        </tbody>
-    </table>
 
-    <a href="{{ path('app_hba1c_new') }}">Create new</a>
+        {{ form_start(form, {'attr': {'class': 'flex flex-col gap-6', 'novalidate': 'novalidate'}}) }}
+
+            <div>
+                <label class="block text-gray-800 font-medium mb-2">Date</label>
+                {{ form_widget(form.date) }}
+                {{ form_errors(form.date) }}
+            </div>
+
+            <div>
+                <label class="block text-gray-800 font-medium mb-2">Heure</label>
+                {{ form_widget(form.hour) }}
+                {{ form_errors(form.hour) }}
+            </div>
+
+            <div>
+                <label class="block text-gray-800 font-medium mb-2">Valeur</label>
+                {{ form_widget(form.value) }}
+                {{ form_errors(form.value) }}
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-blue-900 hover:bg-blue-800 text-white font-semibold py-3 rounded-xl transition">
+                Envoyer
+            </button>
+
+        {{ form_end(form) }}
+
+        {# ---------------------------------------------------- #}
+        {# HISTORIQUE #}
+        {# ---------------------------------------------------- #}
+        <h2 class="text-lg font-semibold text-gray-800 mt-12 mb-4">Historique récent</h2>
+
+        {% if hba1cs is empty %}
+            <p class="text-gray-500 text-sm">Aucune mesure enregistrée pour le moment.</p>
+        {% else %}
+            <div class="flex flex-col gap-3">
+                {% for hba1c in hba1cs %}
+                    <a href="{{ path('app_hba1c_show', {id: hba1c.id}) }}"
+                       class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex items-center justify-between hover:border-green-300 transition">
+                        <div>
+                            <p class="font-medium text-gray-800">
+                                Taux d'HbA1c
+                            </p>
+                            <p class="text-sm text-gray-500">
+                                {{ hba1c.date|date('d/m/Y') }} à {{ hba1c.hour }}h
+                            </p>
+                        </div>
+                        <span class="text-lg font-semibold text-green-700">
+                            {{ hba1c.value }}%
+                        </span>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    </div>
+</section>
 {% endblock %}
