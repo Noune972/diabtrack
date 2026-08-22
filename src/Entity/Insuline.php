@@ -5,6 +5,7 @@ use App\Enum\InsulineType;
 use App\Repository\InsulineRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: InsulineRepository::class)]
 class Insuline
@@ -16,6 +17,11 @@ class Insuline
 
     #[ORM\Column(enumType: InsulineType::class)]
     private ?InsulineType $type_of_insuline = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2)]
+    #[Assert\NotBlank(message: 'Merci de renseigner la dose injectée.')]
+    #[Assert\Positive(message: 'La dose doit être supérieure à 0.')]
+    private ?string $dose = null; // en unités (UI) — Doctrine renvoie les DECIMAL en string, cf. note ci-dessous
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $date = null;
@@ -40,6 +46,17 @@ class Insuline
     public function setTypeOfInsuline(InsulineType $type_of_insuline): static
     {
         $this->type_of_insuline = $type_of_insuline;
+        return $this;
+    }
+
+    public function getDose(): ?float
+    {
+        return $this->dose !== null ? (float) $this->dose : null;
+    }
+
+    public function setDose(float $dose): static
+    {
+        $this->dose = (string) $dose;
         return $this;
     }
 

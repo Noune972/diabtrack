@@ -1,39 +1,151 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Insuline index{% endblock %}
+{% block title %}Mon insuline - DiabTrack{% endblock %}
 
 {% block body %}
-    <h1>Insuline index</h1>
+<section class="min-h-screen bg-white py-10 px-4">
+    <div class="max-w-md mx-auto">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Type_of_insuline</th>
-                <th>Date</th>
-                <th>Hour</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for insuline in insulines %}
-            <tr>
-                <td>{{ insuline.id }}</td>
-                <td>{{ insuline.typeOfInsuline }}</td>
-                <td>{{ insuline.date ? insuline.date|date('Y-m-d') : '' }}</td>
-                <td>{{ insuline.hour }}</td>
-                <td>
-                    <a href="{{ path('app_insuline_show', {'id': insuline.id}) }}">show</a>
-                    <a href="{{ path('app_insuline_edit', {'id': insuline.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
+    
+        <h1 class="text-3xl mb-8">
+            <span class="font-extrabold italic text-gray-900">AJOUTER</span>
+            <span class="font-extrabold italic text-green-700">INSULINE</span>
+        </h1>
+
+    
+        <div class="bg-teal-50 rounded-2xl flex items-center justify-center mb-8" style="height: 220px;">
+            <img src="{{ asset('images/insuinsu.png') }}"
+                 alt="Illustration seringue d'insuline"
+                 class="h-40 w-40 object-contain">
+        </div>
+
+        {% for message in app.flashes('success') %}
+            <div class="bg-green-50 text-green-700 border border-green-200 rounded-xl px-4 py-3 mb-6 text-sm">
+                {{ message }}
+            </div>
         {% endfor %}
-        </tbody>
-    </table>
 
-    <a href="{{ path('app_insuline_new') }}">Create new</a>
+        {{ form_start(form, {'attr': {'class': 'flex flex-col gap-6', 'novalidate': 'novalidate'}}) }}
+
+            <div>
+                <label class="block text-gray-800 font-medium mb-2">Date</label>
+                <div class="insuline-row">
+                    {{ form_widget(form.date) }}
+                </div>
+                {{ form_errors(form.date) }}
+            </div>
+
+            <div>
+                <label class="block text-gray-800 font-medium mb-2">Heure</label>
+                <div class="insuline-row">
+                    {{ form_widget(form.hour) }}
+                </div>
+                {{ form_errors(form.hour) }}
+            </div>
+
+            <div>
+                <label class="block text-gray-800 font-medium mb-2">Lente ou rapide</label>
+                {{ form_widget(form.type_of_insuline) }}
+                {{ form_errors(form.type_of_insuline) }}
+            </div>
+
+            <div>
+                <label class="block text-gray-800 font-medium mb-2">Dose</label>
+                {{ form_widget(form.dose) }}
+                {{ form_errors(form.dose) }}
+            </div>
+
+            <div class="flex justify-center pt-4">
+                <button type="submit" class="insuline-submit">
+                    Envoyer
+                </button>
+            </div>
+
+        {{ form_end(form) }}
+
+        {# ---------------------------------------------------- #}
+        {# HISTORIQUE #}
+        {# ---------------------------------------------------- #}
+        <h2 class="text-lg font-semibold text-gray-800 mt-12 mb-4">Historique récent</h2>
+
+        {% if insulines is empty %}
+            <p class="text-gray-500 text-sm">Aucune injection enregistrée pour le moment.</p>
+        {% else %}
+            <div class="flex flex-col gap-3">
+                {% for insuline in insulines %}
+                    <a href="{{ path('app_insuline_show', {id: insuline.id}) }}"
+                       class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex items-center justify-between hover:border-amber-300 transition">
+                        <div>
+                            <p class="font-medium text-gray-800">
+                                Insuline {{ insuline.typeOfInsuline.value|default(insuline.typeOfInsuline) }}
+                            </p>
+                            <p class="text-sm text-gray-500">
+                                {{ insuline.date|date('d/m/Y') }} à {{ insuline.hour }}h
+                            </p>
+                        </div>
+                        <span class="text-lg font-semibold text-amber-700">
+                            {{ insuline.dose }} U
+                        </span>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    </div>
+</section>
+
+<style>
+    #{{ form.vars.id }} input[type="text"],
+    #{{ form.vars.id }} input[type="number"],
+    #{{ form.vars.id }} select {
+        width: 100%;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        padding: 0.625rem 1rem;
+        color: #374151;
+        background-color: #fff;
+        font-size: 0.95rem;
+    }
+    #{{ form.vars.id }} input::placeholder {
+        color: #9ca3af;
+    }
+    #{{ form.vars.id }} select {
+        color: #9ca3af;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%239ca3af' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+    }
+    #{{ form.vars.id }} select:valid {
+        color: #374151;
+    }
+    #{{ form.vars.id }} input:focus,
+    #{{ form.vars.id }} select:focus {
+        outline: none;
+        border-color: #1d4ed8;
+        box-shadow: 0 0 0 1px #1d4ed8;
+    }
+
+    .insuline-row {
+        display: flex;
+        gap: 0.75rem;
+    }
+    .insuline-row input {
+        flex: 1;
+        min-width: 0;
+        text-align: center;
+    }
+
+    .insuline-submit {
+        background-color: #1e3a8a;
+        color: #fff;
+        font-weight: 600;
+        padding: 0.75rem 2.5rem;
+        border-radius: 0.75rem;
+        transition: background-color 0.2s;
+    }
+    .insuline-submit:hover {
+        background-color: #1e40af;
+    }
+</style>
 {% endblock %}
