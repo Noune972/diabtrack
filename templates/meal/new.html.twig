@@ -4,9 +4,13 @@
 
 {% block body %}
 <div class="max-w-2xl mx-auto py-8 px-4">
+ <h1 class="text-3xl mb-8">
+            <span class="font-extrabold italic text-gray-900">AJOUTER</span>
+            <span class="font-extrabold italic text-green-700">REPAS</span>
+        </h1>
 
 <img src="{{ asset('images/ajout_plat.jpg') }}" alt="Meal" class=" mb-4">
-<h1 class="text-2xl font-bold mb-6">Ajouter un nouveau repas</h1>
+<h2 class="text-2xl font-bold mb-6">Ajouter un nouveau repas</h2>
 
     {{ form_start(form, {'attr': {'id': 'meal-form'}}) }}
 <div class="mb-4">
