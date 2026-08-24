@@ -24,16 +24,9 @@ class ArticleCategory
     #[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'category')]
     private Collection $articles;
 
-    /**
-     * @var Collection<int, Article>
-     */
-    #[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'articleCategory')]
-    private Collection $article;
-
     public function __construct()
     {
         $this->articles = new ArrayCollection();
-        $this->article = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -49,7 +42,6 @@ class ArticleCategory
     public function setTitle(string $title): static
     {
         $this->title = $title;
-
         return $this;
     }
 
@@ -67,27 +59,16 @@ class ArticleCategory
             $this->articles->add($article);
             $article->setCategory($this);
         }
-
         return $this;
     }
 
     public function removeArticle(Article $article): static
     {
         if ($this->articles->removeElement($article)) {
-            // set the owning side to null (unless already changed)
             if ($article->getCategory() === $this) {
                 $article->setCategory(null);
             }
         }
-
         return $this;
-    }
-
-    /**
-     * @return Collection<int, Article>
-     */
-    public function getArticle(): Collection
-    {
-        return $this->article;
     }
 }
