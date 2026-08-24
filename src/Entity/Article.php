@@ -19,7 +19,7 @@ class Article
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
     #[ORM\Column(length: 255)]
@@ -31,7 +31,9 @@ class Article
     #[ORM\Column(enumType: ArticleStatus::class)]
     private ArticleStatus $status = ArticleStatus::DRAFT;
 
+    // Une seule relation vers ArticleCategory (la seconde, dupliquée, a été supprimée)
     #[ORM\ManyToOne(inversedBy: 'articles')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?ArticleCategory $category = null;
 
     /**
@@ -39,9 +41,6 @@ class Article
      */
     #[ORM\OneToMany(targetEntity: CommentArticle::class, mappedBy: 'article')]
     private Collection $comment_article;
-
-    #[ORM\ManyToOne(inversedBy: 'article')]
-    private ?ArticleCategory $articleCategory = null;
 
     public function __construct()
     {
@@ -78,6 +77,12 @@ class Article
     public function getAuthor(): ?string
     {
         return $this->author;
+    }
+
+    public function setAuthor(string $author): static
+    {
+        $this->author = $author;
+        return $this;
     }
 
     public function getDate(): ?\DateTime
@@ -127,31 +132,16 @@ class Article
             $this->comment_article->add($commentArticle);
             $commentArticle->setArticle($this);
         }
-
         return $this;
     }
 
     public function removeCommentArticle(CommentArticle $commentArticle): static
     {
         if ($this->comment_article->removeElement($commentArticle)) {
-            // set the owning side to null (unless already changed)
             if ($commentArticle->getArticle() === $this) {
                 $commentArticle->setArticle(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getArticleCategory(): ?ArticleCategory
-    {
-        return $this->articleCategory;
-    }
-
-    public function setArticleCategory(?ArticleCategory $articleCategory): static
-    {
-        $this->articleCategory = $articleCategory;
-
         return $this;
     }
 }
