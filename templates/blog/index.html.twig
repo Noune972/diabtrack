@@ -40,7 +40,7 @@
                                 {{ article.title }}
                             </h2>
                             <p class="text-gray-500 text-sm line-clamp-3">
-                                {{ article.content|striptags }}
+                                {{ article.content|excerpt(180) }}
                             </p>
                             <p class="text-xs text-gray-400 mt-auto pt-2">
                                 {{ article.author }} — {{ article.date|date('d/m/Y') }}

@@ -20,7 +20,7 @@
         <p class="text-sm text-gray-400 mb-8">{{ article.author }} — {{ article.date|date('d/m/Y') }}</p>
 
         <div class="prose max-w-none text-gray-700 whitespace-pre-line mb-12">
-            {{ article.content }}
+            {{ article.content|markdown }}
         </div>
 
         {% if is_granted('ROLE_ADMIN') %}
