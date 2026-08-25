@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Article;
 use App\Entity\CommentArticle;
+use App\Enum\CommentStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +18,39 @@ class CommentArticleRepository extends ServiceEntityRepository
         parent::__construct($registry, CommentArticle::class);
     }
 
-    //    /**
-    //     * @return CommentArticle[] Returns an array of CommentArticle objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Commentaires validés d'un article, du plus ancien au plus récent.
+     *
+     * @return CommentArticle[]
+     */
+    public function findValidesPourArticle(Article $article): array
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.article = :article')
+            ->andWhere('c.status = :status')
+            ->setParameter('article', $article)
+            ->setParameter('status', CommentStatus::VALID)
+            ->orderBy('c.date', 'ASC')
+            ->addOrderBy('c.hour', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
-    //    public function findOneBySomeField($value): ?CommentArticle
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * Commentaires en attente de modération, du plus récent au plus ancien.
+     *
+     * @return CommentArticle[]
+     */
+    public function findEnAttente(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.status = :status')
+            ->setParameter('status', CommentStatus::NON_VALID)
+            ->orderBy('c.date', 'DESC')
+            ->addOrderBy('c.hour', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

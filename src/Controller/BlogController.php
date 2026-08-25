@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\CommentArticle;
 use App\Form\ArticleType;
+use App\Form\CommentArticleType;
 use App\Repository\ArticleRepository;
+use App\Repository\CommentArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,12 +27,42 @@ final class BlogController extends AbstractController
         ]);
     }
 
-    // Accessible à tout le monde.
-    #[Route('/{id}', name: 'app_blog_show', methods: ['GET'])]
-    public function show(Article $article): Response
-    {
+    // Accessible à tout le monde. Le formulaire de commentaire n'est traité
+    // que si l'utilisateur est connecté (vérifié avant handleRequest).
+    #[Route('/{id}', name: 'app_blog_show', methods: ['GET', 'POST'])]
+    public function show(
+        Article $article,
+        Request $request,
+        CommentArticleRepository $commentArticleRepository,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $comment = new CommentArticle();
+        $commentForm = $this->createForm(CommentArticleType::class, $comment);
+
+        if ($this->getUser()) {
+            $commentForm->handleRequest($request);
+
+            if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+                $comment->setArticle($article);
+                $comment->setPatient($this->getUser());
+                $comment->setDate(new \DateTime());
+                $comment->setHour(new \DateTime());
+                // Le statut par défaut de l'entité est déjà NON_VALID :
+                // le commentaire n'apparaîtra qu'après validation par un admin.
+
+                $entityManager->persist($comment);
+                $entityManager->flush();
+
+                $this->addFlash('success', "Votre commentaire a bien été envoyé et sera visible après validation par un administrateur.");
+
+                return $this->redirectToRoute('app_blog_show', ['id' => $article->getId()], Response::HTTP_SEE_OTHER);
+            }
+        }
+
         return $this->render('blog/show.html.twig', [
             'article' => $article,
+            'comments' => $commentArticleRepository->findValidesPourArticle($article),
+            'commentForm' => $commentForm,
         ]);
     }
 
@@ -39,8 +72,6 @@ final class BlogController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $article = new Article();
-        // L'auteur est déduit automatiquement de l'utilisateur connecté,
-        // jamais saisi librement dans le formulaire.
         $article->setAuthor($this->getUser()->getUserIdentifier());
 
         $form = $this->createForm(ArticleType::class, $article);
