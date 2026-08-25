@@ -10,10 +10,16 @@
             <h1 class="text-3xl font-bold text-gray-800">Blog</h1>
 
             {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('app_blog_new') }}"
-                   class="bg-blue-900 hover:bg-blue-800 text-white font-medium px-5 py-2.5 rounded-xl transition">
-                    + Nouvel article
-                </a>
+                <div class="flex gap-3">
+                    <a href="{{ path('app_comment_moderation_index') }}"
+                       class="bg-white border border-gray-200 hover:border-gray-300 text-gray-700 font-medium px-5 py-2.5 rounded-xl transition">
+                        Modérer les commentaires
+                    </a>
+                    <a href="{{ path('app_blog_new') }}"
+                       class="bg-blue-900 hover:bg-blue-800 text-white font-medium px-5 py-2.5 rounded-xl transition">
+                        + Nouvel article
+                    </a>
+                </div>
             {% endif %}
         </div>
 
@@ -39,8 +45,8 @@
                             <h2 class="text-lg font-semibold text-gray-800">
                                 {{ article.title }}
                             </h2>
-                            <p class="text-gray-500 text-sm line-clamp-3">
-                                {{ article.content|excerpt(180) }}
+                            <p class="text-gray-500 text-sm">
+                                {{ article.content|excerpt(140) }}
                             </p>
                             <p class="text-xs text-gray-400 mt-auto pt-2">
                                 {{ article.author }} — {{ article.date|date('d/m/Y') }}
