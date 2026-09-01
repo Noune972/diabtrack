@@ -57,6 +57,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     #[ORM\Column]
     private bool $isVerified = false;
 
+    #[ORM\Column]
+    private bool $isActive = true;
+
     #[ORM\Column(length: 6, nullable: true)]
      private ?string $emailAuthCode = null;
 
@@ -319,6 +322,18 @@ public function setEmailAuthCode(?string $authCode): void
 
         return $this;
     }
+
+    public function isActive(): bool
+{
+    return $this->isActive;
+}
+
+public function setIsActive(bool $isActive): static
+{
+    $this->isActive = $isActive;
+
+    return $this;
+}
 
     /**
      * @return Collection<int, BloodSugar>
