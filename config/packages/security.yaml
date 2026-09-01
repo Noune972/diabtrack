@@ -31,6 +31,7 @@ security:
 
             logout:
                 path: app_logout
+                
 
     access_control:
     # Pages publiques
@@ -41,6 +42,9 @@ security:
 
     # 2FA
     - { path: ^/2fa, roles: IS_AUTHENTICATED_2FA_IN_PROGRESS }
+
+    # Administration
+    - { path: ^/admin, roles: ROLE_ADMIN }
 
     # Tout le reste nécessite un compte
     - { path: ^/, roles: ROLE_USER }

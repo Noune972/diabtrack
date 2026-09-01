@@ -1,166 +1,401 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
+
 <head>
-<meta charset="UTF-8">
-<title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}
-        {% endblock %}
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
+    <meta charset="UTF-8">
 
-        {% set frankenphpHotReload = app.request.server.get('FRANKENPHP_HOT_RELOAD') %}
-        {% if frankenphpHotReload %}
-<meta name="frankenphp-hot-reload:url" content="{{ frankenphpHotReload }}">
-<script src="https://cdn.jsdelivr.net/npm/idiomorph"></script>
-<script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
-        {% endif %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}DiabTrack{% endblock %}
+    </title>
+
+    {% block stylesheets %}
+    {% endblock %}
+
+    {% block javascripts %}
+        {% block importmap %}
+            {{ importmap('app') }}
+        {% endblock %}
+    {% endblock %}
+
+    {% set frankenphpHotReload = app.request.server.get('FRANKENPHP_HOT_RELOAD') %}
+
+    {% if frankenphpHotReload %}
+
+        <meta
+            name="frankenphp-hot-reload:url"
+            content="{{ frankenphpHotReload }}"
+        >
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/idiomorph">
+        </script>
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm"
+            type="module">
+        </script>
+
+    {% endif %}
+
 </head>
-<body>
-<header class="flex items-center justify-between w-full bg-gray-50 px-8 py-4">
+
+
+<body class="min-h-screen bg-gray-50 text-gray-900">
+
+
+{# ============================================================
+   HEADER
+   ============================================================ #}
+
+<header class="flex w-full items-center justify-between bg-white px-6 py-4 shadow-sm lg:px-8">
 
     {% if app.user %}
-<a href="{{ path('app_home') }}">
-<img
-src="{{ asset('images/logo.svg') }}"
-alt="Logo DiabTrack"
-class="h-16 w-auto">
-</a>
 
-<div class="text-right">
-<p class="text-black font-semibold tracking-wide text-4xl">
+        {# Logo #}
+
+        <a
+            href="{{ path('app_home') }}"
+            class="flex items-center"
+            aria-label="Retour à l'accueil DiabTrack"
+        >
+
+            <img
+                src="{{ asset('images/logo.svg') }}"
+                alt="Logo DiabTrack"
+                class="h-16 w-auto"
+            >
+
+        </a>
+
+
+        {# Bonjour utilisateur #}
+
+        <div class="text-right">
+
+            <p class="text-lg font-semibold text-gray-600 lg:text-xl">
                 Bonjour
-</p>
+            </p>
 
-<h2 class="font-display font-extrabold text-[#48742C] leading-tight text-4xl">
+            <h2 class="text-2xl font-extrabold leading-tight text-[#48742C] lg:text-3xl">
+
                 {{ app.user.firstname }}
-</h2>
-</div>
+
+            </h2>
+
+        </div>
+
     {% endif %}
 
 </header>
 
-{% if app.user %}
-{# Bouton menu mobile #}
-<div class="lg:hidden flex items-center justify-end bg-[#48742C] px-4 py-3">
-    <button id="sidebar-toggle" class="text-white p-2" aria-label="Ouvrir le menu">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-        </svg>
-    </button>
-</div>
-{% endif %}
+
+
+{# ============================================================
+   CONTENU (sidebar + contenu principal côte à côte)
+   ============================================================ #}
 
 <div class="flex min-h-screen">
 
     {% if app.user %}
-    {# Overlay mobile #}
-    <div id="sidebar-overlay" class="hidden fixed inset-0 bg-black/40 z-30 lg:hidden"></div>
 
-    {# Sidebar #}
-    <aside id="sidebar"
-        class="fixed lg:static inset-y-0 left-0 z-40 w-64 bg-[#48742C] flex flex-col
-               transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-in-out">
+        {# ========================================================
+        SIDEBAR
+        ======================================================== #}
 
-        <nav class="flex-1 px-4 py-6 space-y-1">
-            <a href="{{ path('app_home') }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-green-100 hover:bg-white/10 hover:text-white transition
-                {{ app.request.attributes.get('_route') == 'app_home' ? 'bg-white/15 text-white font-semibold' : '' }}">
-                <img src="{{ asset('images/home.png') }}" alt="Accueil" class="h-6 w-auto">
-                Accueil
-            </a>
+        <aside
+            class="hidden w-72 shrink-0 bg-[#48742C] lg:flex lg:flex-col"
+        >
 
-            <a href="{{ path('app_dashboard') }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-green-100 hover:bg-white/10 hover:text-white transition
-                {{ app.request.attributes.get('_route') starts with 'app_dashboard' ? 'bg-white/15 text-white font-semibold' : '' }}">
-                <img src="{{ asset('images/suivi.png') }}" alt="Dashboard" class="h-6 w-auto">
-                Dashboard
-            </a>
+            {# Navigation principale #}
+
+            <nav class="flex-1 px-4 py-7">
+
+                <p class="mb-5 px-4 text-xs font-bold uppercase tracking-widest text-green-100/70">
+                    Navigation
+                </p>
 
 
-            <a href="{{ path('app_emmergency') }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-green-100 hover:bg-white/10 hover:text-white transition
-                {{ app.request.attributes.get('_route') == 'app_emmergency' ? 'bg-white/15 text-white font-semibold' : '' }}">
-                <img src="{{ asset('images/sos.png') }}" alt="Secours" class="h-6 w-auto">
-                Secours
-            </a>
+                {# ACCUEIL #}
+
+                <a
+                    href="{{ path('app_home') }}"
+                    class="mb-2 flex items-center gap-4 rounded-2xl px-5 py-4 text-lg font-semibold text-green-50 transition hover:bg-white/10 hover:text-white
+                    {{ app.request.attributes.get('_route') == 'app_home'
+                        ? 'bg-white/15 text-white'
+                        : '' }}"
+                >
+
+                    <img
+                        src="{{ asset('images/home.png') }}"
+                        alt=""
+                        class="h-7 w-7"
+                    >
+
+                    <span>
+                        Accueil
+                    </span>
+
+                </a>
 
 
-            <a href="{{ path('app_blog_index') }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-green-100 hover:bg-white/10 hover:text-white transition
-                {{ app.request.attributes.get('_route') == 'app_emmergency' ? 'bg-white/15 text-white font-semibold' : '' }}">
-                <img src="{{ asset('images/blog.png') }}" alt="Secours" class="h-6 w-auto">
-                Blog
-            </a>
+
+                {# DASHBOARD #}
+
+                <a
+                    href="{{ path('app_dashboard') }}"
+                    class="mb-2 flex items-center gap-4 rounded-2xl px-5 py-4 text-lg font-semibold text-green-50 transition hover:bg-white/10 hover:text-white
+                    {{ app.request.attributes.get('_route') starts with 'app_dashboard'
+                        ? 'bg-white/15 text-white'
+                        : '' }}"
+                >
+
+                    <img
+                        src="{{ asset('images/suivi.png') }}"
+                        alt=""
+                        class="h-7 w-7"
+                    >
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
 
 
-            <a href="{{ path('app_emmergency') }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-green-100 hover:bg-white/10 hover:text-white transition
-                {{ app.request.attributes.get('_route') == 'app_emmergency' ? 'bg-white/15 text-white font-semibold' : '' }}">
-                <img src="{{ asset('images/rappel.png') }}" alt="Rappel" class="h-6 w-auto">
-                Rappel
-            </a>
 
-            <a href="{{ path('app_meal_new') }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-green-100 hover:bg-white/10 hover:text-white transition
-                {{ app.request.attributes.get('_route') starts with 'app_meal_new' ? 'bg-white/15 text-white font-semibold' : '' }}">
-               <img src="{{ asset('images/forum.png') }}" alt="Forum" class="h-6 w-auto">
-                Forum
-            </a>
+                {# SECOURS #}
 
-        </nav>
+                <a
+                    href="{{ path('app_emmergency') }}"
+                    class="mb-2 flex items-center gap-4 rounded-2xl px-5 py-4 text-lg font-semibold text-green-50 transition hover:bg-white/10 hover:text-white
+                    {{ app.request.attributes.get('_route') == 'app_emmergency'
+                        ? 'bg-white/15 text-white'
+                        : '' }}"
+                >
 
-        <div class="px-4 py-4 border-t border-white/10">
-            <a href="{{ path('app_account_delete') }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-green-100 hover:bg-white/10 hover:text-white transition">
-                <img src="{{ asset('images/profil.png') }}" alt="Profil" class="h-6 w-auto">
-                Profil
-            </a>
-            <a href="{{ path('app_logout') }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-green-100 hover:bg-white/10 hover:text-white transition">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                </svg>
-                Déconnexion
-            </a>
-        </div>
-    </aside>
+                    <img
+                        src="{{ asset('images/sos.png') }}"
+                        alt=""
+                        class="h-7 w-7"
+                    >
+
+                    <span>
+                        Secours
+                    </span>
+
+                </a>
+
+
+
+                {# BLOG #}
+
+                <a
+                    href="{{ path('app_blog_index') }}"
+                    class="mb-2 flex items-center gap-4 rounded-2xl px-5 py-4 text-lg font-semibold text-green-50 transition hover:bg-white/10 hover:text-white
+                    {{ app.request.attributes.get('_route') starts with 'app_blog'
+                        ? 'bg-white/15 text-white'
+                        : '' }}"
+                >
+
+                    <img
+                        src="{{ asset('images/blog.png') }}"
+                        alt=""
+                        class="h-7 w-7"
+                    >
+
+                    <span>
+                        Blog
+                    </span>
+
+                </a>
+
+
+
+                {# RAPPEL #}
+
+                <a
+                    href="{{ path('app_emmergency') }}"
+                    class="mb-2 flex items-center gap-4 rounded-2xl px-5 py-4 text-lg font-semibold text-green-50 transition hover:bg-white/10 hover:text-white"
+                >
+
+                    <img
+                        src="{{ asset('images/rappel.png') }}"
+                        alt=""
+                        class="h-7 w-7"
+                    >
+
+                    <span>
+                        Rappel
+                    </span>
+
+                </a>
+
+
+
+                {# FORUM #}
+
+                <a
+                    href="{{ path('app_meal_new') }}"
+                    class="mb-2 flex items-center gap-4 rounded-2xl px-5 py-4 text-lg font-semibold text-green-50 transition hover:bg-white/10 hover:text-white"
+                >
+
+                    <img
+                        src="{{ asset('images/forum.png') }}"
+                        alt=""
+                        class="h-7 w-7"
+                    >
+
+                    <span>
+                        Forum
+                    </span>
+
+                </a>
+
+
+
+                {# =================================================
+                ESPACE ADMINISTRATEUR
+                ================================================= #}
+
+                {% if is_granted('ROLE_ADMIN') %}
+
+                    <div class="my-6 border-t border-white/10"></div>
+
+                    <p class="mb-3 px-4 text-xs font-bold uppercase tracking-widest text-green-100/70">
+                        Administration
+                    </p>
+
+
+                    {# ADMINISTRATION #}
+
+                    <a
+                        href="{{ path('app_admin') }}"
+                        class="mb-2 flex items-center gap-4 rounded-2xl px-5 py-4 text-lg font-semibold text-green-50 transition hover:bg-white/10 hover:text-white
+                        {{ app.request.attributes.get('_route') starts with 'app_admin'
+                            and not (app.request.attributes.get('_route') starts with 'app_admin_user')
+                            ? 'bg-white/15 text-white'
+                            : '' }}"
+                    >
+
+                        <span class="text-2xl">
+                            ⚙️
+                        </span>
+
+                        <span>
+                            Administration
+                        </span>
+
+                    </a>
+
+
+                    {# GÉRER LES UTILISATEURS #}
+
+                    <a
+                        href="{{ path('app_admin_user') }}"
+                        class="mb-2 flex items-center gap-4 rounded-2xl px-5 py-4 text-lg font-semibold text-green-50 transition hover:bg-white/10 hover:text-white
+                        {{ app.request.attributes.get('_route') starts with 'app_admin_user'
+                            ? 'bg-white/15 text-white'
+                            : '' }}"
+                    >
+
+                        <span class="text-2xl">
+                            👥
+                        </span>
+
+                        <span>
+                            Gérer les utilisateurs
+                        </span>
+
+                    </a>
+
+                {% endif %}
+
+            </nav>
+
+
+
+            {# ====================================================
+            BAS DE SIDEBAR
+            ==================================================== #}
+
+            <div class="border-t border-white/10 px-4 py-5">
+
+
+                {# PROFIL #}
+
+                <a
+                    href="{{ path('app_account_delete') }}"
+                    class="mb-2 flex items-center gap-4 rounded-2xl px-5 py-4 text-lg font-semibold text-green-50 transition hover:bg-white/10 hover:text-white"
+                >
+
+                    <img
+                        src="{{ asset('images/profil.png') }}"
+                        alt=""
+                        class="h-7 w-7"
+                    >
+
+                    <span>
+                        Profil
+                    </span>
+
+                </a>
+
+
+
+                {# DÉCONNEXION #}
+
+                <a
+                    href="{{ path('app_logout') }}"
+                    class="flex items-center gap-4 rounded-2xl px-5 py-4 text-lg font-semibold text-green-50 transition hover:bg-white/10 hover:text-white"
+                >
+
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-7 w-7"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                        />
+
+                    </svg>
+
+                    <span>
+                        Déconnexion
+                    </span>
+
+                </a>
+
+            </div>
+
+        </aside>
+
     {% endif %}
 
-    {# Contenu principal #}
-    <main class="flex-1 min-w-0">
-        {% block body %}{% endblock %}
+
+    {# ========================================================
+        CONTENU PRINCIPAL
+        ======================================================== #}
+
+    <main class="min-w-0 flex-1">
+
+        {% block body %}
+        {% endblock %}
+
     </main>
 
 </div>
 
-<script>
-    function initSidebar() {
-        const toggle = document.getElementById('sidebar-toggle');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebar-overlay');
 
-        if (!toggle || !sidebar || !overlay) {
-            return;
-        }
-
-        function openSidebar() {
-            sidebar.classList.remove('-translate-x-full');
-            overlay.classList.remove('hidden');
-        }
-
-        function closeSidebar() {
-            sidebar.classList.add('-translate-x-full');
-            overlay.classList.add('hidden');
-        }
-
-        toggle.addEventListener('click', openSidebar);
-        overlay.addEventListener('click', closeSidebar);
-    }
-
-    document.addEventListener('DOMContentLoaded', initSidebar);
-    document.addEventListener('turbo:load', initSidebar);
-</script>
 </body>
+
 </html>
