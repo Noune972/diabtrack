@@ -4,143 +4,318 @@
 
 {% block body %}
 
-<div class="min-h-screen bg-gray-50 px-6 py-8 lg:px-10">
+<div class="min-h-screen bg-[#F5F9FC]">
 
-    {# En-tête #}
-    <div class="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    {# =========================================================
+       HERO
+       ========================================================= #}
 
-        <div>
-            <p class="text-sm font-semibold uppercase tracking-wider text-[#48742C]">
-                Administration
-            </p>
+    <section class="relative overflow-hidden bg-gradient-to-br from-[#102A43] via-[#0C4A6E] to-[#0F766E]">
 
-            <h1 class="mt-1 text-3xl font-extrabold text-gray-900">
-                Gestion des utilisateurs
-            </h1>
+        <div class="absolute -right-24 -top-32 h-96 w-96 rounded-full bg-cyan-300/10 blur-3xl"></div>
+        <div class="absolute -bottom-40 left-1/3 h-96 w-96 rounded-full bg-teal-300/10 blur-3xl"></div>
 
-            <p class="mt-2 text-base text-gray-500">
-                Gérez les comptes utilisateurs de DiabTrack.
-            </p>
+        <div class="relative mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-14">
+
+            <div class="flex flex-col gap-7 md:flex-row md:items-end md:justify-between">
+
+                <div>
+
+                    <div class="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-100 ring-1 ring-white/10">
+
+                        <span>👥</span>
+
+                        Administration
+
+                    </div>
+
+                    <h1 class="text-4xl font-black tracking-tight text-white sm:text-5xl">
+                        Gestion des
+                        <span class="text-cyan-300">utilisateurs</span>
+                    </h1>
+
+                    <p class="mt-4 max-w-2xl text-sm leading-6 text-cyan-50/80 sm:text-base">
+                        Consultez les comptes DiabTrack et gérez leur accès
+                        à la plateforme.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="{{ path('app_admin') }}"
+                    class="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3.5 text-sm font-black text-[#102A43] shadow-xl transition duration-300 hover:-translate-y-1 hover:shadow-2xl"
+                >
+                    <span>←</span>
+                    Retour à l'administration
+                </a>
+
+            </div>
+
         </div>
 
-        <a href="{{ path('app_admin') }}"
-           class="inline-flex items-center justify-center rounded-xl bg-[#48742C] px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#365921]">
-            ← Retour au dashboard
-        </a>
-
-    </div>
+    </section>
 
 
-    {# Messages #}
-    {% for message in app.flashes('success') %}
-        <div class="mb-6 rounded-2xl border border-green-200 bg-green-50 px-5 py-4 text-sm font-semibold text-green-700">
-            ✓ {{ message }}
+    {# =========================================================
+       CONTENU
+       ========================================================= #}
+
+    <main class="mx-auto max-w-7xl px-6 py-10 lg:px-8">
+
+
+        {# =====================================================
+           MESSAGES
+           ===================================================== #}
+
+        {% for message in app.flashes('success') %}
+
+            <div class="mb-7 flex items-center gap-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-emerald-800">
+
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 font-black">
+                    ✓
+                </div>
+
+                <div>
+
+                    <p class="text-sm font-black">
+                        Opération réussie
+                    </p>
+
+                    <p class="mt-1 text-sm">
+                        {{ message }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+
+        {# =====================================================
+           STATISTIQUES
+           ===================================================== #}
+
+        <div class="mb-10 grid grid-cols-1 gap-5 md:grid-cols-3">
+
+
+            {# TOTAL #}
+
+            <div class="group relative overflow-hidden rounded-[28px] bg-white p-6 shadow-sm ring-1 ring-slate-200/70 transition hover:-translate-y-1 hover:shadow-lg">
+
+                <div class="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-cyan-50"></div>
+
+                <div class="relative">
+
+                    <div class="flex items-start justify-between">
+
+                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-50 text-xl">
+                            👥
+                        </div>
+
+                        <span class="rounded-full bg-slate-100 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-slate-500">
+                            Total
+                        </span>
+
+                    </div>
+
+                    <p class="mt-6 text-sm font-bold text-slate-500">
+                        Utilisateurs
+                    </p>
+
+                    <p class="mt-1 text-4xl font-black tracking-tight text-[#102A43]">
+                        {{ users|length }}
+                    </p>
+
+                    <p class="mt-2 text-xs text-slate-400">
+                        Comptes enregistrés sur DiabTrack
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {# ACTIFS #}
+
+            <div class="group relative overflow-hidden rounded-[28px] bg-white p-6 shadow-sm ring-1 ring-slate-200/70 transition hover:-translate-y-1 hover:shadow-lg">
+
+                <div class="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-emerald-50"></div>
+
+                <div class="relative">
+
+                    <div class="flex items-start justify-between">
+
+                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-xl">
+                            ✓
+                        </div>
+
+                        <span class="rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-emerald-600">
+                            Actifs
+                        </span>
+
+                    </div>
+
+                    <p class="mt-6 text-sm font-bold text-slate-500">
+                        Comptes actifs
+                    </p>
+
+                    <p class="mt-1 text-4xl font-black tracking-tight text-emerald-600">
+                        {{ users|filter(user => user.isActive)|length }}
+                    </p>
+
+                    <p class="mt-2 text-xs text-slate-400">
+                        Utilisateurs autorisés
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {# SUSPENDUS #}
+
+            <div class="group relative overflow-hidden rounded-[28px] bg-white p-6 shadow-sm ring-1 ring-slate-200/70 transition hover:-translate-y-1 hover:shadow-lg">
+
+                <div class="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-red-50"></div>
+
+                <div class="relative">
+
+                    <div class="flex items-start justify-between">
+
+                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 text-xl">
+                            ⛔
+                        </div>
+
+                        <span class="rounded-full bg-red-50 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-red-600">
+                            Suspendus
+                        </span>
+
+                    </div>
+
+                    <p class="mt-6 text-sm font-bold text-slate-500">
+                        Comptes suspendus
+                    </p>
+
+                    <p class="mt-1 text-4xl font-black tracking-tight text-red-600">
+                        {{ users|filter(user => not user.isActive)|length }}
+                    </p>
+
+                    <p class="mt-2 text-xs text-slate-400">
+                        Accès actuellement désactivés
+                    </p>
+
+                </div>
+
+            </div>
+
         </div>
-    {% endfor %}
 
 
-    {# Statistiques #}
-    <div class="mb-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {# =====================================================
+           LISTE UTILISATEURS
+           ===================================================== #}
 
-        <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
-            <p class="text-sm font-semibold text-gray-500">
-                Utilisateurs
-            </p>
-
-            <p class="mt-2 text-4xl font-extrabold text-gray-900">
-                {{ users|length }}
-            </p>
-
-            <p class="mt-2 text-sm text-gray-400">
-                Comptes enregistrés
-            </p>
-        </div>
+        <section class="overflow-hidden rounded-[30px] bg-white shadow-sm ring-1 ring-slate-200/70">
 
 
-        <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
-            <p class="text-sm font-semibold text-gray-500">
-                Comptes actifs
-            </p>
+            {# HEADER TABLEAU #}
 
-            <p class="mt-2 text-4xl font-extrabold text-[#48742C]">
-                {{ users|filter(user => user.isActive)|length }}
-            </p>
+            <div class="flex flex-col gap-4 border-b border-slate-100 px-6 py-6 sm:flex-row sm:items-center sm:justify-between lg:px-8">
 
-            <p class="mt-2 text-sm text-gray-400">
-                Utilisateurs autorisés
-            </p>
-        </div>
+                <div>
 
+                    <p class="text-xs font-black uppercase tracking-[0.18em] text-teal-600">
+                        Comptes
+                    </p>
 
-        <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
-            <p class="text-sm font-semibold text-gray-500">
-                Comptes suspendus
-            </p>
+                    <h2 class="mt-1 text-2xl font-black tracking-tight text-[#102A43]">
+                        Utilisateurs DiabTrack
+                    </h2>
 
-            <p class="mt-2 text-4xl font-extrabold text-red-600">
-                {{ users|filter(user => not user.isActive)|length }}
-            </p>
+                    <p class="mt-2 text-sm text-slate-500">
+                        Les informations affichées sont limitées au nécessaire
+                        pour la gestion des comptes.
+                    </p>
 
-            <p class="mt-2 text-sm text-gray-400">
-                Accès suspendus
-            </p>
-        </div>
-
-    </div>
+                </div>
 
 
-    {# Liste des utilisateurs #}
-    <div class="overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-gray-100">
+                <div class="inline-flex self-start items-center gap-2 rounded-xl bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-500">
 
-        <div class="border-b border-gray-100 px-6 py-5">
-            <h2 class="text-xl font-bold text-gray-900">
-                Utilisateurs
-            </h2>
+                    <span class="h-2 w-2 rounded-full bg-teal-400"></span>
 
-            <p class="mt-1 text-sm text-gray-500">
-                Les informations affichées sont limitées au nécessaire pour la gestion des comptes.
-            </p>
-        </div>
+                    {{ users|length }} compte{% if users|length > 1 %}s{% endif %}
+
+                </div>
+
+            </div>
 
 
-        {# Version desktop #}
-        <div class="hidden overflow-x-auto md:block">
+            {# =================================================
+               DESKTOP
+               ================================================= #}
 
-            <table class="w-full text-left">
+            <div class="hidden overflow-x-auto md:block">
 
-                <thead class="bg-gray-50 text-xs uppercase tracking-wider text-gray-500">
+                <table class="w-full text-left">
 
-                    <tr>
-                        <th class="px-6 py-4 font-bold">Utilisateur</th>
-                        <th class="px-6 py-4 font-bold">Email</th>
-                        <th class="px-6 py-4 font-bold">Statut</th>
-                        <th class="px-6 py-4 text-right font-bold">Action</th>
-                    </tr>
+                    <thead class="bg-slate-50/80">
 
-                </thead>
+                        <tr class="text-[10px] font-black uppercase tracking-[0.15em] text-slate-400">
 
-                <tbody class="divide-y divide-gray-100">
+                            <th class="px-7 py-4">
+                                Utilisateur
+                            </th>
+
+                            <th class="px-7 py-4">
+                                Email
+                            </th>
+
+                            <th class="px-7 py-4">
+                                Statut
+                            </th>
+
+                            <th class="px-7 py-4 text-right">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody class="divide-y divide-slate-100">
 
                     {% for user in users %}
 
-                        <tr class="transition hover:bg-gray-50">
+                        <tr class="group transition hover:bg-slate-50/70">
 
-                            <td class="px-6 py-5">
 
-                                <div class="flex items-center gap-3">
+                            {# UTILISATEUR #}
 
-                                    <div class="flex h-11 w-11 items-center justify-center rounded-full bg-[#48742C]/10 font-bold text-[#48742C]">
-                                        {{ user.firstname|first|upper }}
+                            <td class="px-7 py-5">
+
+                                <div class="flex items-center gap-4">
+
+                                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-400 to-cyan-500 text-base font-black text-white shadow-md shadow-teal-500/10">
+
+                                        {{ user.firstname|default('U')|first|upper }}
+
                                     </div>
 
+
                                     <div>
-                                        <p class="font-bold text-gray-900">
+
+                                        <p class="font-black text-[#102A43]">
                                             {{ user.firstname }} {{ user.name }}
                                         </p>
 
-                                        <p class="text-xs text-gray-400">
+                                        <p class="mt-1 text-[11px] font-semibold text-slate-400">
                                             Patient #DT-{{ '%04d'|format(user.id) }}
                                         </p>
+
                                     </div>
 
                                 </div>
@@ -148,25 +323,45 @@
                             </td>
 
 
-                            <td class="px-6 py-5 text-sm text-gray-600">
-                                {{ user.email }}
+                            {# EMAIL #}
+
+                            <td class="px-7 py-5">
+
+                                <div class="inline-flex items-center gap-2 text-sm text-slate-600">
+
+                                    <span class="text-slate-300">
+                                        ✉
+                                    </span>
+
+                                    {{ user.email }}
+
+                                </div>
+
                             </td>
 
 
-                            <td class="px-6 py-5">
+                            {# STATUT #}
+
+                            <td class="px-7 py-5">
 
                                 {% if user.isActive %}
 
-                                    <span class="inline-flex items-center gap-2 rounded-full bg-green-50 px-3 py-1.5 text-xs font-bold text-green-700">
-                                        <span class="h-2 w-2 rounded-full bg-green-500"></span>
+                                    <span class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-black text-emerald-700">
+
+                                        <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+
                                         Actif
+
                                     </span>
 
                                 {% else %}
 
-                                    <span class="inline-flex items-center gap-2 rounded-full bg-red-50 px-3 py-1.5 text-xs font-bold text-red-700">
+                                    <span class="inline-flex items-center gap-2 rounded-full bg-red-50 px-3 py-1.5 text-xs font-black text-red-700">
+
                                         <span class="h-2 w-2 rounded-full bg-red-500"></span>
+
                                         Suspendu
+
                                     </span>
 
                                 {% endif %}
@@ -174,21 +369,31 @@
                             </td>
 
 
-                            <td class="px-6 py-5">
+                            {# ACTION #}
+
+                            <td class="px-7 py-5">
 
                                 <div class="flex justify-end">
 
                                     {% if user.isActive %}
 
-                                        <form method="post"
-                                              action="{{ path('admin_user_suspend', {id: user.id}) }}">
+                                        <form
+                                            method="post"
+                                            action="{{ path('admin_user_suspend', {id: user.id}) }}"
+                                            onsubmit="return confirm('Voulez-vous vraiment suspendre ce compte ?');"
+                                        >
 
-                                            <input type="hidden"
-                                                   name="_token"
-                                                   value="{{ csrf_token('suspend-user-' ~ user.id) }}">
+                                            <input
+                                                type="hidden"
+                                                name="_token"
+                                                value="{{ csrf_token('suspend-user-' ~ user.id) }}"
+                                            >
 
-                                            <button type="submit"
-                                                    class="rounded-xl bg-red-50 px-4 py-2 text-sm font-bold text-red-600 transition hover:bg-red-100">
+                                            <button
+                                                type="submit"
+                                                class="inline-flex items-center gap-2 rounded-xl bg-red-50 px-4 py-2.5 text-xs font-black text-red-600 transition hover:bg-red-100"
+                                            >
+                                                <span>⛔</span>
                                                 Suspendre
                                             </button>
 
@@ -196,15 +401,22 @@
 
                                     {% else %}
 
-                                        <form method="post"
-                                              action="{{ path('admin_user_activate', {id: user.id}) }}">
+                                        <form
+                                            method="post"
+                                            action="{{ path('admin_user_activate', {id: user.id}) }}"
+                                        >
 
-                                            <input type="hidden"
-                                                   name="_token"
-                                                   value="{{ csrf_token('activate-user-' ~ user.id) }}">
+                                            <input
+                                                type="hidden"
+                                                name="_token"
+                                                value="{{ csrf_token('activate-user-' ~ user.id) }}"
+                                            >
 
-                                            <button type="submit"
-                                                    class="rounded-xl bg-green-50 px-4 py-2 text-sm font-bold text-[#48742C] transition hover:bg-green-100">
+                                            <button
+                                                type="submit"
+                                                class="inline-flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-2.5 text-xs font-black text-emerald-700 transition hover:bg-emerald-100"
+                                            >
+                                                <span>✓</span>
                                                 Réactiver
                                             </button>
 
@@ -218,112 +430,235 @@
 
                         </tr>
 
+
                     {% else %}
 
                         <tr>
-                            <td colspan="4" class="px-6 py-12 text-center text-gray-500">
-                                Aucun utilisateur trouvé.
+
+                            <td colspan="4" class="px-6 py-16 text-center">
+
+                                <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 text-2xl">
+                                    👥
+                                </div>
+
+                                <p class="mt-4 font-black text-[#102A43]">
+                                    Aucun utilisateur
+                                </p>
+
+                                <p class="mt-1 text-sm text-slate-400">
+                                    Aucun compte utilisateur n'a été trouvé.
+                                </p>
+
                             </td>
+
                         </tr>
 
                     {% endfor %}
 
-                </tbody>
+                    </tbody>
 
-            </table>
+                </table>
 
-        </div>
+            </div>
 
 
-        {# Version mobile #}
-        <div class="space-y-4 p-4 md:hidden">
+            {# =================================================
+               MOBILE
+               ================================================= #}
 
-            {% for user in users %}
+            <div class="space-y-4 p-4 md:hidden">
 
-                <div class="rounded-2xl border border-gray-100 p-4">
+                {% for user in users %}
 
-                    <div class="flex items-center justify-between gap-3">
+                    <div class="rounded-[24px] border border-slate-100 bg-white p-5 shadow-sm">
 
-                        <div>
-                            <p class="font-bold text-gray-900">
-                                {{ user.firstname }} {{ user.name }}
-                            </p>
 
-                            <p class="mt-1 text-xs text-gray-400">
-                                Patient #DT-{{ '%04d'|format(user.id) }}
-                            </p>
+                        <div class="flex items-start justify-between gap-3">
+
+
+                            <div class="flex min-w-0 items-center gap-3">
+
+                                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-teal-400 to-cyan-500 font-black text-white">
+
+                                    {{ user.firstname|default('U')|first|upper }}
+
+                                </div>
+
+
+                                <div class="min-w-0">
+
+                                    <p class="truncate font-black text-[#102A43]">
+                                        {{ user.firstname }} {{ user.name }}
+                                    </p>
+
+                                    <p class="mt-1 text-[10px] font-semibold text-slate-400">
+                                        Patient #DT-{{ '%04d'|format(user.id) }}
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            {% if user.isActive %}
+
+                                <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1.5 text-[10px] font-black text-emerald-700">
+
+                                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+
+                                    Actif
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-red-50 px-2.5 py-1.5 text-[10px] font-black text-red-700">
+
+                                    <span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>
+
+                                    Suspendu
+
+                                </span>
+
+                            {% endif %}
+
                         </div>
 
 
-                        {% if user.isActive %}
+                        <div class="mt-4 rounded-xl bg-slate-50 px-4 py-3">
 
-                            <span class="rounded-full bg-green-50 px-3 py-1 text-xs font-bold text-green-700">
-                                Actif
-                            </span>
+                            <p class="break-all text-xs font-semibold text-slate-500">
+                                {{ user.email }}
+                            </p>
 
-                        {% else %}
+                        </div>
 
-                            <span class="rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-red-700">
-                                Suspendu
-                            </span>
 
-                        {% endif %}
+                        <div class="mt-4">
+
+                            {% if user.isActive %}
+
+                                <form
+                                    method="post"
+                                    action="{{ path('admin_user_suspend', {id: user.id}) }}"
+                                    onsubmit="return confirm('Voulez-vous vraiment suspendre ce compte ?');"
+                                >
+
+                                    <input
+                                        type="hidden"
+                                        name="_token"
+                                        value="{{ csrf_token('suspend-user-' ~ user.id) }}"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="w-full rounded-xl bg-red-50 px-4 py-3 text-sm font-black text-red-600 transition hover:bg-red-100"
+                                    >
+                                        ⛔ Suspendre le compte
+                                    </button>
+
+                                </form>
+
+                            {% else %}
+
+                                <form
+                                    method="post"
+                                    action="{{ path('admin_user_activate', {id: user.id}) }}"
+                                >
+
+                                    <input
+                                        type="hidden"
+                                        name="_token"
+                                        value="{{ csrf_token('activate-user-' ~ user.id) }}"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="w-full rounded-xl bg-emerald-50 px-4 py-3 text-sm font-black text-emerald-700 transition hover:bg-emerald-100"
+                                    >
+                                        ✓ Réactiver le compte
+                                    </button>
+
+                                </form>
+
+                            {% endif %}
+
+                        </div>
 
                     </div>
 
 
-                    <p class="mt-3 text-sm text-gray-500">
-                        {{ user.email }}
-                    </p>
+                {% else %}
+
+                    <div class="py-12 text-center">
+
+                        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 text-2xl">
+                            👥
+                        </div>
+
+                        <p class="mt-4 font-black text-[#102A43]">
+                            Aucun utilisateur
+                        </p>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
 
 
-                    <div class="mt-4">
+        {# =====================================================
+           SÉCURITÉ
+           ===================================================== #}
 
-                        {% if user.isActive %}
+        <section class="relative mt-8 overflow-hidden rounded-[30px] bg-[#102A43] p-7 text-white shadow-xl lg:p-9">
 
-                            <form method="post"
-                                  action="{{ path('admin_user_suspend', {id: user.id}) }}">
+            <div class="absolute -right-16 -top-20 h-64 w-64 rounded-full bg-teal-400/10 blur-2xl"></div>
 
-                                <input type="hidden"
-                                       name="_token"
-                                       value="{{ csrf_token('suspend-user-' ~ user.id) }}">
+            <div class="relative flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
 
-                                <button type="submit"
-                                        class="w-full rounded-xl bg-red-50 px-4 py-3 text-sm font-bold text-red-600">
-                                    Suspendre le compte
-                                </button>
+                <div class="flex items-start gap-4">
 
-                            </form>
+                    <div class="hidden h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-2xl sm:flex">
+                        🔒
+                    </div>
 
-                        {% else %}
+                    <div>
 
-                            <form method="post"
-                                  action="{{ path('admin_user_activate', {id: user.id}) }}">
+                        <p class="text-xs font-black uppercase tracking-[0.2em] text-cyan-300">
+                            Administration sécurisée
+                        </p>
 
-                                <input type="hidden"
-                                       name="_token"
-                                       value="{{ csrf_token('activate-user-' ~ user.id) }}">
+                        <h2 class="mt-2 text-xl font-black">
+                            Gestion des accès utilisateurs
+                        </h2>
 
-                                <button type="submit"
-                                        class="w-full rounded-xl bg-green-50 px-4 py-3 text-sm font-bold text-[#48742C]">
-                                    Réactiver le compte
-                                </button>
-
-                            </form>
-
-                        {% endif %}
+                        <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-300">
+                            La suspension désactive l'accès au compte sans supprimer
+                            les informations associées à l'utilisateur.
+                        </p>
 
                     </div>
 
                 </div>
 
-            {% endfor %}
 
-        </div>
+                <div class="flex shrink-0 items-center gap-2 rounded-2xl bg-white/10 px-5 py-3 text-xs font-bold text-slate-200 ring-1 ring-white/10">
 
-    </div>
+                    <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+
+                    Accès administrateur
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
 
 </div>
 
 {% endblock %}
-

@@ -1,47 +1,391 @@
 {% extends 'base.html.twig' %}
-{% block title %}Accueil{% endblock %}
+
+{% block title %}Accueil - DiabTrack{% endblock %}
+
 {% block body %}
-<div class="h-screen flex flex-col overflow-hidden relative">
+
+<div class="min-h-screen overflow-hidden bg-[#F6FAFC]">
+
+    {# =========================
+       NAVBAR
+       ========================= #}
+    <header class="relative z-20">
+        <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-8">
+
+            <a href="{{ path('app_home') }}" class="flex items-center gap-3">
+                <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-400 to-cyan-500 shadow-lg shadow-teal-500/20">
+                    <span class="text-2xl">💧</span>
+                </div>
+
+                <div>
+                    <p class="text-xl font-black tracking-tight text-[#102A43]">
+                        Diab<span class="text-teal-500">Track</span>
+                    </p>
+                    <p class="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                        Mon suivi, ma santé
+                    </p>
+                </div>
+            </a>
 
 
-  
-  <div class="flex-1 flex flex-col min-h-0 bg-gray-50">
+            <div class="hidden items-center gap-8 text-sm font-semibold text-slate-500 md:flex">
+                <a href="#suivi" class="transition hover:text-teal-600">
+                    Le suivi
+                </a>
 
-    
-    <div class="flex-1 flex items-center min-h-0 overflow-hidden">
+                <a href="#fonctionnalites" class="transition hover:text-teal-600">
+                    Fonctionnalités
+                </a>
 
-      {# Mascotte#}
-      <div class="flex-1 flex items-center justify-center min-h-0">
-        <img src="{{ asset('images/mascotte.png') }}" alt="mascotte" class="max-w-full max-h-[70vh] w-auto h-auto">
-      </div>
+                <a href="#securite" class="transition hover:text-teal-600">
+                    Sécurité
+                </a>
+            </div>
 
-      {# Texte #}
-      <div class="flex-1 flex flex-col items-center justify-center text-center gap-4 px-8">
-        <h1 class="text-5xl font-black uppercase tracking-wider leading-tight italic">
-        <span class="text-[#48742C]">Bienvenue </span>
-        <span class="text-gray-900">sur </span>
-          <span class="text-[#48742C]">Diabtrack </span>
-          <span class="text-gray-900">l'appli<br> utile pour le suivi du<br></span>
-          <span class="text-[#48742C]">diabète de type 2</span>
-        </h1>
-        <p class="text-gray-500 text-sm max-w-sm">
-          Suivez votre glycémie, vos repas, votre insuline, votre activité sportive, et bien plus encore le tout au même endroit.
-        </p>
-      </div>
 
-    </div>
+            <a href="{{ path('app_login') }}"
+               class="rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-700 shadow-sm transition hover:border-teal-200 hover:text-teal-600">
+                Se connecter
+            </a>
 
-    {# Boutons connexion et déconnexion #}
-   <div class="flex justify-center gap-4 pb-16">
-  <a href="{{ path('app_login') }}" class="bg-blue-900 text-white font-semibold py-3 px-12 rounded-xl text-base hover:bg-blue-800 transition text-center">
-    Se connecter
-  </a>
+        </div>
+    </header>
 
-  <a href="{{ path('app_register') }}" class="border-2 border-[#48742C] text-[#48742C] font-semibold py-3 px-12 rounded-xl text-base hover:bg-[#48742C] hover:text-white transition text-center">
-    Créer un compte
-  </a>
+
+    {# =========================
+       HERO
+       ========================= #}
+
+    <main class="relative">
+
+        {# Décor #}
+        <div class="pointer-events-none absolute -left-40 top-20 h-96 w-96 rounded-full bg-cyan-200/30 blur-3xl"></div>
+        <div class="pointer-events-none absolute -right-32 top-0 h-[500px] w-[500px] rounded-full bg-teal-200/30 blur-3xl"></div>
+
+
+        <section class="relative mx-auto grid min-h-[680px] max-w-7xl grid-cols-1 items-center gap-10 px-6 pb-16 pt-10 lg:grid-cols-2 lg:px-8 lg:pb-24">
+
+            {# TEXTE #}
+            <div class="relative z-10">
+
+                <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-teal-100 bg-white px-4 py-2 shadow-sm">
+                    <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+
+                    <span class="text-xs font-black uppercase tracking-[0.15em] text-teal-700">
+                        Votre santé au quotidien
+                    </span>
+                </div>
+
+
+                <h1 class="max-w-2xl text-5xl font-black leading-[1.05] tracking-[-0.04em] text-[#102A43] sm:text-6xl xl:text-7xl">
+
+                    Mieux comprendre
+
+                    <span class="relative text-teal-500">
+                        son diabète,
+                    </span>
+
+                    simplement.
+
+                </h1>
+
+
+                <p class="mt-7 max-w-xl text-base leading-7 text-slate-500 sm:text-lg">
+                    Glycémie, alimentation, insuline, activité physique et poids :
+                    retrouvez votre suivi du diabète de type 2 dans un seul espace
+                    clair et facile à utiliser.
+                </p>
+
+
+                {# BOUTONS #}
+                <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+
+                    <a href="{{ path('app_register') }}"
+                       class="group inline-flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-teal-500 to-cyan-500 px-7 py-4 text-sm font-black text-white shadow-xl shadow-teal-500/20 transition duration-300 hover:-translate-y-1 hover:shadow-2xl">
+
+                        Créer mon compte
+
+                        <span class="transition group-hover:translate-x-1">
+                            →
+                        </span>
+                    </a>
+
+
+                    <a href="{{ path('app_login') }}"
+                       class="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-7 py-4 text-sm font-black text-slate-700 shadow-sm transition hover:border-teal-200 hover:text-teal-600">
+
+                        J'ai déjà un compte
+
+                    </a>
+
+                </div>
+
+
+                {# PETITS AVANTAGES #}
+                <div class="mt-9 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-slate-500">
+
+                    <span class="flex items-center gap-2">
+                        <span class="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-[10px] text-emerald-600">
+                            ✓
+                        </span>
+                        Simple
+                    </span>
+
+                    <span class="flex items-center gap-2">
+                        <span class="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-[10px] text-emerald-600">
+                            ✓
+                        </span>
+                        Centralisé
+                    </span>
+
+                    <span class="flex items-center gap-2">
+                        <span class="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-[10px] text-emerald-600">
+                            ✓
+                        </span>
+                        Sécurisé
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            {# =========================
+               PARTIE VISUELLE
+               ========================= #}
+
+            <div class="relative flex min-h-[570px] items-center justify-center">
+
+                {# GRAND CERCLE #}
+                <div class="absolute h-[470px] w-[470px] rounded-full bg-gradient-to-br from-cyan-100 via-teal-50 to-white shadow-2xl shadow-cyan-900/10 sm:h-[520px] sm:w-[520px]"></div>
+
+
+                {# MOTIF CERCLES #}
+                <div class="absolute h-[390px] w-[390px] rounded-full border border-teal-200/60 sm:h-[440px] sm:w-[440px]"></div>
+
+                <div class="absolute h-[320px] w-[320px] rounded-full border border-dashed border-cyan-300/60 sm:h-[370px] sm:w-[370px]"></div>
+
+
+                {# MASCOTTE #}
+                <img
+                    src="{{ asset('images/mascotte.png') }}"
+                    alt="Mascotte DiabTrack"
+                    class="relative z-10 max-h-[440px] max-w-[80%] object-contain drop-shadow-2xl">
+
+
+                {# CARTE GLYCEMIE #}
+                <div class="absolute left-0 top-24 z-20 rounded-2xl bg-white/95 p-4 shadow-xl shadow-slate-900/10 backdrop-blur sm:left-2">
+
+                    <div class="flex items-center gap-3">
+
+                        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-50 text-xl">
+                            💧
+                        </div>
+
+                        <div>
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                                Glycémie
+                            </p>
+
+                            <p class="text-lg font-black text-[#102A43]">
+                                Votre suivi
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="mt-3 flex h-8 items-end gap-1">
+                        <span class="h-3 w-2 rounded-full bg-teal-200"></span>
+                        <span class="h-5 w-2 rounded-full bg-teal-300"></span>
+                        <span class="h-4 w-2 rounded-full bg-teal-300"></span>
+                        <span class="h-7 w-2 rounded-full bg-teal-400"></span>
+                        <span class="h-5 w-2 rounded-full bg-teal-400"></span>
+                        <span class="h-8 w-2 rounded-full bg-teal-500"></span>
+                        <span class="h-6 w-2 rounded-full bg-teal-400"></span>
+                    </div>
+
+                </div>
+
+
+                {# CARTE ACTIVITE #}
+                <div class="absolute bottom-20 right-0 z-20 rounded-2xl bg-white/95 p-4 shadow-xl shadow-slate-900/10 backdrop-blur sm:right-2">
+
+                    <div class="flex items-center gap-3">
+
+                        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-50 text-xl">
+                            🏃
+                        </div>
+
+                        <div>
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                                Activité
+                            </p>
+
+                            <p class="text-sm font-black text-[#102A43]">
+                                Restez actif
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                {# CARTE INSULINE #}
+                <div class="absolute right-5 top-16 z-20 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-2xl shadow-xl shadow-slate-900/10">
+                    💉
+                </div>
+
+
+                {# CARTE ALIMENTATION #}
+                <div class="absolute bottom-16 left-12 z-20 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-2xl shadow-xl shadow-slate-900/10">
+                    🥗
+                </div>
+
+            </div>
+
+        </section>
+
+
+        {# =========================
+           FONCTIONNALITÉS
+           ========================= #}
+
+        <section id="fonctionnalites" class="border-t border-slate-100 bg-white">
+
+            <div class="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+
+                <div class="mx-auto max-w-2xl text-center">
+
+                    <p class="text-xs font-black uppercase tracking-[0.2em] text-teal-600">
+                        Tout au même endroit
+                    </p>
+
+                    <h2 class="mt-3 text-3xl font-black tracking-tight text-[#102A43]">
+                        Un suivi pensé pour votre quotidien
+                    </h2>
+
+                    <p class="mt-3 text-sm leading-6 text-slate-500">
+                        DiabTrack centralise les informations utiles pour vous aider
+                        à visualiser plus facilement votre suivi.
+                    </p>
+
+                </div>
+
+
+                <div class="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+
+                    <div class="group rounded-[26px] bg-[#F7FBFC] p-6 ring-1 ring-slate-100 transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+
+                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-100 text-2xl">
+                            💧
+                        </div>
+
+                        <h3 class="mt-5 font-black text-[#102A43]">
+                            Glycémie
+                        </h3>
+
+                        <p class="mt-2 text-sm leading-6 text-slate-500">
+                            Enregistrez et retrouvez facilement vos mesures.
+                        </p>
+
+                    </div>
+
+
+                    <div class="group rounded-[26px] bg-[#F7FBFC] p-6 ring-1 ring-slate-100 transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+
+                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100 text-2xl">
+                            💉
+                        </div>
+
+                        <h3 class="mt-5 font-black text-[#102A43]">
+                            Insuline
+                        </h3>
+
+                        <p class="mt-2 text-sm leading-6 text-slate-500">
+                            Centralisez vos injections dans votre espace personnel.
+                        </p>
+
+                    </div>
+
+
+                    <div class="group rounded-[26px] bg-[#F7FBFC] p-6 ring-1 ring-slate-100 transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+
+                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-100 text-2xl">
+                            🥗
+                        </div>
+
+                        <h3 class="mt-5 font-black text-[#102A43]">
+                            Alimentation
+                        </h3>
+
+                        <p class="mt-2 text-sm leading-6 text-slate-500">
+                            Gardez une trace de vos repas et de votre alimentation.
+                        </p>
+
+                    </div>
+
+
+                    <div class="group rounded-[26px] bg-[#F7FBFC] p-6 ring-1 ring-slate-100 transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+
+                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-100 text-2xl">
+                            🏃
+                        </div>
+
+                        <h3 class="mt-5 font-black text-[#102A43]">
+                            Activité physique
+                        </h3>
+
+                        <p class="mt-2 text-sm leading-6 text-slate-500">
+                            Suivez vos activités et votre évolution au quotidien.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        {# =========================
+           BANDEAU FINAL
+           ========================= #}
+
+        <section id="securite" class="bg-[#102A43]">
+
+            <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-8 px-6 py-12 text-center lg:flex-row lg:px-8 lg:text-left">
+
+                <div>
+
+                    <p class="text-xs font-black uppercase tracking-[0.2em] text-cyan-300">
+                        DiabTrack
+                    </p>
+
+                    <h2 class="mt-2 text-2xl font-black text-white">
+                        Votre suivi. Votre santé. Votre quotidien.
+                    </h2>
+
+                    <p class="mt-2 max-w-xl text-sm leading-6 text-slate-300">
+                        Un espace personnel pour centraliser les informations
+                        utiles à votre suivi du diabète.
+                    </p>
+
+                </div>
+
+
+                <a href="{{ path('app_register') }}"
+                   class="shrink-0 rounded-2xl bg-white px-7 py-4 text-sm font-black text-[#102A43] shadow-xl transition hover:-translate-y-1">
+                    Commencer maintenant →
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
 </div>
-  </div>
 
-</div>
 {% endblock %}

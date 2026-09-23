@@ -3,57 +3,344 @@
 {% block title %}Blog - DiabTrack{% endblock %}
 
 {% block body %}
-<section class="min-h-screen bg-gray-50 py-12 px-4">
-    <div class="max-w-5xl mx-auto">
 
-        <div class="flex items-center justify-between mb-10">
-            <h1 class="text-3xl font-bold text-gray-800">Blog</h1>
+<div class="min-h-screen bg-[#F5F9FC]">
 
-            {% if is_granted('ROLE_ADMIN') %}
-                <div class="flex gap-3">
-                    
-                    <a href="{{ path('app_blog_new') }}"
-                       class="bg-blue-900 hover:bg-blue-800 text-white font-medium px-5 py-2.5 rounded-xl transition">
-                        + Nouvel article
-                    </a>
+    {# =========================================================
+       HERO
+       ========================================================= #}
+
+    <section class="relative overflow-hidden bg-gradient-to-br from-[#102A43] via-[#0C4A6E] to-[#0F766E]">
+
+        <div class="absolute -right-24 -top-32 h-96 w-96 rounded-full bg-cyan-300/10 blur-3xl"></div>
+        <div class="absolute -bottom-40 left-1/3 h-96 w-96 rounded-full bg-teal-300/10 blur-3xl"></div>
+
+        <div class="relative mx-auto max-w-7xl px-6 py-14 lg:px-8 lg:py-16">
+
+            <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+
+                <div class="max-w-2xl">
+
+                    <div class="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-100 ring-1 ring-white/10">
+
+                        <span class="text-base">📚</span>
+
+                        Conseils & informations
+
+                    </div>
+
+                    <h1 class="text-4xl font-black tracking-tight text-white sm:text-5xl">
+                        Le blog
+                        <span class="text-cyan-300">DiabTrack</span>
+                    </h1>
+
+                    <p class="mt-4 max-w-xl text-base leading-7 text-cyan-50/80">
+                        Retrouvez des articles et des conseils pour mieux comprendre
+                        le diabète et accompagner votre suivi au quotidien.
+                    </p>
+
                 </div>
-            {% endif %}
+
+
+                {# BOUTON ADMIN #}
+
+                {% if is_granted('ROLE_ADMIN') %}
+
+                    <a
+                        href="{{ path('app_blog_new') }}"
+                        class="inline-flex shrink-0 items-center justify-center gap-3 rounded-2xl bg-white px-6 py-3.5 text-sm font-black text-[#102A43] shadow-xl transition duration-300 hover:-translate-y-1 hover:shadow-2xl"
+                    >
+
+                        <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-teal-100 text-lg text-teal-700">
+                            +
+                        </span>
+
+                        Nouvel article
+
+                    </a>
+
+                {% endif %}
+
+            </div>
+
         </div>
 
+    </section>
+
+
+    {# =========================================================
+       CONTENU
+       ========================================================= #}
+
+    <main class="mx-auto max-w-7xl px-6 py-10 lg:px-8 lg:py-12">
+
+
+        {# =====================================================
+           MESSAGES SUCCESS
+           ===================================================== #}
+
         {% for message in app.flashes('success') %}
-            <div class="bg-green-50 text-green-700 border border-green-200 rounded-xl px-4 py-3 mb-6 text-sm">
-                {{ message }}
+
+            <div class="mb-8 flex items-start gap-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-emerald-800">
+
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100">
+                    ✓
+                </div>
+
+                <div>
+
+                    <p class="font-black">
+                        Opération réussie
+                    </p>
+
+                    <p class="mt-1 text-sm">
+                        {{ message }}
+                    </p>
+
+                </div>
+
             </div>
+
         {% endfor %}
 
-        {% if articles is empty %}
-            <p class="text-gray-500 text-sm">Aucun article publié pour le moment.</p>
-        {% else %}
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {% for article in articles %}
-                    <a href="{{ path('app_blog_show', {id: article.id}) }}"
-                       class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition flex flex-col">
-                        <div class="p-6 flex flex-col gap-3 flex-1">
-                            {% if article.category %}
-                                <span class="self-start text-xs font-medium text-blue-700 bg-blue-50 px-3 py-1 rounded-full">
-                                    {{ article.category.title }}
-                                </span>
-                            {% endif %}
-                            <h2 class="text-lg font-semibold text-gray-800">
-                                {{ article.title }}
-                            </h2>
-                            <p class="text-gray-500 text-sm">
-                                {{ article.content|excerpt(140) }}
-                            </p>
-                            <p class="text-xs text-gray-400 mt-auto pt-2">
-                                {{ article.author }} — {{ article.date|date('d/m/Y') }}
-                            </p>
-                        </div>
-                    </a>
-                {% endfor %}
+
+        {# =====================================================
+           TITRE DE SECTION
+           ===================================================== #}
+
+        <div class="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+
+            <div>
+
+                <p class="text-xs font-black uppercase tracking-[0.2em] text-teal-600">
+                    À découvrir
+                </p>
+
+                <h2 class="mt-1 text-3xl font-black tracking-tight text-[#102A43]">
+                    Nos derniers articles
+                </h2>
+
+                <p class="mt-2 text-sm text-slate-500">
+                    Informations, prévention et conseils autour du diabète.
+                </p>
+
             </div>
+
+
+            {% if articles is not empty %}
+
+                <div class="inline-flex self-start items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs font-bold text-slate-500 shadow-sm ring-1 ring-slate-100">
+
+                    <span class="h-2 w-2 rounded-full bg-teal-400"></span>
+
+                    {{ articles|length }}
+
+                    {% if articles|length > 1 %}
+                        articles
+                    {% else %}
+                        article
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        {# =====================================================
+           AUCUN ARTICLE
+           ===================================================== #}
+
+        {% if articles is empty %}
+
+            <div class="rounded-[30px] bg-white px-6 py-16 text-center shadow-sm ring-1 ring-slate-200/70">
+
+                <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-[24px] bg-teal-50 text-4xl">
+                    📖
+                </div>
+
+                <h3 class="mt-6 text-2xl font-black text-[#102A43]">
+                    Aucun article pour le moment
+                </h3>
+
+                <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
+                    Les prochains articles et conseils DiabTrack apparaîtront ici.
+                </p>
+
+
+                {% if is_granted('ROLE_ADMIN') %}
+
+                    <a
+                        href="{{ path('app_blog_new') }}"
+                        class="mt-7 inline-flex items-center gap-2 rounded-xl bg-teal-600 px-5 py-3 text-sm font-black text-white transition hover:bg-teal-700"
+                    >
+                        + Créer le premier article
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+
+        {% else %}
+
+
+            {# =================================================
+               LISTE ARTICLES
+               ================================================= #}
+
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+
+                {% for article in articles %}
+
+                    <a
+                        href="{{ path('app_blog_show', {id: article.id}) }}"
+                        class="group relative flex min-h-[320px] flex-col overflow-hidden rounded-[28px] bg-white shadow-sm ring-1 ring-slate-200/70 transition duration-300 hover:-translate-y-1 hover:shadow-xl"
+                    >
+
+
+                        {# ================= HAUT CARTE ================= #}
+
+                        <div class="relative h-28 overflow-hidden bg-gradient-to-br from-[#102A43] via-[#0C4A6E] to-[#0F766E]">
+
+                            <div class="absolute -right-10 -top-12 h-36 w-36 rounded-full bg-cyan-300/10"></div>
+
+                            <div class="absolute -bottom-12 left-10 h-28 w-28 rounded-full bg-teal-300/10"></div>
+
+
+                            <div class="relative flex h-full items-center justify-between p-6">
+
+                                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-2xl ring-1 ring-white/10">
+                                    📖
+                                </div>
+
+
+                                {% if article.category %}
+
+                                    <span class="rounded-full bg-white/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-cyan-100 ring-1 ring-white/10">
+
+                                        {{ article.category.title }}
+
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        {# ================= TEXTE ================= #}
+
+                        <div class="flex flex-1 flex-col p-6">
+
+                            <h3 class="text-xl font-black leading-snug text-[#102A43] transition group-hover:text-teal-600">
+
+                                {{ article.title }}
+
+                            </h3>
+
+
+                            <p class="mt-3 text-sm leading-6 text-slate-500">
+
+                                {{ article.content|excerpt(140) }}
+
+                            </p>
+
+
+                            {# ================= AUTEUR ================= #}
+
+                            <div class="mt-auto pt-6">
+
+                                <div class="border-t border-slate-100 pt-4">
+
+                                    <div class="flex items-center justify-between gap-4">
+
+                                        <div class="flex min-w-0 items-center gap-3">
+
+                                            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-teal-50 text-sm font-black text-teal-600">
+                                                ✎
+                                            </div>
+
+                                            <div class="min-w-0">
+
+                                                <p class="truncate text-xs font-black text-slate-700">
+                                                    {{ article.author }}
+                                                </p>
+
+                                                <p class="mt-0.5 text-[10px] font-semibold text-slate-400">
+                                                    {{ article.date|date('d/m/Y') }}
+                                                </p>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-teal-600 transition duration-300 group-hover:translate-x-1 group-hover:bg-teal-50">
+                                            →
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                {% endfor %}
+
+            </div>
+
         {% endif %}
 
-    </div>
-</section>
+
+        {# =====================================================
+           BANDEAU BAS
+           ===================================================== #}
+
+        <section class="relative mt-10 overflow-hidden rounded-[30px] bg-[#102A43] p-7 text-white shadow-xl lg:p-9">
+
+            <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-teal-400/10 blur-2xl"></div>
+
+            <div class="relative flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+
+                <div>
+
+                    <p class="text-xs font-black uppercase tracking-[0.2em] text-cyan-300">
+                        DiabTrack
+                    </p>
+
+                    <h2 class="mt-2 text-xl font-black sm:text-2xl">
+                        Mieux comprendre pour mieux suivre
+                    </h2>
+
+                    <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-300">
+                        Consultez régulièrement nos contenus consacrés au suivi
+                        du diabète, à l'alimentation et à l'activité physique.
+                    </p>
+
+                </div>
+
+
+                <div class="flex shrink-0 items-center gap-2 rounded-2xl bg-white/10 px-5 py-3 text-xs font-bold text-slate-200 ring-1 ring-white/10">
+
+                    <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+
+                    Conseils & prévention
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
 {% endblock %}

@@ -146,12 +146,8 @@ public function setEmailAuthCodeCreatedAt(?\DateTimeInterface $date): static
 }
 
 
-public function getEmailAuthCode(): string
+public function getEmailAuthCode(): ?string
 {
-    if (null === $this->emailAuthCode) {
-        throw new \LogicException('The email authentication code was not set');
-    }
-
     return $this->emailAuthCode;
 }
 

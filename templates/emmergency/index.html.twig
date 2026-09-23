@@ -4,89 +4,404 @@
 
 {% block body %}
 
-<section class="min-h-screen bg-gray-50 py-8 px-8">
+<div class="min-h-screen bg-[#F5F9FC]">
 
-   
+    {# =========================================================
+       HERO URGENCE
+       ========================================================= #}
+    <section class="relative overflow-hidden bg-gradient-to-br from-[#102A43] via-[#123D5A] to-[#0F766E]">
 
-    <h2 class="text-5xl text-red-900 font-bold text-center uppercase mb-8">
-        <a href="tel:15" class="hover:text-red-900 transition">
-            📞 Cliquez ici pour appeler le 15
-        </a>
-    </h2>
-    <h1 class="text-3xl ! text-red-900 font-bold text-center uppercase mb-16">
-        Les signes qui doivent vous alerter
-    </h1>
+        <div class="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-cyan-300/10 blur-3xl"></div>
+        <div class="absolute -bottom-40 left-1/3 h-96 w-96 rounded-full bg-teal-300/10 blur-3xl"></div>
 
-    {# HYPOGLYCÉMIE #}
-    <div class="grid md:grid-cols-2 gap-12 items-center mb-20">
+        <div class="relative mx-auto max-w-7xl px-6 py-14 text-center lg:px-8 lg:py-20">
 
-        <div class="flex justify-center">
-            <img
-                src="{{ asset('images/hypoglycemie.png') }}"
-                alt="Hypoglycémie"
-                class="w-full max-w-md rounded-2xl shadow-xl">
-        </div>
+            <div class="mx-auto mb-5 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-100 ring-1 ring-white/10">
+                <span class="h-2 w-2 animate-pulse rounded-full bg-red-400"></span>
+                Informations d'urgence
+            </div>
 
-        <div>
+            <h1 class="mx-auto max-w-3xl text-4xl font-black tracking-tight text-white sm:text-5xl">
+                Reconnaître les signes qui doivent
+                <span class="text-cyan-300">vous alerter</span>
+            </h1>
 
-            <h2 class="text-3xl font-bold text-[#2c4374] mb-6">
-                Hypoglycémie
-            </h2>
-
-            <p class="text-gray-700 leading-8 text-lg">
-                L'hypoglycémie correspond à une baisse anormale du taux de sucre dans le sang,
-                généralement en dessous de <strong>0,70 g/L</strong>. Elle peut apparaître après
-                un effort physique important, un repas insuffisant ou retardé, ou encore à la
-                suite d'une dose excessive d'insuline ou d'un traitement antidiabétique.
+            <p class="mx-auto mt-5 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
+                Hypoglycémie ou hyperglycémie : apprenez à identifier les
+                principaux symptômes et à réagir rapidement.
             </p>
 
-            <p class="text-gray-700 leading-8 text-lg mt-6">
-                Les signes les plus fréquents sont des tremblements, une sensation de faim,
-                des sueurs froides, des palpitations, une fatigue importante, des troubles de
-                la concentration ou encore une confusion. En cas de symptômes, il est conseillé
-                de consommer rapidement environ 15 g de sucre rapide puis de contrôler sa glycémie.
-                Si la personne perd connaissance, contactez immédiatement les secours.
-            </p>
 
-        </div>
+            {# BOUTON 15 #}
+            <div class="mt-8">
 
-    </div>
+                <a
+                    href="tel:15"
+                    class="group inline-flex items-center gap-4 rounded-2xl bg-red-600 px-7 py-4 text-white shadow-xl shadow-red-950/30 transition duration-300 hover:-translate-y-1 hover:bg-red-500 hover:shadow-2xl">
 
-    {# HYPERGLYCÉMIE #}
-    <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-white/15 text-2xl">
+                        📞
+                    </span>
 
-        <div class="flex justify-center">
-            <img
-                src="{{ asset('images/hyperglycemie.png') }}"
-                alt="Hyperglycémie"
-                class="w-full max-w-md rounded-2xl shadow-xl">
-        </div>
+                    <span class="text-left">
+                        <span class="block text-[10px] font-black uppercase tracking-[0.18em] text-red-100">
+                            Urgence médicale
+                        </span>
 
-        <div>
+                        <span class="block text-lg font-black">
+                            Appeler le 15
+                        </span>
+                    </span>
 
-            <h2 class="text-3xl font-bold text-red-900 mb-6">
-                Hyperglycémie
-            </h2>
+                    <span class="ml-2 text-xl transition group-hover:translate-x-1">
+                        →
+                    </span>
 
-            <p class="text-gray-700 leading-8 text-lg">
-                L'hyperglycémie correspond à un taux de sucre dans le sang trop élevé,
-                généralement supérieur à <strong>1,80 g/L après un repas</strong>. Elle peut
-                être provoquée par un oubli d'insuline, une alimentation trop riche en glucides,
-                une infection, le stress ou un manque d'activité physique.
-            </p>
+                </a>
 
-            <p class="text-gray-700 leading-8 text-lg mt-6">
-                Les principaux symptômes sont une soif importante, des envies fréquentes
-                d'uriner, une fatigue inhabituelle, une vision trouble et une bouche sèche.
-                Si l'hyperglycémie persiste ou s'accompagne de vomissements, de douleurs
-                abdominales ou d'une respiration difficile, il est nécessaire de consulter
-                rapidement un médecin ou d'appeler les secours.
-            </p>
+            </div>
 
         </div>
 
-    </div>
+    </section>
 
-</section>
+
+    {# =========================================================
+       CONTENU
+       ========================================================= #}
+
+    <main class="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
+
+
+        {# =========================================================
+           HYPOGLYCÉMIE
+           ========================================================= #}
+
+        <section class="mb-8 overflow-hidden rounded-[32px] bg-white shadow-sm ring-1 ring-slate-200/70">
+
+            <div class="grid grid-cols-1 lg:grid-cols-2">
+
+                {# IMAGE #}
+                <div class="relative flex min-h-[400px] items-center justify-center overflow-hidden bg-gradient-to-br from-sky-50 via-cyan-50 to-white p-8 lg:min-h-[540px]">
+
+                    <div class="absolute h-72 w-72 rounded-full bg-cyan-200/30 blur-3xl"></div>
+
+                    <img
+                        src="{{ asset('images/hypoglycemie.png') }}"
+                        alt="Hypoglycémie"
+                        class="relative z-10 max-h-[430px] w-full max-w-md object-contain drop-shadow-xl">
+
+                </div>
+
+
+                {# TEXTE #}
+                <div class="flex flex-col justify-center p-7 sm:p-10 lg:p-12">
+
+                    <div class="mb-5 flex items-center gap-3">
+
+                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-100 text-2xl">
+                            ↓
+                        </div>
+
+                        <div>
+                            <p class="text-xs font-black uppercase tracking-[0.18em] text-sky-600">
+                                Glycémie basse
+                            </p>
+
+                            <h2 class="text-3xl font-black tracking-tight text-[#102A43]">
+                                Hypoglycémie
+                            </h2>
+                        </div>
+
+                    </div>
+
+
+                    <div class="mb-6 rounded-2xl border border-sky-100 bg-sky-50 p-5">
+
+                        <p class="text-xs font-bold uppercase tracking-wider text-sky-600">
+                            Repère
+                        </p>
+
+                        <p class="mt-1 text-2xl font-black text-[#102A43]">
+                            &lt; 0,70 g/L
+                        </p>
+
+                        <p class="mt-1 text-xs text-slate-500">
+                            Valeur généralement utilisée pour identifier une hypoglycémie.
+                        </p>
+
+                    </div>
+
+
+                    <p class="text-sm leading-7 text-slate-600 sm:text-base">
+                        L'hypoglycémie correspond à une baisse anormale du taux de sucre
+                        dans le sang, généralement en dessous de
+                        <strong class="font-black text-slate-800">0,70 g/L</strong>.
+                        Elle peut apparaître après un effort physique important, un repas
+                        insuffisant ou retardé, ou encore à la suite d'une dose excessive
+                        d'insuline ou d'un traitement antidiabétique.
+                    </p>
+
+
+                    {# SYMPTÔMES #}
+                    <div class="mt-7">
+
+                        <p class="mb-3 text-sm font-black text-[#102A43]">
+                            Signes fréquents
+                        </p>
+
+                        <div class="flex flex-wrap gap-2">
+
+                            {% for symptom in [
+                                'Tremblements',
+                                'Faim',
+                                'Sueurs froides',
+                                'Palpitations',
+                                'Fatigue',
+                                'Confusion'
+                            ] %}
+
+                                <span class="rounded-full bg-slate-100 px-3 py-2 text-xs font-bold text-slate-600">
+                                    {{ symptom }}
+                                </span>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+
+                    {# ACTION #}
+                    <div class="mt-7 rounded-2xl border border-amber-200 bg-amber-50 p-5">
+
+                        <div class="flex gap-4">
+
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-100">
+                                ⚡
+                            </div>
+
+                            <div>
+                                <p class="font-black text-amber-900">
+                                    Que faire ?
+                                </p>
+
+                                <p class="mt-1 text-sm leading-6 text-amber-900/70">
+                                    En cas de symptômes, consommez rapidement environ
+                                    <strong>15 g de sucre rapide</strong>, puis contrôlez
+                                    votre glycémie.
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="mt-4 flex gap-3 rounded-2xl bg-red-50 p-5">
+
+                        <span class="text-xl">🚨</span>
+
+                        <p class="text-sm font-semibold leading-6 text-red-800">
+                            Si la personne perd connaissance, contactez immédiatement
+                            les secours.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        {# =========================================================
+           HYPERGLYCÉMIE
+           ========================================================= #}
+
+        <section class="overflow-hidden rounded-[32px] bg-white shadow-sm ring-1 ring-slate-200/70">
+
+            <div class="grid grid-cols-1 lg:grid-cols-2">
+
+
+                {# TEXTE #}
+                <div class="order-2 flex flex-col justify-center p-7 sm:p-10 lg:order-1 lg:p-12">
+
+                    <div class="mb-5 flex items-center gap-3">
+
+                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-100 text-2xl">
+                            ↑
+                        </div>
+
+                        <div>
+                            <p class="text-xs font-black uppercase tracking-[0.18em] text-rose-600">
+                                Glycémie élevée
+                            </p>
+
+                            <h2 class="text-3xl font-black tracking-tight text-[#102A43]">
+                                Hyperglycémie
+                            </h2>
+                        </div>
+
+                    </div>
+
+
+                    <div class="mb-6 rounded-2xl border border-rose-100 bg-rose-50 p-5">
+
+                        <p class="text-xs font-bold uppercase tracking-wider text-rose-600">
+                            Repère
+                        </p>
+
+                        <p class="mt-1 text-2xl font-black text-[#102A43]">
+                            &gt; 1,80 g/L
+                        </p>
+
+                        <p class="mt-1 text-xs text-slate-500">
+                            Valeur indiquée ici après un repas.
+                        </p>
+
+                    </div>
+
+
+                    <p class="text-sm leading-7 text-slate-600 sm:text-base">
+                        L'hyperglycémie correspond à un taux de sucre dans le sang
+                        trop élevé, généralement supérieur à
+                        <strong class="font-black text-slate-800">
+                            1,80 g/L après un repas
+                        </strong>.
+                        Elle peut être provoquée par un oubli d'insuline, une
+                        alimentation trop riche en glucides, une infection, le stress
+                        ou un manque d'activité physique.
+                    </p>
+
+
+                    {# SYMPTÔMES #}
+                    <div class="mt-7">
+
+                        <p class="mb-3 text-sm font-black text-[#102A43]">
+                            Signes fréquents
+                        </p>
+
+                        <div class="flex flex-wrap gap-2">
+
+                            {% for symptom in [
+                                'Soif importante',
+                                'Urines fréquentes',
+                                'Fatigue',
+                                'Vision trouble',
+                                'Bouche sèche'
+                            ] %}
+
+                                <span class="rounded-full bg-slate-100 px-3 py-2 text-xs font-bold text-slate-600">
+                                    {{ symptom }}
+                                </span>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+
+                    {# ALERTE #}
+                    <div class="mt-7 rounded-2xl border border-red-200 bg-red-50 p-5">
+
+                        <div class="flex gap-4">
+
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-100">
+                                🚨
+                            </div>
+
+                            <div>
+
+                                <p class="font-black text-red-900">
+                                    Quand demander de l'aide ?
+                                </p>
+
+                                <p class="mt-1 text-sm leading-6 text-red-800/80">
+                                    Si l'hyperglycémie persiste ou s'accompagne de
+                                    vomissements, de douleurs abdominales ou d'une
+                                    respiration difficile, consultez rapidement un
+                                    professionnel de santé ou appelez les secours.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                {# IMAGE #}
+                <div class="order-1 relative flex min-h-[400px] items-center justify-center overflow-hidden bg-gradient-to-br from-rose-50 via-orange-50 to-white p-8 lg:order-2 lg:min-h-[540px]">
+
+                    <div class="absolute h-72 w-72 rounded-full bg-rose-200/30 blur-3xl"></div>
+
+                    <img
+                        src="{{ asset('images/hyperglycemie.png') }}"
+                        alt="Hyperglycémie"
+                        class="relative z-10 max-h-[430px] w-full max-w-md object-contain drop-shadow-xl">
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        {# =========================================================
+           URGENCE FINALE
+           ========================================================= #}
+
+        <section class="relative mt-8 overflow-hidden rounded-[30px] bg-red-600 p-7 text-white shadow-xl shadow-red-900/10 sm:p-9">
+
+            <div class="absolute -right-16 -top-20 h-64 w-64 rounded-full bg-white/10"></div>
+
+            <div class="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+
+                <div class="flex items-start gap-4">
+
+                    <div class="hidden h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/15 text-2xl sm:flex">
+                        📞
+                    </div>
+
+                    <div>
+
+                        <p class="text-xs font-black uppercase tracking-[0.18em] text-red-100">
+                            Situation d'urgence
+                        </p>
+
+                        <h2 class="mt-1 text-2xl font-black">
+                            Un doute face à une urgence grave ?
+                        </h2>
+
+                        <p class="mt-2 max-w-2xl text-sm leading-6 text-red-100">
+                            En cas de perte de connaissance ou de signes graves,
+                            contactez immédiatement les services d'urgence.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="tel:15"
+                    class="inline-flex shrink-0 items-center justify-center gap-3 rounded-2xl bg-white px-7 py-4 text-sm font-black text-red-600 shadow-lg transition hover:-translate-y-1">
+
+                    📞 Appeler le 15
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
 
 {% endblock %}
