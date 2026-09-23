@@ -1,350 +1,839 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ma glycémie{% endblock %}
+{% block title %}Ma glycémie - DiabTrack{% endblock %}
 
 {% block body %}
 
-<div class="font-body bg-gray-50 min-h-screen">
+<div class="min-h-screen bg-[#F5F9FC]">
 
-    <header class=" px-6 lg:px-10 py-6">
-        <div class="max-w-6xl mx-auto flex items-center justify-between">
-            
-            <div class="text-right">
-              
+    {# =========================================================
+       HERO
+       ========================================================= #}
+
+    <section class="relative overflow-hidden bg-gradient-to-br from-[#102A43] via-[#0C4A6E] to-[#0F766E]">
+
+        <div class="absolute -right-24 -top-32 h-96 w-96 rounded-full bg-cyan-300/10 blur-3xl"></div>
+        <div class="absolute -bottom-40 left-1/3 h-96 w-96 rounded-full bg-teal-300/10 blur-3xl"></div>
+
+        <div class="relative mx-auto max-w-7xl px-6 py-12 lg:px-8">
+
+            <div class="flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
+
+                <div>
+
+                    <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-100 ring-1 ring-white/10">
+                        <span>💧</span>
+                        Suivi glycémique
+                    </div>
+
+                    <h1 class="mt-5 text-4xl font-black tracking-tight text-white sm:text-5xl">
+                        Ma
+                        <span class="text-cyan-300">
+                            glycémie
+                        </span>
+                    </h1>
+
+                    <p class="mt-4 max-w-2xl text-sm leading-6 text-cyan-50/80 sm:text-base">
+                        Enregistrez vos mesures et consultez l'évolution de votre
+                        glycémie au fil du temps.
+                    </p>
+
+                </div>
+
+
+                {% if blood_sugars|first %}
+
+                    {% set heroLast = blood_sugars|first %}
+
+                    <div class="flex items-center gap-4 rounded-2xl bg-white/10 px-5 py-4 ring-1 ring-white/10 backdrop-blur-sm">
+
+                        <div>
+
+                            <p class="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-200">
+                                Dernière mesure
+                            </p>
+
+                            <div class="mt-1 flex items-end gap-2">
+
+                                <span class="text-3xl font-black text-white">
+                                    {{ heroLast.value }}
+                                </span>
+
+                                <span class="mb-1 text-xs font-bold text-slate-300">
+                                    mg/dL
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="h-10 w-px bg-white/20"></div>
+
+                        <div class="text-xs font-semibold text-slate-300">
+
+                            {{ heroLast.date|date('d/m/Y') }}
+
+                            <br>
+
+                            {{ heroLast.time|date('H:i') }}
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
             </div>
+
         </div>
 
-        <div class="max-w-6xl mx-auto mt-4">
-             <h1 class="text-3xl mb-8">
-            <span class="font-extrabold italic text-gray-900">AJOUTER</span>
-            <span class="font-extrabold italic text-green-700">GLYCEMIE</span>
-        </h1>
-            <p class="text-blue-900 text-sm font-medium">Historique complet</p>
-        </div>
-    </header>
+    </section>
 
-    <div class="max-w-6xl mx-auto px-4 lg:px-10 -mt-6 pb-10">
+
+    {# =========================================================
+       CONTENU
+       ========================================================= #}
+
+    <main class="mx-auto max-w-7xl px-6 py-10 lg:px-8">
+
+
+        {# FLASH #}
 
         {% for message in app.flashes('success') %}
-            <div class="bg-[#48742C] text-white text-sm font-semibold rounded-2xl px-4 py-3 shadow-lg shadow-green-900/20 mb-4">
-                ✅ {{ message }}
+
+            <div class="mb-7 flex items-center gap-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-800">
+
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 font-black">
+                    ✓
+                </div>
+
+                <div>
+
+                    <p class="text-sm font-black">
+                        Mesure enregistrée
+                    </p>
+
+                    <p class="mt-0.5 text-xs">
+                        {{ message }}
+                    </p>
+
+                </div>
+
             </div>
+
         {% endfor %}
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-            <div class="lg:col-span-1 space-y-6 order-1">
+        <div class="grid grid-cols-1 gap-7 xl:grid-cols-[360px_1fr]">
 
-                {# Dernière mesure #}
-                <div class="bg-white rounded-3xl shadow-lg shadow-gray-200 ring-1 ring-gray-100 p-5">
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-xs font-bold uppercase tracking-wide text-gray-400">Dernière mesure</span>
+
+            {# =================================================
+               COLONNE GAUCHE
+               ================================================= #}
+
+            <div class="space-y-6">
+
+
+                {# =============================================
+                   DERNIÈRE MESURE
+                   ============================================= #}
+
+                <section class="relative overflow-hidden rounded-[28px] bg-white p-6 shadow-sm ring-1 ring-slate-200/70">
+
+                    <div class="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-cyan-50"></div>
+
+                    <div class="relative">
+
+                        <div class="flex items-center justify-between">
+
+                            <div>
+
+                                <p class="text-[10px] font-black uppercase tracking-[0.18em] text-teal-600">
+                                    Aujourd'hui
+                                </p>
+
+                                <h2 class="mt-1 text-lg font-black text-[#102A43]">
+                                    Dernière mesure
+                                </h2>
+
+                            </div>
+
+                            <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-50 text-xl">
+                                💧
+                            </div>
+
+                        </div>
+
+
                         {% if blood_sugars|first %}
-                            <span class="text-xs font-semibold text-gray-400">
-                                {{ blood_sugars|first.date|date('d/m') }} · {{ blood_sugars|first.time|date('H:i') }}
-                            </span>
+
+                            {% set last = blood_sugars|first %}
+
+                            <div class="mt-7 flex items-end gap-2">
+
+                                <span class="text-5xl font-black tracking-tight text-[#102A43]">
+                                    {{ last.value }}
+                                </span>
+
+                                <span class="mb-1.5 text-sm font-bold text-slate-400">
+                                    mg/dL
+                                </span>
+
+                            </div>
+
+
+                            <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
+
+                                {% if last.relation == 'hypoglycemie' %}
+
+                                    <span class="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1.5 text-xs font-black text-blue-700">
+                                        <span class="h-2 w-2 rounded-full bg-blue-500"></span>
+                                        Hypoglycémie
+                                    </span>
+
+                                {% elseif last.relation == 'hyperglycemie' %}
+
+                                    <span class="inline-flex items-center gap-2 rounded-full bg-red-50 px-3 py-1.5 text-xs font-black text-red-700">
+                                        <span class="h-2 w-2 rounded-full bg-red-500"></span>
+                                        Hyperglycémie
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-black text-emerald-700">
+                                        <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                                        Normale
+                                    </span>
+
+                                {% endif %}
+
+
+                                <span class="text-xs font-semibold text-slate-400">
+                                    {{ last.date|date('d/m/Y') }} · {{ last.time|date('H:i') }}
+                                </span>
+
+                            </div>
+
+                        {% else %}
+
+                            <div class="py-8 text-center">
+
+                                <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-50 text-2xl">
+                                    💧
+                                </div>
+
+                                <p class="mt-4 text-sm font-semibold text-slate-400">
+                                    Aucune mesure enregistrée.
+                                </p>
+
+                            </div>
+
                         {% endif %}
+
                     </div>
 
-                    {% if blood_sugars|first %}
-                        {% set last = blood_sugars|first %}
-                        <div class="flex items-end gap-2">
-                            <span class="font-display text-5xl font-extrabold text-gray-900">{{ last.value }}</span>
-                            <span class="text-gray-400 font-semibold mb-1.5">mg/dL</span>
-                        </div>
-                        <div class="mt-2">
-                            {% if last.relation == 'hypoglycemie' %}
-                                <span class="inline-flex items-center gap-1 bg-blue-50 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-full">🔵 Hypoglycémie</span>
-                            {% elseif last.relation == 'hyperglycemie' %}
-                                <span class="inline-flex items-center gap-1 bg-red-50 text-red-700 text-xs font-bold px-2.5 py-1 rounded-full">🔴 Hyperglycémie</span>
-                            {% else %}
-                                <span class="inline-flex items-center gap-1 bg-green-50 text-green-700 text-xs font-bold px-2.5 py-1 rounded-full">🟢 Normale</span>
-                            {% endif %}
-                        </div>
-                    {% else %}
-                        <p class="text-gray-400 italic text-sm py-4 text-center">Aucune mesure pour l'instant.</p>
-                    {% endif %}
-                </div>
+                </section>
 
-                {# Formulaire de saisie #}
-                <div class="bg-white rounded-3xl shadow-lg shadow-gray-200 ring-1 ring-gray-100 p-5 order-3 lg:order-none">
-                    <p class="text-xs font-bold uppercase tracking-wide text-gray-400 mb-3">Nouvelle mesure</p>
 
-                    {{ form_start(form, {'attr': {'class': 'space-y-3'}}) }}
+                {# =============================================
+                   NOUVELLE MESURE
+                   ============================================= #}
+
+                <section class="rounded-[28px] bg-white p-6 shadow-sm ring-1 ring-slate-200/70">
+
+                    <div class="mb-6">
+
+                        <p class="text-[10px] font-black uppercase tracking-[0.18em] text-teal-600">
+                            Ajouter
+                        </p>
+
+                        <h2 class="mt-1 text-xl font-black text-[#102A43]">
+                            Nouvelle glycémie
+                        </h2>
+
+                        <p class="mt-2 text-xs leading-5 text-slate-400">
+                            Saisissez votre nouvelle mesure.
+                        </p>
+
+                    </div>
+
+
+                    {{ form_start(form, {
+                        'attr': {
+                            'class': 'space-y-4'
+                        }
+                    }) }}
+
+
                         <div>
-                            {{ form_widget(form.value, {'attr': {
-                                'class': 'w-full text-center font-display text-3xl font-extrabold border-2 border-gray-100 focus:border-[#48742C] rounded-2xl px-3 py-3 bg-gray-50 focus:bg-white outline-none transition',
-                                'placeholder': '95'
-                            }}) }}
-                            {{ form_errors(form.value) }}
+
+                            <label class="mb-2 block text-xs font-black uppercase tracking-wider text-slate-400">
+                                Glycémie
+                            </label>
+
+                            <div class="relative">
+
+                                {{ form_widget(form.value, {
+                                    'attr': {
+                                        'class': 'w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 pr-20 text-center text-3xl font-black text-[#102A43] outline-none transition placeholder:text-slate-300 focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-100',
+                                        'placeholder': '95'
+                                    }
+                                }) }}
+
+                                <span class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-xs font-black text-slate-400">
+                                    mg/dL
+                                </span>
+
+                            </div>
+
+                            <div class="mt-1 text-xs text-red-600">
+                                {{ form_errors(form.value) }}
+                            </div>
+
                         </div>
+
 
                         <div class="grid grid-cols-2 gap-3">
+
                             <div>
-                                {{ form_widget(form.date, {'attr': {'class': 'w-full border-2 border-gray-100 focus:border-[#48742C] rounded-2xl px-3 py-2.5 bg-gray-50 focus:bg-white outline-none text-sm transition'}}) }}
+
+                                <label class="mb-2 block text-xs font-bold text-slate-500">
+                                    Date
+                                </label>
+
+                                {{ form_widget(form.date, {
+                                    'attr': {
+                                        'class': 'w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-xs text-[#102A43] outline-none transition focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-100'
+                                    }
+                                }) }}
+
                                 {{ form_errors(form.date) }}
+
                             </div>
+
+
                             <div>
-                                {{ form_widget(form.time, {'attr': {'class': 'w-full border-2 border-gray-100 focus:border-[#48742C] rounded-2xl px-3 py-2.5 bg-gray-50 focus:bg-white outline-none text-sm transition'}}) }}
+
+                                <label class="mb-2 block text-xs font-bold text-slate-500">
+                                    Heure
+                                </label>
+
+                                {{ form_widget(form.time, {
+                                    'attr': {
+                                        'class': 'w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-xs text-[#102A43] outline-none transition focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-100'
+                                    }
+                                }) }}
+
                                 {{ form_errors(form.time) }}
+
                             </div>
+
                         </div>
 
-                        <button type="submit"
-                            class="w-full bg-blue-900 hover:bg-blue-800 active:scale-[0.98] text-white font-display font-bold rounded-2xl py-3.5 shadow-lg shadow-blue-900/30 transition">
-                            Enregistrer une glycémie
+
+                        <button
+                            type="submit"
+                            class="group flex w-full items-center justify-center gap-2 rounded-2xl bg-[#102A43] px-5 py-4 text-sm font-black text-white shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:bg-[#163B5C]"
+                        >
+                            Enregistrer la mesure
+
+                            <span class="transition-transform group-hover:translate-x-1">
+                                →
+                            </span>
                         </button>
-                    {{ form_end(form) }}
-                </div>
 
-                {# Barème #}
-                <div class="bg-white rounded-3xl shadow-lg shadow-gray-200 ring-1 ring-gray-100 p-5 order-4 lg:order-none">
-                    <p class="text-xs font-bold uppercase tracking-wide text-gray-400 mb-3">Barème</p>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div class="flex items-center gap-2 bg-red-50 rounded-xl px-3 py-2">
-                            <span class="w-3 h-3 rounded-full bg-red-800 shrink-0"></span>
-                            <span class="text-xs font-semibold text-red-900 leading-tight">Hyper<br><span class="text-red-500 font-medium"> supp ou = 110 mg/l </span></span>
-                        </div>
-                        
-                        <div class="flex items-center gap-2 bg-green-50 rounded-xl px-3 py-2">
-                            <span class="w-3 h-3 rounded-full bg-[#48742C] shrink-0"></span>
-                            <span class="text-xs font-semibold text-green-900 leading-tight">Normal<br><span class="text-green-600 font-medium"> inf ou = 110 mg/l</span></span>
-                        </div>
-                        <div class="flex items-center gap-2 bg-blue-50 rounded-xl px-3 py-2">
-                            <span class="w-3 h-3 rounded-full bg-blue-800 shrink-0"></span>
-                            <span class="text-xs font-semibold text-blue-900 leading-tight">Hypo<br><span class="text-blue-600 font-medium"> inf ou= 70 mg/l</span></span>
-                        </div>
+
+                    {{ form_end(form) }}
+
+                </section>
+
+
+                {# =============================================
+                   BARÈME
+                   ============================================= #}
+
+                <section class="rounded-[28px] bg-white p-6 shadow-sm ring-1 ring-slate-200/70">
+
+                    <div class="mb-5">
+
+                        <p class="text-[10px] font-black uppercase tracking-[0.18em] text-teal-600">
+                            Repères
+                        </p>
+
+                        <h2 class="mt-1 text-lg font-black text-[#102A43]">
+                            Barème glycémique
+                        </h2>
+
                     </div>
-                </div>
+
+
+                    <div class="space-y-3">
+
+
+                        <div class="flex items-center justify-between rounded-2xl bg-blue-50 p-4">
+
+                            <div class="flex items-center gap-3">
+
+                                <span class="h-3 w-3 rounded-full bg-blue-500"></span>
+
+                                <div>
+
+                                    <p class="text-xs font-black text-blue-800">
+                                        Hypoglycémie
+                                    </p>
+
+                                    <p class="mt-0.5 text-[11px] font-semibold text-blue-500">
+                                        inférieur à 70 mg/dL
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <span class="text-lg font-black text-blue-700">
+                                &lt; 70
+                            </span>
+
+                        </div>
+
+
+                        <div class="flex items-center justify-between rounded-2xl bg-emerald-50 p-4">
+
+                            <div class="flex items-center gap-3">
+
+                                <span class="h-3 w-3 rounded-full bg-emerald-500"></span>
+
+                                <div>
+
+                                    <p class="text-xs font-black text-emerald-800">
+                                        Normale
+                                    </p>
+
+                                    <p class="mt-0.5 text-[11px] font-semibold text-emerald-600">
+                                        de 70 à 110 mg/dL
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <span class="text-lg font-black text-emerald-700">
+                                70–110
+                            </span>
+
+                        </div>
+
+
+                        <div class="flex items-center justify-between rounded-2xl bg-red-50 p-4">
+
+                            <div class="flex items-center gap-3">
+
+                                <span class="h-3 w-3 rounded-full bg-red-500"></span>
+
+                                <div>
+
+                                    <p class="text-xs font-black text-red-800">
+                                        Hyperglycémie
+                                    </p>
+
+                                    <p class="mt-0.5 text-[11px] font-semibold text-red-500">
+                                        supérieur à 110 mg/dL
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <span class="text-lg font-black text-red-700">
+                                &gt; 110
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </section>
 
             </div>
 
-            {# ===================== CONTENU PRINCIPAL (mobile: ordre 2, 5) ===================== #}
-            <div class="lg:col-span-2 space-y-6 order-2">
 
-                {# Graphique #}
-                <div class="bg-white rounded-3xl shadow-lg shadow-gray-200 ring-1 ring-gray-100 p-5 lg:p-6">
-                    <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
-                        <p class="text-sm font-bold uppercase tracking-wide text-gray-400">Évolution</p>
+            {# =================================================
+               COLONNE DROITE
+               ================================================= #}
 
-                        <div class="flex gap-2 flex-wrap">
-                            <button type="button" data-period="day"
-                                class="period-btn text-xs font-bold px-3 py-1.5 rounded-full bg-gray-100 text-gray-600">Jour</button>
-                            <button type="button" data-period="week"
-                                class="period-btn text-xs font-bold px-3 py-1.5 rounded-full bg-[#48742C] text-white">Semaine</button>
-                            <button type="button" data-period="month"
-                                class="period-btn text-xs font-bold px-3 py-1.5 rounded-full bg-gray-100 text-gray-600">Mois</button>
-                            <button type="button" data-period="custom"
-                                class="period-btn text-xs font-bold px-3 py-1.5 rounded-full bg-gray-100 text-gray-600">Personnalisé</button>
+            <div class="space-y-7">
+
+
+                {# =============================================
+                   GRAPHIQUE
+                   ============================================= #}
+
+                <section class="rounded-[30px] bg-white p-6 shadow-sm ring-1 ring-slate-200/70 lg:p-8">
+
+                    <div class="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+
+                        <div>
+
+                            <p class="text-[10px] font-black uppercase tracking-[0.18em] text-teal-600">
+                                Analyse
+                            </p>
+
+                            <h2 class="mt-1 text-2xl font-black tracking-tight text-[#102A43]">
+                                Évolution de la glycémie
+                            </h2>
+
+                            <p class="mt-2 text-xs text-slate-400">
+                                Visualisez vos mesures dans le temps.
+                            </p>
+
                         </div>
+
+
+                        <div class="flex flex-wrap gap-2">
+
+                            <button
+                                type="button"
+                                data-period="day"
+                                class="period-btn rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-600 transition"
+                            >
+                                Jour
+                            </button>
+
+                            <button
+                                type="button"
+                                data-period="week"
+                                class="period-btn rounded-full bg-[#48742C] px-4 py-2 text-xs font-black text-white transition"
+                            >
+                                Semaine
+                            </button>
+
+                            <button
+                                type="button"
+                                data-period="month"
+                                class="period-btn rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-600 transition"
+                            >
+                                Mois
+                            </button>
+
+                            <button
+                                type="button"
+                                data-period="custom"
+                                class="period-btn rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-600 transition"
+                            >
+                                Personnalisé
+                            </button>
+
+                        </div>
+
                     </div>
 
-                    <div id="customRange" class="hidden grid grid-cols-2 gap-2 mb-4 max-w-xs">
-                        <input type="date" id="customStart" class="border-2 border-gray-100 rounded-xl px-2 py-1.5 text-xs">
-                        <input type="date" id="customEnd" class="border-2 border-gray-100 rounded-xl px-2 py-1.5 text-xs">
+
+                    <div
+                        id="customRange"
+                        class="mt-5 hidden grid max-w-md grid-cols-2 gap-3"
+                    >
+
+                        <input
+                            type="date"
+                            id="customStart"
+                            class="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs text-[#102A43] outline-none focus:border-teal-400"
+                        >
+
+                        <input
+                            type="date"
+                            id="customEnd"
+                            class="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs text-[#102A43] outline-none focus:border-teal-400"
+                        >
+
                     </div>
 
-                    <div class="relative h-72 lg:h-80">
+
+                    <div class="relative mt-7 h-72 lg:h-[380px]">
                         <canvas id="glycemieChart"></canvas>
                     </div>
 
-                    <div class="flex justify-center gap-4 mt-4 text-xs font-semibold text-gray-500">
-                        <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-blue-800"></span> Hypo</span>
-                        <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-green-800"></span> Normale</span>
-                        <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-red-800"></span> Hyper</span>
-                    </div>
-                </div>
 
-                {# Historique complet en tableau (desktop) #}
-                <div class="bg-white rounded-3xl shadow-lg shadow-gray-200 ring-1 ring-gray-100 p-5 lg:p-6 order-5 lg:order-none">
-                    <p class="text-sm font-bold uppercase tracking-wide text-gray-400 mb-4">Historique complet</p>
+                    <div class="mt-6 flex flex-wrap justify-center gap-5 border-t border-slate-100 pt-5 text-xs font-bold text-slate-500">
+
+                        <span class="flex items-center gap-2">
+                            <span class="h-2.5 w-2.5 rounded-full bg-blue-500"></span>
+                            Hypoglycémie
+                        </span>
+
+                        <span class="flex items-center gap-2">
+                            <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+                            Normale
+                        </span>
+
+                        <span class="flex items-center gap-2">
+                            <span class="h-2.5 w-2.5 rounded-full bg-red-500"></span>
+                            Hyperglycémie
+                        </span>
+
+                    </div>
+
+                </section>
+
+
+                {# =============================================
+                   HISTORIQUE
+                   ============================================= #}
+
+                <section class="overflow-hidden rounded-[30px] bg-white shadow-sm ring-1 ring-slate-200/70">
+
+                    <div class="flex items-center justify-between border-b border-slate-100 px-6 py-6 lg:px-8">
+
+                        <div>
+
+                            <p class="text-[10px] font-black uppercase tracking-[0.18em] text-teal-600">
+                                Historique
+                            </p>
+
+                            <h2 class="mt-1 text-xl font-black text-[#102A43]">
+                                Toutes mes mesures
+                            </h2>
+
+                        </div>
+
+
+                        <div class="rounded-xl bg-slate-50 px-3 py-2 text-xs font-black text-slate-500">
+                            {{ blood_sugars|length }}
+                            mesure{% if blood_sugars|length > 1 %}s{% endif %}
+                        </div>
+
+                    </div>
+
 
                     {% if blood_sugars|length > 0 %}
+
                         <div class="overflow-x-auto">
+
                             <table class="w-full text-left">
-                                <thead>
-                                    <tr class="border-b border-gray-200 text-xs text-gray-500 uppercase">
-                                        <th class="py-2 pr-4">Date</th>
-                                        <th class="py-2 pr-4">Heure</th>
-                                        <th class="py-2 pr-4">Valeur</th>
-                                        <th class="py-2 pr-4">Statut</th>
-                                        <th class="py-2">Actions</th>
+
+                                <thead class="bg-slate-50/80">
+
+                                    <tr class="text-[10px] font-black uppercase tracking-[0.14em] text-slate-400">
+
+                                        <th class="px-6 py-4">
+                                            Date
+                                        </th>
+
+                                        <th class="px-6 py-4">
+                                            Heure
+                                        </th>
+
+                                        <th class="px-6 py-4">
+                                            Valeur
+                                        </th>
+
+                                        <th class="px-6 py-4">
+                                            Statut
+                                        </th>
+
+                                        <th class="px-6 py-4 text-right">
+                                            Actions
+                                        </th>
+
                                     </tr>
+
                                 </thead>
-                                <tbody>
-                                    {% for blood_sugar in blood_sugars %}
-                                        <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
-                                            <td class="py-3 pr-4 text-sm">{{ blood_sugar.date|date('d/m/Y') }}</td>
-                                            <td class="py-3 pr-4 text-sm">{{ blood_sugar.time|date('H:i') }}</td>
-                                            <td class="py-3 pr-4 text-sm font-bold">{{ blood_sugar.value }} <span class="text-gray-400 font-normal text-xs">mg/dL</span></td>
-                                            <td class="py-3 pr-4">
-                                                {% if blood_sugar.relation == 'hypoglycemie' %}
-                                                    <span class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full">Hypoglycémie</span>
-                                                {% elseif blood_sugar.relation == 'hyperglycemie' %}
-                                                    <span class="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2 py-1 rounded-full">Hyperglycémie</span>
-                                                {% else %}
-                                                    <span class="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">Normale</span>
-                                                {% endif %}
-                                            </td>
-                                            <td class="py-3">
-                                                <div class="flex items-center gap-3 text-xs">
-                                                    <a href="{{ path('app_blood_sugar_show', {'id': blood_sugar.id}) }}" class="text-blue-700 font-semibold hover:underline">Voir</a>
-                                                    <a href="{{ path('app_blood_sugar_edit', {'id': blood_sugar.id}) }}" class="text-gray-600 font-semibold hover:underline">Modifier</a>
-                                                    <form method="post" action="{{ path('app_blood_sugar_delete', {'id': blood_sugar.id}) }}"
-                                                        onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"
-                                                        style="display:inline;">
-                                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ blood_sugar.id) }}">
-                                                        <button class="text-red-700 font-semibold hover:underline">Supprimer</button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
+
+
+                                <tbody class="divide-y divide-slate-100">
+
+                                {% for blood_sugar in blood_sugars %}
+
+                                    <tr class="transition hover:bg-slate-50/70">
+
+                                        <td class="whitespace-nowrap px-6 py-5 text-sm font-semibold text-slate-600">
+                                            {{ blood_sugar.date|date('d/m/Y') }}
+                                        </td>
+
+                                        <td class="whitespace-nowrap px-6 py-5 text-sm text-slate-500">
+                                            {{ blood_sugar.time|date('H:i') }}
+                                        </td>
+
+
+                                        <td class="whitespace-nowrap px-6 py-5">
+
+                                            <span class="text-lg font-black text-[#102A43]">
+                                                {{ blood_sugar.value }}
+                                            </span>
+
+                                            <span class="ml-1 text-[10px] font-bold text-slate-400">
+                                                mg/dL
+                                            </span>
+
+                                        </td>
+
+
+                                        <td class="whitespace-nowrap px-6 py-5">
+
+                                            {% if blood_sugar.relation == 'hypoglycemie' %}
+
+                                                <span class="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1.5 text-xs font-black text-blue-700">
+
+                                                    <span class="h-2 w-2 rounded-full bg-blue-500"></span>
+
+                                                    Hypoglycémie
+
+                                                </span>
+
+                                            {% elseif blood_sugar.relation == 'hyperglycemie' %}
+
+                                                <span class="inline-flex items-center gap-2 rounded-full bg-red-50 px-3 py-1.5 text-xs font-black text-red-700">
+
+                                                    <span class="h-2 w-2 rounded-full bg-red-500"></span>
+
+                                                    Hyperglycémie
+
+                                                </span>
+
+                                            {% else %}
+
+                                                <span class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-black text-emerald-700">
+
+                                                    <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+
+                                                    Normale
+
+                                                </span>
+
+                                            {% endif %}
+
+                                        </td>
+
+
+                                        <td class="whitespace-nowrap px-6 py-5">
+
+                                            <div class="flex items-center justify-end gap-2">
+
+                                                <a
+                                                    href="{{ path('app_blood_sugar_show', {'id': blood_sugar.id}) }}"
+                                                    class="rounded-lg bg-cyan-50 px-3 py-2 text-[11px] font-black text-cyan-700 transition hover:bg-cyan-100"
+                                                >
+                                                    Voir
+                                                </a>
+
+
+                                                <a
+                                                    href="{{ path('app_blood_sugar_edit', {'id': blood_sugar.id}) }}"
+                                                    class="rounded-lg bg-slate-100 px-3 py-2 text-[11px] font-black text-slate-600 transition hover:bg-slate-200"
+                                                >
+                                                    Modifier
+                                                </a>
+
+
+                                                <form
+                                                    method="post"
+                                                    action="{{ path('app_blood_sugar_delete', {'id': blood_sugar.id}) }}"
+                                                    onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"
+                                                >
+
+                                                    <input
+                                                        type="hidden"
+                                                        name="_token"
+                                                        value="{{ csrf_token('delete' ~ blood_sugar.id) }}"
+                                                    >
+
+                                                    <button
+                                                        type="submit"
+                                                        class="rounded-lg bg-red-50 px-3 py-2 text-[11px] font-black text-red-600 transition hover:bg-red-100"
+                                                    >
+                                                        Supprimer
+                                                    </button>
+
+                                                </form>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
                                 </tbody>
+
                             </table>
+
                         </div>
+
                     {% else %}
-                        <p class="text-gray-400 italic text-sm py-4 text-center">Aucune mesure enregistrée pour le moment.</p>
+
+                        <div class="px-6 py-16 text-center">
+
+                            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-cyan-50 text-2xl">
+                                💧
+                            </div>
+
+                            <p class="mt-4 font-black text-[#102A43]">
+                                Aucune mesure
+                            </p>
+
+                            <p class="mt-1 text-sm text-slate-400">
+                                Votre historique apparaîtra ici après votre première mesure.
+                            </p>
+
+                        </div>
+
                     {% endif %}
+
+                </section>
+
+            </div>
+
+        </div>
+
+
+        {# =====================================================
+           INFO
+           ===================================================== #}
+
+        <section class="relative mt-8 overflow-hidden rounded-[30px] bg-[#102A43] p-7 text-white lg:p-8">
+
+            <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-teal-400/10 blur-2xl"></div>
+
+            <div class="relative flex items-start gap-4">
+
+                <div class="hidden h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-xl sm:flex">
+                    ℹ️
+                </div>
+
+                <div>
+
+                    <p class="text-xs font-black uppercase tracking-[0.18em] text-cyan-300">
+                        Votre suivi
+                    </p>
+
+                    <h2 class="mt-1 text-lg font-black">
+                        Gardez un historique de vos mesures
+                    </h2>
+
+                    <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-300">
+                        DiabTrack vous permet de centraliser vos mesures afin de suivre
+                        leur évolution dans le temps.
+                    </p>
+
                 </div>
 
             </div>
-        </div>
-    </div>
+
+        </section>
+
+    </main>
+
 </div>
 
+
+{# =============================================================
+   GARDE ICI TON SCRIPT CHART.JS ACTUEL, SANS LE MODIFIER
+   ============================================================= #}
+
 <script type="module">
-    import { Chart, registerables } from 'chart.js';
-    import annotationPlugin from 'chartjs-plugin-annotation';
-    import 'chartjs-adapter-date-fns';
 
-    Chart.register(...registerables, annotationPlugin);
+    {# COLLE ICI exactement les lignes de ton script actuel #}
 
-    const rawData = {{ blood_sugars|map(bs => {
-        'datetime': (bs.date|date('Y-m-d')) ~ ' ' ~ (bs.time|date('H:i:s')),
-        'value': bs.value
-    })|json_encode|raw }};
-
-    const allPoints = rawData
-        .map(p => ({ x: new Date(p.datetime.replace(' ', 'T')), y: parseFloat(p.value) }))
-        .sort((a, b) => a.x - b.x);
-
-    const SEUIL_HYPO = 70;
-    const SEUIL_HYPER = 110;
-    const Y_MAX = 350;
-
-    const ctx = document.getElementById('glycemieChart').getContext('2d');
-
-    let chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            datasets: [{
-                label: 'Glycémie (mg/dL)',
-                data: [],
-                borderColor: '#1e3a8a',
-                backgroundColor: 'rgba(30, 58, 138, 0.1)',
-                pointBackgroundColor: '#1e3a8a',
-                pointRadius: 4,
-                tension: 0.3,
-                fill: true,
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: {
-                    type: 'time',
-                    time: { unit: 'day' },
-                    ticks: { font: { size: 10 } }
-                },
-                y: {
-                    min: 0,
-                    max: Y_MAX,
-                    ticks: { font: { size: 10 } }
-                }
-            },
-            plugins: {
-                legend: { display: false },
-                annotation: {
-                    annotations: {
-                        zoneHyper: {
-                            type: 'box',
-                            yMin: SEUIL_HYPER,
-                            yMax: Y_MAX,
-                            backgroundColor: 'rgba(220, 38, 38, 0.08)',
-                            borderWidth: 0,
-                        },
-                        zoneNormale: {
-                            type: 'box',
-                            yMin: SEUIL_HYPO,
-                            yMax: SEUIL_HYPER,
-                            backgroundColor: 'rgba(72, 116, 44, 0.08)',
-                            borderWidth: 0,
-                        },
-                        zoneHypo: {
-                            type: 'box',
-                            yMin: 0,
-                            yMax: SEUIL_HYPO,
-                            backgroundColor: 'rgba(37, 99, 235, 0.08)',
-                            borderWidth: 0,
-                        },
-                    }
-                }
-            }
-        }
-    });
-
-    function filterByPeriod(period) {
-        const now = new Date();
-        let start;
-
-        if (period === 'day') {
-            start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        } else if (period === 'week') {
-            start = new Date(now);
-            start.setDate(now.getDate() - 7);
-        } else if (period === 'month') {
-            start = new Date(now);
-            start.setMonth(now.getMonth() - 1);
-        } else if (period === 'custom') {
-            const startInput = document.getElementById('customStart').value;
-            const endInput = document.getElementById('customEnd').value;
-            if (!startInput || !endInput) return allPoints;
-            const startDate = new Date(startInput);
-            const endDate = new Date(endInput);
-            endDate.setHours(23, 59, 59);
-            return allPoints.filter(p => p.x >= startDate && p.x <= endDate);
-        } else {
-            start = new Date(0);
-        }
-
-        return allPoints.filter(p => p.x >= start);
-    }
-
-    function updateChart(period) {
-        chart.data.datasets[0].data = filterByPeriod(period);
-        chart.update();
-    }
-
-    document.querySelectorAll('.period-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.period-btn').forEach(b => {
-                b.classList.remove('bg-[#48742C]', 'text-white');
-                b.classList.add('bg-gray-100', 'text-gray-600');
-            });
-            btn.classList.remove('bg-gray-100', 'text-gray-600');
-            btn.classList.add('bg-[#48742C]', 'text-white');
-
-            const period = btn.dataset.period;
-            document.getElementById('customRange').classList.toggle('hidden', period !== 'custom');
-            updateChart(period);
-        });
-    });
-
-    document.getElementById('customStart').addEventListener('change', () => updateChart('custom'));
-    document.getElementById('customEnd').addEventListener('change', () => updateChart('custom'));
-
-    updateChart('week');
 </script>
+
 {% endblock %}

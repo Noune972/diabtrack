@@ -1,58 +1,366 @@
 {% extends 'base.html.twig' %}
-{% block title %}Log in!{% endblock %}
+
+{% block title %}Connexion - DiabTrack{% endblock %}
+
 {% block body %}
-<section class="h-screen flex flex-col overflow-hidden">
-  {# Contenu principal centré #}
-  <div class="flex-1 flex flex-col items-center justify-center bg-gray-50 gap-6">
+
+<section class="relative min-h-screen overflow-hidden bg-[#F5F9FC]">
+
+    {# Décor arrière-plan #}
+    <div class="absolute left-0 top-0 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-200/30 blur-3xl"></div>
+    <div class="absolute bottom-0 right-0 h-96 w-96 translate-x-1/3 translate-y-1/3 rounded-full bg-teal-200/30 blur-3xl"></div>
+
+    <div class="relative mx-auto flex min-h-screen max-w-7xl items-center justify-center px-5 py-12 lg:px-8">
+
+        <div class="grid w-full max-w-5xl overflow-hidden rounded-[32px] bg-white shadow-[0_30px_80px_rgba(15,42,67,0.15)] ring-1 ring-slate-200/60 lg:grid-cols-2">
 
 
-    
-    <h1 class="text-5xl font-black uppercase tracking-wider text-center leading-tight italic">
-      <span class="text-gray-900">SE </span>
-      <span class="text-[#48742C]">CONNECTER</span>
-    </h1>
+            {# =====================================================
+               PARTIE GAUCHE
+               ===================================================== #}
 
-    <div class="bg-white rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.15)] p-10 w-full max-w-md">
-      <form method="post" class="flex flex-col gap-4">
-        {% if error %}
-          <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
+            <div class="relative hidden overflow-hidden bg-gradient-to-br from-[#102A43] via-[#0C4A6E] to-[#0F766E] p-12 text-white lg:flex lg:flex-col lg:justify-between">
 
-        {% if app.user %}
-          <div class="mb-3">
-            Vous êtes connecté(e) en tant que {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Déconnexion</a>
-          </div>
-        {% endif %}
+                <div class="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-cyan-300/10 blur-2xl"></div>
+                <div class="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-teal-300/10 blur-2xl"></div>
 
-        <div class="flex flex-col gap-1">
-          <label for="username">Email</label>
-          <input type="text" value="{{ last_username }}" name="_username" id="username" class="form-control border rounded-lg px-3 py-2" autocomplete="username" required autofocus>
+
+                <div class="relative">
+
+                    <div class="inline-flex items-center gap-3">
+
+                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-2xl ring-1 ring-white/10">
+                            💧
+                        </div>
+
+                        <span class="text-2xl font-black tracking-tight">
+                            Diab<span class="text-cyan-300">Track</span>
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="relative py-14">
+
+                    <div class="mb-5 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-200 ring-1 ring-white/10">
+                        Votre espace santé
+                    </div>
+
+                    <h1 class="text-4xl font-black leading-tight tracking-tight xl:text-5xl">
+                        Votre suivi diabétique,
+                        <span class="text-cyan-300">
+                            simplement.
+                        </span>
+                    </h1>
+
+                    <p class="mt-6 max-w-md text-sm leading-7 text-slate-300">
+                        Retrouvez vos données de santé et poursuivez votre suivi
+                        quotidien depuis votre espace personnel DiabTrack.
+                    </p>
+
+
+                    <div class="mt-9 space-y-4">
+
+                        <div class="flex items-center gap-3 text-sm font-semibold text-slate-200">
+
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-cyan-300">
+                                ✓
+                            </span>
+
+                            Suivi de votre glycémie
+
+                        </div>
+
+                        <div class="flex items-center gap-3 text-sm font-semibold text-slate-200">
+
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-cyan-300">
+                                ✓
+                            </span>
+
+                            Historique de vos données
+
+                        </div>
+
+                        <div class="flex items-center gap-3 text-sm font-semibold text-slate-200">
+
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-cyan-300">
+                                ✓
+                            </span>
+
+                            Espace personnel sécurisé
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="relative flex items-center gap-2 text-xs font-semibold text-slate-400">
+
+                    <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+
+                    Données personnelles protégées
+
+                </div>
+
+            </div>
+
+
+            {# =====================================================
+               FORMULAIRE
+               ===================================================== #}
+
+            <div class="flex items-center p-7 sm:p-10 lg:p-14">
+
+                <div class="w-full">
+
+
+                    {# Logo mobile #}
+
+                    <div class="mb-10 flex items-center gap-3 lg:hidden">
+
+                        <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-[#102A43] text-xl text-white">
+                            💧
+                        </div>
+
+                        <span class="text-xl font-black text-[#102A43]">
+                            Diab<span class="text-teal-500">Track</span>
+                        </span>
+
+                    </div>
+
+
+                    <div class="mb-8">
+
+                        <p class="text-xs font-black uppercase tracking-[0.2em] text-teal-600">
+                            Bienvenue
+                        </p>
+
+                        <h2 class="mt-2 text-3xl font-black tracking-tight text-[#102A43] sm:text-4xl">
+                            Se connecter
+                        </h2>
+
+                        <p class="mt-3 text-sm leading-6 text-slate-500">
+                            Connectez-vous pour accéder à votre espace personnel.
+                        </p>
+
+                    </div>
+
+
+                    {# ERREUR DE CONNEXION #}
+
+                    {% if error %}
+
+                        <div class="mb-6 flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-700">
+
+                            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 font-black">
+                                !
+                            </div>
+
+                            <div>
+
+                                <p class="text-sm font-black">
+                                    Connexion impossible
+                                </p>
+
+                                <p class="mt-1 text-xs leading-5">
+                                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+
+                    {# DÉJÀ CONNECTÉ #}
+
+                    {% if app.user %}
+
+                        <div class="mb-6 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm text-[#102A43]">
+
+                            Vous êtes connecté(e) en tant que
+
+                            <strong>
+                                {{ app.user.userIdentifier }}
+                            </strong>.
+
+                            <a
+                                href="{{ logout_path() }}"
+                                class="ml-1 font-black text-teal-700 hover:underline"
+                            >
+                                Déconnexion
+                            </a>
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <form method="post" class="space-y-5">
+
+
+                        {# EMAIL #}
+
+                        <div>
+
+                            <label
+                                for="username"
+                                class="mb-2 block text-sm font-black text-[#102A43]"
+                            >
+                                Adresse email
+                            </label>
+
+                            <div class="relative">
+
+                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                                    ✉
+                                </div>
+
+                                <input
+                                    type="email"
+                                    value="{{ last_username }}"
+                                    name="_username"
+                                    id="username"
+                                    autocomplete="username"
+                                    required
+                                    autofocus
+                                    placeholder="votre@email.fr"
+                                    class="w-full rounded-2xl border border-slate-200 bg-slate-50 py-3.5 pl-11 pr-4 text-sm text-[#102A43] outline-none transition placeholder:text-slate-400 focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-100"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        {# MOT DE PASSE #}
+
+                        <div>
+
+                            <div class="mb-2 flex items-center justify-between">
+
+                                <label
+                                    for="password"
+                                    class="block text-sm font-black text-[#102A43]"
+                                >
+                                    Mot de passe
+                                </label>
+
+                                <a
+                                    href="{{ path('app_forgot_password_request') }}"
+                                    class="text-xs font-bold text-teal-600 transition hover:text-teal-700 hover:underline"
+                                >
+                                    Mot de passe oublié ?
+                                </a>
+
+                            </div>
+
+
+                            <div class="relative">
+
+                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                                    🔒
+                                </div>
+
+                                <input
+                                    type="password"
+                                    name="_password"
+                                    id="password"
+                                    autocomplete="current-password"
+                                    required
+                                    placeholder="Votre mot de passe"
+                                    class="w-full rounded-2xl border border-slate-200 bg-slate-50 py-3.5 pl-11 pr-4 text-sm text-[#102A43] outline-none transition placeholder:text-slate-400 focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-100"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        {# CSRF #}
+
+                        <input
+                            type="hidden"
+                            name="_csrf_token"
+                            data-controller="csrf-protection"
+                            value="{{ csrf_token('authenticate') }}"
+                        >
+
+
+                        {# REMEMBER ME #}
+
+                        <label class="flex cursor-pointer items-center gap-3">
+
+                            <input
+                                type="checkbox"
+                                name="_remember_me"
+                                id="_remember_me"
+                                class="h-4 w-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500"
+                            >
+
+                            <span class="text-sm font-semibold text-slate-500">
+                                Se souvenir de moi
+                            </span>
+
+                        </label>
+
+
+                        {# BOUTON #}
+
+                        <button
+                            type="submit"
+                            class="group flex w-full items-center justify-center gap-2 rounded-2xl bg-[#102A43] px-5 py-4 text-sm font-black text-white shadow-lg shadow-slate-900/10 transition duration-300 hover:-translate-y-0.5 hover:bg-[#163B5C] hover:shadow-xl"
+                        >
+                            Se connecter
+
+                            <span class="transition-transform group-hover:translate-x-1">
+                                →
+                            </span>
+                        </button>
+
+
+                    </form>
+
+
+                    {# BAS DU FORMULAIRE #}
+
+                    <div class="mt-8 border-t border-slate-100 pt-6 text-center">
+
+                        <p class="text-sm text-slate-500">
+                            Vous n'avez pas encore de compte ?
+
+                            <a
+                                href="{{ path('app_register') }}"
+                                class="font-black text-teal-600 transition hover:text-teal-700 hover:underline"
+                            >
+                                Créer un compte
+                            </a>
+                        </p>
+
+                    </div>
+
+
+                    <div class="mt-7 flex items-center justify-center gap-2 text-[11px] font-semibold text-slate-400">
+
+                        <span>🔒</span>
+
+                        Connexion sécurisée • DiabTrack
+
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="flex flex-col gap-1">
-          <label for="password">Mot de passe</label>
-          <input type="password" name="_password" id="password" class="form-control border rounded-lg px-3 py-2" autocomplete="current-password" required>
-        </div>
-
-        <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
-
-        <div class="flex items-center gap-2">
-          <input type="checkbox" name="_remember_me" id="_remember_me">
-          <label for="_remember_me">Se souvenir de moi</label>
-        </div>
-
-        <button type="submit" class="w-full bg-blue-900 text-white font-semibold py-3 rounded-xl border-none cursor-pointer mt-2 text-base">
-          Se connecter
-        </button>
-
-       <a href="{{ path('app_forgot_password_request') }}"
-   class="block text-center mt-3 text-sm text-[#48742C] underline">
-    Mot de passe oublié ?
-</a>
-      </form>
     </div>
 
-  </div>
-
 </section>
+
 {% endblock %}
