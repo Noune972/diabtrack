@@ -1,13 +1,173 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Reminder{% endblock %}
+{% block title %}Modifier mon rappel - DiabTrack{% endblock %}
 
 {% block body %}
-    <h1>Edit Reminder</h1>
 
-    {{ include('reminder/_form.html.twig', {'button_label': 'Update'}) }}
+<div class="min-h-screen bg-[#F5F9FC]">
 
-    <a href="{{ path('app_reminder_index') }}">back to list</a>
+    {# ================= HERO ================= #}
+    <section class="relative overflow-hidden bg-gradient-to-br from-[#0F2D46] via-[#0C4A6E] to-[#0F766E]">
 
-    {{ include('reminder/_delete_form.html.twig') }}
+        <div class="absolute -right-24 -top-32 h-96 w-96 rounded-full bg-cyan-300/10 blur-3xl"></div>
+        <div class="absolute -bottom-40 left-1/3 h-96 w-96 rounded-full bg-teal-300/10 blur-3xl"></div>
+
+        <div class="relative mx-auto max-w-7xl px-6 py-12 lg:px-8">
+
+            <a
+                href="{{ path('app_reminder_index') }}"
+                class="mb-6 inline-flex items-center gap-2 text-sm font-bold text-cyan-100 transition hover:text-white"
+            >
+                ← Mes rappels
+            </a>
+
+            <div class="max-w-2xl">
+
+                <div class="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-100 ring-1 ring-white/10">
+                    <span class="h-2 w-2 rounded-full bg-amber-300"></span>
+                    Modification
+                </div>
+
+                <h1 class="text-4xl font-black tracking-tight text-white sm:text-5xl">
+                    Modifier mon rappel
+                </h1>
+
+                <p class="mt-4 max-w-xl text-base leading-7 text-cyan-50/80">
+                    Modifiez le type, la fréquence ou l'heure de votre rappel.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    {# ================= CONTENU ================= #}
+    <main class="mx-auto max-w-7xl px-6 py-10 lg:px-8">
+
+        <div class="grid gap-7 lg:grid-cols-[minmax(0,1fr)_340px]">
+
+            {# ================= FORMULAIRE ================= #}
+            <section class="rounded-[30px] bg-white p-6 shadow-sm ring-1 ring-slate-200/70 sm:p-8">
+
+                <div class="mb-7 flex items-start gap-4">
+
+                    <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-2xl">
+                        {{ reminder.type.icon }}
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-black uppercase tracking-[0.18em] text-teal-600">
+                            Rappel actuel
+                        </p>
+
+                        <h2 class="mt-1 text-2xl font-black text-[#102A43]">
+                            {{ reminder.type.label }}
+                        </h2>
+
+                        <p class="mt-1 text-sm text-slate-500">
+                            Programmé à
+                            <strong class="text-[#102A43]">
+                                {{ reminder.time ? reminder.time|date('H:i') : '--:--' }}
+                            </strong>
+                        </p>
+                    </div>
+
+                </div>
+
+                {{ include('reminder/_form.html.twig', {
+                    button_label: 'Enregistrer les modifications'
+                }) }}
+
+            </section>
+
+
+            {# ================= COLONNE DROITE ================= #}
+            <aside class="space-y-5">
+
+                {# RÉSUMÉ #}
+                <section class="rounded-[28px] bg-[#102A43] p-6 text-white shadow-lg">
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-2xl">
+                        🕐
+                    </div>
+
+                    <p class="mt-5 text-xs font-black uppercase tracking-[0.18em] text-cyan-300">
+                        Votre rappel
+                    </p>
+
+                    <h2 class="mt-2 text-xl font-black">
+                        {{ reminder.type.label }}
+                    </h2>
+
+                    <div class="mt-5 rounded-2xl bg-white/10 p-4">
+
+                        <p class="text-xs font-bold uppercase tracking-wider text-slate-300">
+                            Heure actuelle
+                        </p>
+
+                        <p class="mt-1 text-3xl font-black">
+                            {{ reminder.time ? reminder.time|date('H:i') : '--:--' }}
+                        </p>
+
+                    </div>
+
+                </section>
+
+
+                {# CONSEIL #}
+                <section class="rounded-[28px] border border-cyan-100 bg-cyan-50 p-6">
+
+                    <div class="flex gap-4">
+
+                        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-xl shadow-sm">
+                            💡
+                        </div>
+
+                        <div>
+                            <h3 class="font-black text-[#102A43]">
+                                Bon à savoir
+                            </h3>
+
+                            <p class="mt-2 text-xs leading-5 text-slate-600">
+                                Vous pouvez modifier votre rappel à tout moment.
+                                Les changements seront appliqués dès l'enregistrement.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                {# ZONE DANGEREUSE #}
+                <section class="rounded-[28px] border border-red-100 bg-white p-6 shadow-sm">
+
+                    <p class="text-xs font-black uppercase tracking-[0.18em] text-red-500">
+                        Suppression
+                    </p>
+
+                    <h3 class="mt-2 text-lg font-black text-[#102A43]">
+                        Supprimer ce rappel
+                    </h3>
+
+                    <p class="mt-2 text-xs leading-5 text-slate-500">
+                        Cette action supprimera définitivement ce rappel de votre liste.
+                    </p>
+
+                    <div class="mt-5">
+                        {{ include('reminder/_delete_form.html.twig') }}
+                    </div>
+
+                </section>
+
+            </aside>
+
+        </div>
+
+    </main>
+
+</div>
+
 {% endblock %}

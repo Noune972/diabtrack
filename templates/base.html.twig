@@ -186,6 +186,26 @@
 
             </a>
 
+            {# MA JOURNÉE #}
+
+<a
+    href="{{ path('app_daily_journal') }}"
+    class="mb-1.5 flex items-center gap-3 rounded-2xl px-4 py-3.5 text-sm font-bold transition
+    {{ app.request.attributes.get('_route') == 'app_daily_journal'
+        ? 'bg-gradient-to-r from-teal-500 to-cyan-500 text-white shadow-lg'
+        : 'text-slate-300 hover:bg-white/[0.07] hover:text-white' }}"
+>
+
+    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-lg">
+        📅
+    </span>
+
+    <span class="flex-1">
+        Ma journée
+    </span>
+
+</a>
+
 
             {# URGENCES #}
 
@@ -240,11 +260,17 @@
             </p>
 
 
-            {# RAPPELS - route à ajouter plus tard #}
+                       {# RAPPELS #}
 
-            <div class="mb-1.5 flex items-center gap-3 rounded-2xl px-4 py-3.5 text-sm font-bold text-slate-500">
+            <a
+                href="{{ path('app_reminder_index') }}"
+                class="mb-1.5 flex items-center gap-3 rounded-2xl px-4 py-3.5 text-sm font-bold transition
+                {{ app.request.attributes.get('_route') starts with 'app_reminder'
+                    ? 'bg-gradient-to-r from-teal-500 to-cyan-500 text-white shadow-lg'
+                    : 'text-slate-300 hover:bg-white/[0.07] hover:text-white' }}"
+            >
 
-                <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 text-lg">
+                <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-lg">
                     🔔
                 </span>
 
@@ -252,12 +278,7 @@
                     Rappels
                 </span>
 
-                <span class="rounded-full bg-white/5 px-2 py-1 text-[8px] font-black uppercase tracking-wider">
-                    Bientôt
-                </span>
-
-            </div>
-
+            </a>
 
             {# FORUM - route à ajouter plus tard #}
 

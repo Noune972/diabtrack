@@ -1,4 +1,110 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+{{ form_start(form, {
+    attr: {
+        class: 'space-y-6'
+    }
+}) }}
+
+    {# TYPE DE RAPPEL #}
+    <div>
+        {{ form_label(form.type, null, {
+            label_attr: {
+                class: 'mb-2 block text-sm font-black text-[#102A43]'
+            }
+        }) }}
+
+        {{ form_widget(form.type, {
+            attr: {
+                class: 'w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-[#102A43] outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-100'
+            }
+        }) }}
+
+        {{ form_errors(form.type) }}
+
+        <p class="mt-2 text-xs leading-5 text-slate-400">
+            Choisissez l'action ou le suivi pour lequel vous souhaitez programmer un rappel.
+        </p>
+    </div>
+
+
+    {# FRÉQUENCE #}
+    <div>
+        {{ form_label(form.frequency, null, {
+            label_attr: {
+                class: 'mb-2 block text-sm font-black text-[#102A43]'
+            }
+        }) }}
+
+        {{ form_widget(form.frequency, {
+            attr: {
+                class: 'w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-[#102A43] outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-100'
+            }
+        }) }}
+
+        {{ form_errors(form.frequency) }}
+
+        <p class="mt-2 text-xs leading-5 text-slate-400">
+            Définissez à quelle fréquence ce rappel doit apparaître.
+        </p>
+    </div>
+
+
+    {# HEURE #}
+    <div>
+        {{ form_label(form.time, null, {
+            label_attr: {
+                class: 'mb-2 block text-sm font-black text-[#102A43]'
+            }
+        }) }}
+
+        <div class="relative">
+
+            {{ form_widget(form.time, {
+                attr: {
+                    class: 'w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 pr-14 text-sm font-bold text-[#102A43] outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-100'
+                }
+            }) }}
+
+            <div class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-xl">
+                🕐
+            </div>
+
+        </div>
+
+        {{ form_errors(form.time) }}
+
+        <p class="mt-2 text-xs leading-5 text-slate-400">
+            Choisissez l'heure à laquelle vous souhaitez retrouver ce rappel.
+        </p>
+    </div>
+
+
+    {# ERREURS GLOBALES #}
+    {% if not form.vars.valid %}
+        <div class="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {{ form_errors(form) }}
+        </div>
+    {% endif %}
+
+
+    {# ACTIONS #}
+    <div class="flex flex-col gap-3 border-t border-slate-100 pt-6 sm:flex-row sm:items-center sm:justify-between">
+
+        <a
+            href="{{ path('app_reminder_index') }}"
+            class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-600 transition hover:bg-slate-50"
+        >
+            ← Retour aux rappels
+        </a>
+
+        <button
+            type="submit"
+            class="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 px-6 py-3.5 text-sm font-black text-white shadow-lg shadow-cyan-500/10 transition hover:-translate-y-0.5 hover:shadow-xl"
+        >
+            <span>✓</span>
+            {{ button_label|default('Enregistrer le rappel') }}
+        </button>
+
+    </div>
+
 {{ form_end(form) }}

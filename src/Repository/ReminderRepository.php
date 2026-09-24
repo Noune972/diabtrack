@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Reminder;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +17,19 @@ class ReminderRepository extends ServiceEntityRepository
         parent::__construct($registry, Reminder::class);
     }
 
-    //    /**
-    //     * @return Reminder[] Returns an array of Reminder objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('r.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Reminder
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * Retourne tous les rappels d'un patient,
+     * classés par heure.
+     *
+     * @return Reminder[]
+     */
+    public function findForPatient(User $patient): array
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.patient = :patient')
+            ->setParameter('patient', $patient)
+            ->orderBy('r.time', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

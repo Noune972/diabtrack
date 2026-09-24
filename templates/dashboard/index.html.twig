@@ -71,6 +71,258 @@
 
 
     {# =========================================================
+   VUE D'ENSEMBLE SANTÉ
+   ========================================================= #}
+
+<section class="mx-auto max-w-7xl px-6 pt-10 lg:px-8">
+
+    <div class="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+
+        <div>
+            <p class="text-xs font-black uppercase tracking-[0.2em] text-teal-600">
+                Aujourd'hui
+            </p>
+
+            <h2 class="mt-1 text-2xl font-black tracking-tight text-[#102A43] sm:text-3xl">
+                Vue d'ensemble santé
+            </h2>
+
+            <p class="mt-2 text-sm text-slate-500">
+                Un aperçu rapide des données enregistrées aujourd'hui.
+            </p>
+        </div>
+
+        <a href="{{ path('app_daily_journal') }}"
+           class="inline-flex items-center gap-2 text-sm font-black text-teal-600 transition hover:text-teal-700">
+            Voir ma journée
+            <span>→</span>
+        </a>
+
+    </div>
+
+
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
+
+        {# GLYCÉMIE #}
+        <a href="{{ path('app_blood_sugar_index') }}"
+           class="group rounded-[26px] bg-white p-5 shadow-sm ring-1 ring-slate-200/70 transition hover:-translate-y-1 hover:shadow-lg">
+
+            <div class="flex items-start justify-between">
+
+                <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-rose-50 text-xl">
+                    🩸
+                </span>
+
+                <span class="rounded-full bg-rose-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-rose-600">
+                    {{ blood_sugar_count }} mesure{{ blood_sugar_count > 1 ? 's' : '' }}
+                </span>
+
+            </div>
+
+            <p class="mt-5 text-xs font-bold uppercase tracking-wider text-slate-400">
+                Dernière glycémie
+            </p>
+
+            {% if last_blood_sugar %}
+
+                <div class="mt-1 flex items-baseline gap-1">
+                    <span class="text-3xl font-black text-[#102A43]">
+                        {{ last_blood_sugar.value }}
+                    </span>
+
+                    <span class="text-xs font-bold text-slate-400">
+                        mg/dL
+                    </span>
+                </div>
+
+                <p class="mt-2 text-xs text-slate-400">
+                    {{ last_blood_sugar.time
+                        ? 'À ' ~ last_blood_sugar.time|date('H:i')
+                        : 'Aujourd’hui' }}
+                </p>
+
+            {% else %}
+
+                <p class="mt-2 text-xl font-black text-[#102A43]">
+                    —
+                </p>
+
+                <p class="mt-2 text-xs text-slate-400">
+                    Aucune mesure aujourd'hui
+                </p>
+
+            {% endif %}
+
+        </a>
+
+
+        {# REPAS #}
+        <a href="{{ path('app_meal_new') }}"
+           class="group rounded-[26px] bg-white p-5 shadow-sm ring-1 ring-slate-200/70 transition hover:-translate-y-1 hover:shadow-lg">
+
+            <div class="flex items-start justify-between">
+
+                <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-50 text-xl">
+                    🥗
+                </span>
+
+                <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-emerald-600">
+                    {{ meal_count }} repas
+                </span>
+
+            </div>
+
+            <p class="mt-5 text-xs font-bold uppercase tracking-wider text-slate-400">
+                Nutrition
+            </p>
+
+            <div class="mt-1 flex items-baseline gap-1">
+                <span class="text-3xl font-black text-[#102A43]">
+                    {{ meal_calories_today }}
+                </span>
+
+                <span class="text-xs font-bold text-slate-400">
+                    kcal
+                </span>
+            </div>
+
+            <p class="mt-2 text-xs text-slate-400">
+                Total enregistré aujourd'hui
+            </p>
+
+        </a>
+
+
+        {# INSULINE #}
+        <a href="{{ path('app_insuline_index') }}"
+           class="group rounded-[26px] bg-white p-5 shadow-sm ring-1 ring-slate-200/70 transition hover:-translate-y-1 hover:shadow-lg">
+
+            <div class="flex items-start justify-between">
+
+                <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 text-xl">
+                    💉
+                </span>
+
+                <span class="rounded-full bg-indigo-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-indigo-600">
+                    {{ insuline_count }} injection{{ insuline_count > 1 ? 's' : '' }}
+                </span>
+
+            </div>
+
+            <p class="mt-5 text-xs font-bold uppercase tracking-wider text-slate-400">
+                Insuline
+            </p>
+
+            <div class="mt-1 flex items-baseline gap-1">
+                <span class="text-3xl font-black text-[#102A43]">
+                    {{ insuline_dose_today|number_format(1, ',', ' ') }}
+                </span>
+
+                <span class="text-xs font-bold text-slate-400">
+                    U
+                </span>
+            </div>
+
+            <p class="mt-2 text-xs text-slate-400">
+                Dose totale aujourd'hui
+            </p>
+
+        </a>
+
+
+        {# ACTIVITÉ #}
+        <a href="{{ path('app_sporting_activity_index') }}"
+           class="group rounded-[26px] bg-white p-5 shadow-sm ring-1 ring-slate-200/70 transition hover:-translate-y-1 hover:shadow-lg">
+
+            <div class="flex items-start justify-between">
+
+                <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-50 text-xl">
+                    🏃
+                </span>
+
+                <span class="rounded-full bg-sky-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-sky-600">
+                    {{ activity_count }} séance{{ activity_count > 1 ? 's' : '' }}
+                </span>
+
+            </div>
+
+            <p class="mt-5 text-xs font-bold uppercase tracking-wider text-slate-400">
+                Activité physique
+            </p>
+
+            <div class="mt-1 flex items-baseline gap-1">
+                <span class="text-3xl font-black text-[#102A43]">
+                    {{ activity_duration_today }}
+                </span>
+
+                <span class="text-xs font-bold text-slate-400">
+                    min
+                </span>
+            </div>
+
+            <p class="mt-2 text-xs text-slate-400">
+                {{ activity_calories_today }} kcal dépensées
+            </p>
+
+        </a>
+
+
+        {# HBA1C #}
+        <a href="{{ path('app_hba1c_index') }}"
+           class="group rounded-[26px] bg-white p-5 shadow-sm ring-1 ring-slate-200/70 transition hover:-translate-y-1 hover:shadow-lg">
+
+            <div class="flex items-start justify-between">
+
+                <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-50 text-xl">
+                    🧪
+                </span>
+
+                <span class="rounded-full bg-violet-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-violet-600">
+                    Dernière valeur
+                </span>
+
+            </div>
+
+            <p class="mt-5 text-xs font-bold uppercase tracking-wider text-slate-400">
+                HbA1c
+            </p>
+
+            {% if last_hba1c %}
+
+                <div class="mt-1 flex items-baseline gap-1">
+                    <span class="text-3xl font-black text-[#102A43]">
+                        {{ last_hba1c.value }}
+                    </span>
+
+                    <span class="text-xs font-bold text-slate-400">
+                        %
+                    </span>
+                </div>
+
+                <p class="mt-2 text-xs text-slate-400">
+                    Mesurée le {{ last_hba1c.date|date('d/m/Y') }}
+                </p>
+
+            {% else %}
+
+                <p class="mt-2 text-xl font-black text-[#102A43]">
+                    —
+                </p>
+
+                <p class="mt-2 text-xs text-slate-400">
+                    Aucune mesure enregistrée
+                </p>
+
+            {% endif %}
+
+        </a>
+
+    </div>
+
+</section>
+
+
+    {# =========================================================
        CONTENU
        ========================================================= #}
 
