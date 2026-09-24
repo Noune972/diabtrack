@@ -35,6 +35,37 @@ public function findForPatientAndDate(User $patient, \DateTimeInterface $date): 
         ->getQuery()
         ->getResult();
 }
+
+/**
+ * Retourne les repas d'un patient
+ * compris entre deux dates.
+ *
+ * @return Meal[]
+ */
+public function findForPatientAndPeriod(
+    User $patient,
+    \DateTimeInterface $startDate,
+    \DateTimeInterface $endDate
+): array {
+    $start = \DateTimeImmutable::createFromInterface($startDate)
+        ->setTime(0, 0, 0);
+
+    $end = \DateTimeImmutable::createFromInterface($endDate)
+        ->setTime(23, 59, 59);
+
+    return $this->createQueryBuilder('m')
+        ->andWhere('m.patient = :patient')
+        ->andWhere('m.date >= :start')
+        ->andWhere('m.date <= :end')
+        ->setParameter('patient', $patient)
+        ->setParameter('start', $start)
+        ->setParameter('end', $end)
+        ->orderBy('m.date', 'ASC')
+        ->addOrderBy('m.hour', 'ASC')
+        ->getQuery()
+        ->getResult();
+}
+
     
     public function __construct(ManagerRegistry $registry)
     {

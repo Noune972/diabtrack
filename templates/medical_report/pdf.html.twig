@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Rapport de suivi DiabTrack</title>
+
+    <style>
+        @page {
+            margin: 28px 32px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "DejaVu Sans", sans-serif;
+            font-size: 10px;
+            line-height: 1.45;
+            color: #243B53;
+            background: #ffffff;
+        }
+
+        h1, h2, h3, p {
+            margin-top: 0;
+        }
+
+        .header {
+            background: #102A43;
+            color: #ffffff;
+            padding: 22px 24px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+        }
+
+        .brand {
+            font-size: 23px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .brand span {
+            color: #2DD4BF;
+        }
+
+        .subtitle {
+            color: #D9E2EC;
+            font-size: 10px;
+        }
+
+        .period {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid #486581;
+            font-size: 11px;
+        }
+
+        .section {
+            margin-top: 18px;
+            page-break-inside: avoid;
+        }
+
+        .section-title {
+            color: #102A43;
+            font-size: 14px;
+            font-weight: bold;
+            border-bottom: 2px solid #14B8A6;
+            padding-bottom: 6px;
+            margin-bottom: 10px;
+        }
+
+        .info-table,
+        .summary-table,
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .info-table td {
+            width: 50%;
+            padding: 5px 8px;
+            border-bottom: 1px solid #E6EEF5;
+        }
+
+        .label {
+            color: #627D98;
+            font-weight: bold;
+        }
+
+        .summary-table {
+            margin-top: 8px;
+        }
+
+        .summary-table td {
+            width: 25%;
+            padding: 10px 6px;
+            text-align: center;
+            border: 1px solid #D9E2EC;
+        }
+
+        .summary-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #102A43;
+        }
+
+        .summary-label {
+            margin-top: 3px;
+            font-size: 8px;
+            color: #627D98;
+        }
+
+        .data-table th {
+            background: #EAF7F5;
+            color: #102A43;
+            text-align: left;
+            padding: 7px 6px;
+            font-size: 8px;
+            border: 1px solid #D9E2EC;
+        }
+
+        .data-table td {
+            padding: 6px;
+            border: 1px solid #E6EEF5;
+            vertical-align: top;
+            font-size: 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 6px;
+            border-radius: 10px;
+            font-size: 7px;
+            font-weight: bold;
+        }
+
+        .badge-low {
+            background: #E8F1FF;
+            color: #1D4ED8;
+        }
+
+        .badge-ok {
+            background: #E8F8F2;
+            color: #047857;
+        }
+
+        .badge-high {
+            background: #FDECEC;
+            color: #B91C1C;
+        }
+
+        .notice {
+            margin-top: 18px;
+            padding: 11px 13px;
+            background: #FFF5F5;
+            border: 1px solid #EF4444;
+            color: #7F1D1D;
+            border-radius: 6px;
+        }
+
+        .notice-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .empty {
+            color: #829AB1;
+            font-style: italic;
+            padding: 8px 0;
+        }
+
+        .footer {
+            margin-top: 20px;
+            padding-top: 8px;
+            border-top: 1px solid #D9E2EC;
+            text-align: center;
+            color: #829AB1;
+            font-size: 7px;
+        }
+    </style>
+</head>
+
+<body>
+
+    {# EN-TÊTE #}
+    <div class="header">
+
+        <div class="brand">
+            Diab<span>Track</span>
+        </div>
+
+        <div class="subtitle">
+            Rapport de suivi
+        </div>
+
+        <div class="period">
+            Période du
+            <strong>{{ startDate|date('d/m/Y') }}</strong>
+            au
+            <strong>{{ endDate|date('d/m/Y') }}</strong>
+        </div>
+
+    </div>
+
+
+    {# PATIENT #}
+    <div class="section">
+
+        <div class="section-title">
+            Informations du patient
+        </div>
+
+        <table class="info-table">
+            <tr>
+                <td>
+                    <span class="label">Nom :</span>
+                    {{ user.name ?: 'Non renseigné' }}
+                </td>
+
+                <td>
+                    <span class="label">Prénom :</span>
+                    {{ user.firstname ?: 'Non renseigné' }}
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <span class="label">Date de naissance :</span>
+
+                    {% if user.dateOfBirth %}
+                        {{ user.dateOfBirth|date('d/m/Y') }}
+                    {% else %}
+                        Non renseignée
+                    {% endif %}
+                </td>
+
+                <td>
+                    <span class="label">E-mail :</span>
+                    {{ user.email ?: 'Non renseigné' }}
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <span class="label">Poids :</span>
+
+                    {% if user.weight %}
+                        {{ user.weight }} kg
+                    {% else %}
+                        Non renseigné
+                    {% endif %}
+                </td>
+
+                <td>
+                    <span class="label">Rapport généré le :</span>
+                    {{ "now"|date('d/m/Y') }}
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+
+    {# OBJECTIFS #}
+    <div class="section">
+
+        <div class="section-title">
+            Objectifs glycémiques personnels
+        </div>
+
+        {% if glycemicTarget %}
+
+            <table class="info-table">
+                <tr>
+                    <td>
+                        <span class="label">À jeun / avant repas :</span>
+                        {{ glycemicTarget.fastingMin|number_format(2, ',', ' ') }}
+                        –
+                        {{ glycemicTarget.fastingMax|number_format(2, ',', ' ') }}
+                        g/L
+                    </td>
+
+                    <td>
+                        <span class="label">Après repas :</span>
+                        {{ glycemicTarget.postMealMin|number_format(2, ',', ' ') }}
+                        –
+                        {{ glycemicTarget.postMealMax|number_format(2, ',', ' ') }}
+                        g/L
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span class="label">Au coucher :</span>
+                        {{ glycemicTarget.bedtimeMin|number_format(2, ',', ' ') }}
+                        –
+                        {{ glycemicTarget.bedtimeMax|number_format(2, ',', ' ') }}
+                        g/L
+                    </td>
+
+                    <td>
+                        Plages personnelles enregistrées dans DiabTrack.
+                    </td>
+                </tr>
+            </table>
+
+        {% else %}
+
+            <div class="empty">
+                Aucun objectif glycémique personnel enregistré.
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    {# SYNTHÈSE GLYCÉMIQUE #}
+    <div class="section">
+
+        <div class="section-title">
+            Synthèse glycémique
+        </div>
+
+        <table class="summary-table">
+            <tr>
+                <td>
+                    <div class="summary-value">
+                        {{ bloodSugarCount }}
+                    </div>
+
+                    <div class="summary-label">
+                        MESURES
+                    </div>
+                </td>
+
+                <td>
+                    <div class="summary-value">
+                        {% if bloodSugarAverage is not null %}
+                            {{ bloodSugarAverage|number_format(2, ',', ' ') }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </div>
+
+                    <div class="summary-label">
+                        MOYENNE G/L
+                    </div>
+                </td>
+
+                <td>
+                    <div class="summary-value">
+                        {{ inTarget }}
+                    </div>
+
+                    <div class="summary-label">
+                        DANS L'OBJECTIF
+                    </div>
+                </td>
+
+                <td>
+                    <div class="summary-value">
+                        {{ belowTarget + aboveTarget }}
+                    </div>
+
+                    <div class="summary-label">
+                        HORS OBJECTIF
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <table class="summary-table">
+            <tr>
+                <td>
+                    <div class="summary-value">
+                        {{ belowTarget }}
+                    </div>
+
+                    <div class="summary-label">
+                        SOUS L'OBJECTIF
+                    </div>
+                </td>
+
+                <td>
+                    <div class="summary-value">
+                        {{ aboveTarget }}
+                    </div>
+
+                    <div class="summary-label">
+                        AU-DESSUS DE L'OBJECTIF
+                    </div>
+                </td>
+
+                <td>
+                    <div class="summary-value">
+                        {{ meals|length }}
+                    </div>
+
+                    <div class="summary-label">
+                        REPAS
+                    </div>
+                </td>
+
+                <td>
+                    <div class="summary-value">
+                        {{ activities|length }}
+                    </div>
+
+                    <div class="summary-label">
+                        ACTIVITÉS
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+
+    {# HISTORIQUE GLYCÉMIE #}
+    <div class="section">
+
+        <div class="section-title">
+            Historique des glycémies
+        </div>
+
+        {% if bloodSugars is not empty %}
+
+            <table class="data-table">
+
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Heure</th>
+                        <th>Valeur</th>
+                        <th>Contexte</th>
+                        <th>Position / objectif</th>
+                        <th>Note</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for bloodSugar in bloodSugars %}
+
+                        <tr>
+                            <td>
+                                {{ bloodSugar.date|date('d/m/Y') }}
+                            </td>
+
+                            <td>
+                                {% if bloodSugar.time %}
+                                    {{ bloodSugar.time|date('H:i') }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <strong>
+                                    {{ bloodSugar.value|number_format(2, ',', ' ') }} g/L
+                                </strong>
+                            </td>
+
+                            <td>
+                                {{ bloodSugar.context ?: 'Non renseigné' }}
+                            </td>
+
+                            <td>
+
+                                {% if bloodSugar.relation == 'hypoglycemie' %}
+
+                                    <span class="badge badge-low">
+                                        Sous l'objectif
+                                    </span>
+
+                                {% elseif bloodSugar.relation == 'hyperglycemie' %}
+
+                                    <span class="badge badge-high">
+                                        Au-dessus de l'objectif
+                                    </span>
+
+                                {% elseif bloodSugar.relation == 'normale' %}
+
+                                    <span class="badge badge-ok">
+                                        Dans l'objectif
+                                    </span>
+
+                                {% else %}
+
+                                    —
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+                                {{ bloodSugar.note ?: '—' }}
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        {% else %}
+
+            <div class="empty">
+                Aucune mesure de glycémie sur cette période.
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    {# HBA1C #}
+    <div class="section">
+
+        <div class="section-title">
+            HbA1c
+        </div>
+
+        {% if latestHba1c %}
+
+            <p>
+                Dernière valeur enregistrée sur la période :
+                <strong>
+                    {{ latestHba1c.value|number_format(1, ',', ' ') }} %
+                </strong>
+                le
+                {{ latestHba1c.date|date('d/m/Y') }}.
+            </p>
+
+        {% else %}
+
+            <div class="empty">
+                Aucune mesure d'HbA1c sur cette période.
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    {# INSULINE #}
+    <div class="section">
+
+        <div class="section-title">
+            Suivi de l'insuline
+        </div>
+
+        <table class="summary-table">
+            <tr>
+                <td>
+                    <div class="summary-value">
+                        {{ insulines|length }}
+                    </div>
+
+                    <div class="summary-label">
+                        INJECTIONS
+                    </div>
+                </td>
+
+                <td>
+                    <div class="summary-value">
+                        {{ totalInsulinDose|number_format(1, ',', ' ') }}
+                    </div>
+
+                    <div class="summary-label">
+                        UNITÉS ENREGISTRÉES
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+
+    {# NUTRITION #}
+    <div class="section">
+
+        <div class="section-title">
+            Nutrition
+        </div>
+
+        <table class="summary-table">
+            <tr>
+                <td>
+                    <div class="summary-value">
+                        {{ meals|length }}
+                    </div>
+
+                    <div class="summary-label">
+                        REPAS ENREGISTRÉS
+                    </div>
+                </td>
+
+                <td>
+                    <div class="summary-value">
+                        {{ totalMealCalories }}
+                    </div>
+
+                    <div class="summary-label">
+                        KCAL ENREGISTRÉES
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+
+    {# ACTIVITÉ #}
+    <div class="section">
+
+        <div class="section-title">
+            Activité physique
+        </div>
+
+        <table class="summary-table">
+            <tr>
+                <td>
+                    <div class="summary-value">
+                        {{ activities|length }}
+                    </div>
+
+                    <div class="summary-label">
+                        ACTIVITÉS
+                    </div>
+                </td>
+
+                <td>
+                    <div class="summary-value">
+                        {{ totalActivityDuration }}
+                    </div>
+
+                    <div class="summary-label">
+                        MINUTES
+                    </div>
+                </td>
+
+                <td>
+                    <div class="summary-value">
+                        {{ totalActivityCalories }}
+                    </div>
+
+                    <div class="summary-label">
+                        KCAL
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+
+    {# AVERTISSEMENT #}
+    <div class="notice">
+
+        <div class="notice-title">
+            Important — interprétation du rapport
+        </div>
+
+        Les classifications des glycémies présentées dans ce document
+        reposent sur le contexte enregistré pour chaque mesure et sur les
+        objectifs personnels configurés dans DiabTrack.
+
+        Ce rapport est un document de suivi. Il ne constitue pas, à lui seul,
+        un diagnostic médical et ne remplace pas l'avis d'un professionnel
+        de santé.
+
+    </div>
+
+
+    <div class="footer">
+        DiabTrack — Rapport de suivi généré automatiquement le
+        {{ "now"|date('d/m/Y à H:i') }}
+    </div>
+
+</body>
+</html>

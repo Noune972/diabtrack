@@ -18,14 +18,16 @@ class BloodSugarType extends AbstractType
     {
         $builder
             ->add('value', NumberType::class, [
-                'label' => 'Valeur de la glycémie (mg/dL)',
-                'html5' => true,
-                'attr' => [
-                    'min' => 0,
-                    'max' => 500,
-                    'placeholder' => 'Ex. 105',
-                ],
-            ])
+    'label' => 'Valeur de la glycémie (g/L)',
+    'html5' => true,
+    'scale' => 2,
+    'attr' => [
+        'min' => 0,
+        'max' => 5,
+        'step' => '0.01',
+        'placeholder' => 'Ex. 0.95',
+    ],
+])
 
             ->add('date', DateType::class, [
                 'label' => 'Date de la mesure',

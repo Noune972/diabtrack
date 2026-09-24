@@ -46,6 +46,36 @@ class InsulineRepository extends ServiceEntityRepository
         ->getQuery()
         ->getResult();
     }
+
+    /**
+ * Retourne les injections d'insuline d'un patient
+ * comprises entre deux dates.
+ *
+ * @return Insuline[]
+ */
+public function findForPatientAndPeriod(
+    User $patient,
+    \DateTimeInterface $startDate,
+    \DateTimeInterface $endDate
+): array {
+    $start = \DateTimeImmutable::createFromInterface($startDate)
+        ->setTime(0, 0, 0);
+
+    $end = \DateTimeImmutable::createFromInterface($endDate)
+        ->setTime(23, 59, 59);
+
+    return $this->createQueryBuilder('i')
+        ->andWhere('i.patient = :patient')
+        ->andWhere('i.date >= :start')
+        ->andWhere('i.date <= :end')
+        ->setParameter('patient', $patient)
+        ->setParameter('start', $start)
+        ->setParameter('end', $end)
+        ->orderBy('i.date', 'ASC')
+        ->addOrderBy('i.hour', 'ASC')
+        ->getQuery()
+        ->getResult();
+}
     
      public function findRecentesPourPatient(User $patient, int $limite = 30): array
     {

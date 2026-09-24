@@ -47,7 +47,35 @@ public function findForPatientAndDate(User $patient, \DateTimeInterface $date): 
         ->getResult();
 }
     
-    
+    /**
+ * Retourne les mesures d'HbA1c d'un patient
+ * comprises entre deux dates.
+ *
+ * @return Hba1c[]
+ */
+public function findForPatientAndPeriod(
+    User $patient,
+    \DateTimeInterface $startDate,
+    \DateTimeInterface $endDate
+): array {
+    $start = \DateTimeImmutable::createFromInterface($startDate)
+        ->setTime(0, 0, 0);
+
+    $end = \DateTimeImmutable::createFromInterface($endDate)
+        ->setTime(23, 59, 59);
+
+    return $this->createQueryBuilder('h')
+        ->andWhere('h.patient = :patient')
+        ->andWhere('h.date >= :start')
+        ->andWhere('h.date <= :end')
+        ->setParameter('patient', $patient)
+        ->setParameter('start', $start)
+        ->setParameter('end', $end)
+        ->orderBy('h.date', 'ASC')
+        ->addOrderBy('h.hour', 'ASC')
+        ->getQuery()
+        ->getResult();
+}
     
      public function findRecentesPourPatient(User $patient, int $limite = 30): array
     {

@@ -34,6 +34,36 @@ public function findForPatientAndDate(User $patient, \DateTimeInterface $date): 
         ->getQuery()
         ->getResult();
 }
+
+/**
+ * Retourne les mesures de glycémie d'un patient
+ * comprises entre deux dates.
+ *
+ * @return BloodSugar[]
+ */
+public function findForPatientAndPeriod(
+    User $patient,
+    \DateTimeInterface $startDate,
+    \DateTimeInterface $endDate
+): array {
+    $start = \DateTimeImmutable::createFromInterface($startDate)
+        ->setTime(0, 0, 0);
+
+    $end = \DateTimeImmutable::createFromInterface($endDate)
+        ->setTime(23, 59, 59);
+
+    return $this->createQueryBuilder('b')
+        ->andWhere('b.patient = :patient')
+        ->andWhere('b.date >= :start')
+        ->andWhere('b.date <= :end')
+        ->setParameter('patient', $patient)
+        ->setParameter('start', $start)
+        ->setParameter('end', $end)
+        ->orderBy('b.date', 'ASC')
+        ->addOrderBy('b.time', 'ASC')
+        ->getQuery()
+        ->getResult();
+}
     
     public function __construct(ManagerRegistry $registry)
     {

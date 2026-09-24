@@ -1,0 +1,295 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rapport de suivi | DiabTrack{% endblock %}
+
+{% block body %}
+
+<div class="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+
+    {# HERO #}
+    <section class="overflow-hidden rounded-[2rem] bg-[#102A43] shadow-xl">
+
+        <div class="relative px-6 py-10 sm:px-10">
+
+            <div class="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-teal-400/10"></div>
+            <div class="absolute -bottom-20 right-32 h-48 w-48 rounded-full bg-cyan-400/10"></div>
+
+            <div class="relative">
+
+                <div class="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-teal-300">
+                    📄 Suivi de santé
+                </div>
+
+                <h1 class="max-w-3xl text-3xl font-black tracking-tight text-white sm:text-4xl">
+                    Mon rapport de suivi
+                </h1>
+
+                <p class="mt-4 max-w-2xl text-sm font-medium leading-6 text-slate-300 sm:text-base">
+                    Générez un document récapitulatif de vos données enregistrées
+                    dans DiabTrack sur la période de votre choix.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    {# CONTENU #}
+    <div class="mt-8 grid gap-6 lg:grid-cols-[1fr_340px]">
+
+        {# CHOIX PÉRIODE #}
+        <section class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+
+            <div>
+                <p class="text-[10px] font-black uppercase tracking-[0.18em] text-teal-600">
+                    Période du rapport
+                </p>
+
+                <h2 class="mt-2 text-2xl font-black text-[#102A43]">
+                    Choisissez la période à analyser
+                </h2>
+
+                <p class="mt-2 text-sm leading-6 text-slate-500">
+                    Toutes les données enregistrées pendant cette période seront
+                    regroupées dans le rapport.
+                </p>
+            </div>
+
+
+            <div class="mt-7 grid gap-4 sm:grid-cols-3">
+
+                <a
+                    href="{{ path('app_medical_report', {period: 7}) }}"
+                    class="rounded-2xl border-2 p-5 transition
+                    {{ period == '7'
+                        ? 'border-teal-500 bg-teal-50 shadow-sm'
+                        : 'border-slate-200 bg-white hover:border-teal-300 hover:bg-slate-50'
+                    }}"
+                >
+                    <div class="text-2xl">📅</div>
+
+                    <div class="mt-3 text-lg font-black text-[#102A43]">
+                        7 jours
+                    </div>
+
+                    <div class="mt-1 text-xs font-semibold text-slate-500">
+                        Suivi récent
+                    </div>
+                </a>
+
+
+                <a
+                    href="{{ path('app_medical_report', {period: 30}) }}"
+                    class="rounded-2xl border-2 p-5 transition
+                    {{ period == '30'
+                        ? 'border-teal-500 bg-teal-50 shadow-sm'
+                        : 'border-slate-200 bg-white hover:border-teal-300 hover:bg-slate-50'
+                    }}"
+                >
+                    <div class="text-2xl">🗓️</div>
+
+                    <div class="mt-3 text-lg font-black text-[#102A43]">
+                        30 jours
+                    </div>
+
+                    <div class="mt-1 text-xs font-semibold text-slate-500">
+                        Vue mensuelle
+                    </div>
+                </a>
+
+
+                <a
+                    href="{{ path('app_medical_report', {period: 90}) }}"
+                    class="rounded-2xl border-2 p-5 transition
+                    {{ period == '90'
+                        ? 'border-teal-500 bg-teal-50 shadow-sm'
+                        : 'border-slate-200 bg-white hover:border-teal-300 hover:bg-slate-50'
+                    }}"
+                >
+                    <div class="text-2xl">📊</div>
+
+                    <div class="mt-3 text-lg font-black text-[#102A43]">
+                        3 mois
+                    </div>
+
+                    <div class="mt-1 text-xs font-semibold text-slate-500">
+                        Suivi trimestriel
+                    </div>
+                </a>
+
+            </div>
+
+
+            {# PÉRIODE SÉLECTIONNÉE #}
+            <div class="mt-8 rounded-2xl bg-slate-50 p-5">
+
+                <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+
+                    <div>
+
+                        <p class="text-xs font-black uppercase tracking-wide text-slate-400">
+                            Période sélectionnée
+                        </p>
+
+                        <p class="mt-2 text-lg font-black text-[#102A43]">
+                            {{ startDate|date('d/m/Y') }}
+                            <span class="mx-2 text-slate-300">→</span>
+                            {{ endDate|date('d/m/Y') }}
+                        </p>
+
+                    </div>
+
+                    <div class="rounded-xl bg-white px-4 py-3 text-sm font-black text-teal-700 shadow-sm">
+                        {% if period == '7' %}
+                            7 jours
+                        {% elseif period == '90' %}
+                            3 mois
+                        {% else %}
+                            30 jours
+                        {% endif %}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            {# DONNÉES INCLUSES #}
+            <div class="mt-8">
+
+                <h3 class="text-sm font-black uppercase tracking-wide text-[#102A43]">
+                    Données incluses
+                </h3>
+
+                <div class="mt-4 grid gap-3 sm:grid-cols-2">
+
+                    <div class="flex items-center gap-3 rounded-xl border border-slate-100 p-4">
+                        <span class="text-xl">🩸</span>
+                        <span class="text-sm font-bold text-slate-700">
+                            Glycémies et contextes
+                        </span>
+                    </div>
+
+                    <div class="flex items-center gap-3 rounded-xl border border-slate-100 p-4">
+                        <span class="text-xl">🎯</span>
+                        <span class="text-sm font-bold text-slate-700">
+                            Objectifs personnels
+                        </span>
+                    </div>
+
+                    <div class="flex items-center gap-3 rounded-xl border border-slate-100 p-4">
+                        <span class="text-xl">💉</span>
+                        <span class="text-sm font-bold text-slate-700">
+                            Suivi de l'insuline
+                        </span>
+                    </div>
+
+                    <div class="flex items-center gap-3 rounded-xl border border-slate-100 p-4">
+                        <span class="text-xl">🧪</span>
+                        <span class="text-sm font-bold text-slate-700">
+                            HbA1c
+                        </span>
+                    </div>
+
+                    <div class="flex items-center gap-3 rounded-xl border border-slate-100 p-4">
+                        <span class="text-xl">🥗</span>
+                        <span class="text-sm font-bold text-slate-700">
+                            Repas enregistrés
+                        </span>
+                    </div>
+
+                    <div class="flex items-center gap-3 rounded-xl border border-slate-100 p-4">
+                        <span class="text-xl">🏃</span>
+                        <span class="text-sm font-bold text-slate-700">
+                            Activité physique
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            {# TÉLÉCHARGEMENT #}
+            <div class="mt-8 border-t border-slate-100 pt-7">
+
+                <a
+                    href="{{ path('app_medical_report_download', {period: period}) }}"
+                    class="inline-flex w-full items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-teal-500 to-cyan-500 px-6 py-4 text-sm font-black text-white shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl sm:w-auto"
+                >
+                    <span class="text-lg">⬇</span>
+                    Télécharger mon rapport PDF
+                </a>
+
+            </div>
+
+        </section>
+
+
+        {# COLONNE INFO #}
+        <aside class="space-y-6">
+
+            <div class="rounded-[2rem] bg-[#102A43] p-6 text-white shadow-lg">
+
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-400/15 text-2xl">
+                    👨‍⚕️
+                </div>
+
+                <h3 class="mt-5 text-lg font-black">
+                    Pour votre suivi
+                </h3>
+
+                <p class="mt-3 text-sm leading-6 text-slate-300">
+                    Le rapport rassemble vos données DiabTrack dans un document
+                    lisible que vous pouvez conserver ou présenter lors d'un
+                    rendez-vous de suivi.
+                </p>
+
+            </div>
+
+
+            <div class="rounded-[2rem] border-2 border-red-200 bg-red-50 p-6">
+
+                <div class="text-xl">!</div>
+
+                <h3 class="mt-3 text-sm font-black uppercase tracking-wide text-red-800">
+                    Important
+                </h3>
+
+                <p class="mt-3 text-sm font-semibold leading-6 text-red-900">
+                    Les classifications glycémiques reposent sur le contexte
+                    enregistré et sur vos objectifs personnels dans DiabTrack.
+                </p>
+
+                <p class="mt-3 text-xs leading-5 text-red-700">
+                    Le rapport constitue un outil de suivi et ne remplace pas
+                    l'interprétation ou le diagnostic d'un professionnel de santé.
+                </p>
+
+            </div>
+
+
+            <a
+                href="{{ path('app_glycemic_target') }}"
+                class="block rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm transition hover:border-teal-300"
+            >
+                <div class="text-xl">🎯</div>
+
+                <p class="mt-3 text-sm font-black text-[#102A43]">
+                    Mes objectifs glycémiques
+                </p>
+
+                <p class="mt-1 text-xs leading-5 text-slate-500">
+                    Vérifier les plages utilisées pour contextualiser vos résultats.
+                </p>
+            </a>
+
+        </aside>
+
+    </div>
+
+</div>
+
+{% endblock %}

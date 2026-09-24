@@ -14,7 +14,7 @@ class BloodSugar
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0)]
+    #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2)]
     private ?string $value = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -128,24 +128,31 @@ class BloodSugar
     /**
      * Calcule et enregistre automatiquement la classification
      * selon les seuils standards (à jeun) :
-     *  - Hypoglycémie  : < 70 mg/dL
-     *  - Normale       : 70–110 mg/dL
-     *  - Hyperglycémie : > 110 mg/dL
+     *  - Hypoglycémie  : < 70 g/L
+     *  - Normale       : 70–110 g/L
+     *  - Hyperglycémie : > 110 g/L
      */
-    public function calculerClassification(): string
-    {
-        $valeur = (float) $this->value;
+   public function calculerClassification(
+    ?float $minimum = null,
+    ?float $maximum = null
+): string {
+    $valeur = (float) $this->value;
 
-        if ($valeur <= 70) {
-            $classification = 'hypoglycemie';
-        } elseif ($valeur <= 110) {
-            $classification = 'normale';
-        } else {
-            $classification = 'hyperglycemie';
-        }
+    // Valeurs de repli uniquement si aucun objectif personnalisé
+    // n'est encore défini.
+    $minimum ??= 0.70;
+    $maximum ??= 1.10;
 
-        $this->relation = $classification;
-
-        return $classification;
+    if ($valeur < $minimum) {
+        $classification = 'hypoglycemie';
+    } elseif ($valeur > $maximum) {
+        $classification = 'hyperglycemie';
+    } else {
+        $classification = 'normale';
     }
+
+    $this->relation = $classification;
+
+    return $classification;
+}
 }

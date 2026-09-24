@@ -46,6 +46,37 @@ class SportingActivityRepository extends ServiceEntityRepository
         ->getQuery()
         ->getResult();
      }
+
+
+     /**
+ * Retourne les activités sportives d'un patient
+ * comprises entre deux dates.
+ *
+ * @return SportingActivity[]
+ */
+public function findForPatientAndPeriod(
+    User $patient,
+    \DateTimeInterface $startDate,
+    \DateTimeInterface $endDate
+): array {
+    $start = \DateTimeImmutable::createFromInterface($startDate)
+        ->setTime(0, 0, 0);
+
+    $end = \DateTimeImmutable::createFromInterface($endDate)
+        ->setTime(23, 59, 59);
+
+    return $this->createQueryBuilder('s')
+        ->andWhere('s.patient = :patient')
+        ->andWhere('s.date >= :start')
+        ->andWhere('s.date <= :end')
+        ->setParameter('patient', $patient)
+        ->setParameter('start', $start)
+        ->setParameter('end', $end)
+        ->orderBy('s.date', 'ASC')
+        ->addOrderBy('s.hour', 'ASC')
+        ->getQuery()
+        ->getResult();
+}
     
      public function findRecentesPourPatient(User $patient, int $limite = 30): array
     {
