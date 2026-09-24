@@ -23,7 +23,33 @@ class Hba1cRepository extends ServiceEntityRepository
      *
      * @return Hba1c[]
      */
-    public function findRecentesPourPatient(User $patient, int $limite = 30): array
+    
+    /**
+ * Retourne les mesures d'HbA1c d'un patient
+ * pour une journée donnée, triées chronologiquement.
+ *
+ * @return Hba1c[]
+ */
+public function findForPatientAndDate(User $patient, \DateTimeInterface $date): array
+{
+    $start = \DateTimeImmutable::createFromInterface($date)->setTime(0, 0, 0);
+    $end = $start->modify('+1 day');
+
+    return $this->createQueryBuilder('h')
+        ->andWhere('h.patient = :patient')
+        ->andWhere('h.date >= :start')
+        ->andWhere('h.date < :end')
+        ->setParameter('patient', $patient)
+        ->setParameter('start', $start)
+        ->setParameter('end', $end)
+        ->orderBy('h.hour', 'ASC')
+        ->getQuery()
+        ->getResult();
+}
+    
+    
+    
+     public function findRecentesPourPatient(User $patient, int $limite = 30): array
     {
         return $this->createQueryBuilder('h')
             ->andWhere('h.patient = :patient')

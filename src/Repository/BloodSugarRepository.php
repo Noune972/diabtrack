@@ -5,12 +5,36 @@ namespace App\Repository;
 use App\Entity\BloodSugar;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-
+use App\Entity\User;
 /**
  * @extends ServiceEntityRepository<BloodSugar>
  */
 class BloodSugarRepository extends ServiceEntityRepository
 {
+    
+    /**
+ * Retourne les mesures de glycémie d'un patient pour une journée donnée,
+ * triées chronologiquement.
+ *
+ * @return BloodSugar[]
+ */
+public function findForPatientAndDate(User $patient, \DateTimeInterface $date): array
+{
+    $start = \DateTimeImmutable::createFromInterface($date)->setTime(0, 0, 0);
+    $end = $start->modify('+1 day');
+
+    return $this->createQueryBuilder('b')
+        ->andWhere('b.patient = :patient')
+        ->andWhere('b.date >= :start')
+        ->andWhere('b.date < :end')
+        ->setParameter('patient', $patient)
+        ->setParameter('start', $start)
+        ->setParameter('end', $end)
+        ->orderBy('b.time', 'ASC')
+        ->getQuery()
+        ->getResult();
+}
+    
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, BloodSugar::class);

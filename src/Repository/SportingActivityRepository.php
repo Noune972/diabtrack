@@ -23,7 +23,31 @@ class SportingActivityRepository extends ServiceEntityRepository
      *
      * @return SportingActivity[]
      */
-    public function findRecentesPourPatient(User $patient, int $limite = 30): array
+    
+    /**
+ * Retourne les activités sportives d'un patient
+ * pour une journée donnée, triées chronologiquement.
+ *
+ * @return SportingActivity[]
+ */
+    public function findForPatientAndDate(User $patient, \DateTimeInterface $date): array
+    {
+    $start = \DateTimeImmutable::createFromInterface($date)->setTime(0, 0, 0);
+    $end = $start->modify('+1 day');
+
+    return $this->createQueryBuilder('s')
+        ->andWhere('s.patient = :patient')
+        ->andWhere('s.date >= :start')
+        ->andWhere('s.date < :end')
+        ->setParameter('patient', $patient)
+        ->setParameter('start', $start)
+        ->setParameter('end', $end)
+        ->orderBy('s.hour', 'ASC')
+        ->getQuery()
+        ->getResult();
+     }
+    
+     public function findRecentesPourPatient(User $patient, int $limite = 30): array
     {
         return $this->createQueryBuilder('s')
             ->andWhere('s.patient = :patient')

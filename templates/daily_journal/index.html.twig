@@ -1,0 +1,581 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ma journée - DiabTrack{% endblock %}
+
+{% block body %}
+
+{% set previous_date = selected_date|date_modify('-1 day') %}
+{% set next_date = selected_date|date_modify('+1 day') %}
+
+<div class="min-h-screen bg-[#F5F9FC] px-4 py-6 sm:px-6 lg:px-8">
+
+    <div class="mx-auto max-w-7xl">
+
+        {# ================= HEADER ================= #}
+        <section class="relative overflow-hidden rounded-[2rem] bg-[#102A43] px-6 py-8 text-white shadow-xl sm:px-8 lg:px-10">
+
+            <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-cyan-400/10"></div>
+            <div class="absolute -bottom-24 right-40 h-56 w-56 rounded-full bg-teal-400/10"></div>
+
+            <div class="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+
+                <div>
+                    <div class="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-cyan-100">
+                        <span class="h-2 w-2 rounded-full bg-cyan-300"></span>
+                        Journal quotidien
+                    </div>
+
+                    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
+                        Ma journée
+                    </h1>
+
+                    <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
+                        Retrouvez au même endroit vos glycémies, repas, injections
+                        d'insuline, activités physiques et mesures d'HbA1c.
+                    </p>
+                </div>
+
+                <div class="rounded-2xl border border-white/10 bg-white/10 px-5 py-4 backdrop-blur">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-cyan-200">
+                        Événements enregistrés
+                    </p>
+
+                    <div class="mt-1 flex items-end gap-2">
+                        <span class="text-4xl font-bold">{{ total_events }}</span>
+                        <span class="pb-1 text-sm text-slate-300">
+                            aujourd'hui
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        {# ================= NAVIGATION DATE ================= #}
+        <section class="mt-6 rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm">
+
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+
+                <a
+                    href="{{ path('app_daily_journal', {date: previous_date|date('Y-m-d')}) }}"
+                    class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-[#102A43] transition hover:bg-slate-50"
+                >
+                    ← Jour précédent
+                </a>
+
+                <div class="text-center">
+                    <p class="text-xs font-semibold uppercase tracking-[0.15em] text-slate-400">
+                        Journée sélectionnée
+                    </p>
+
+                    <p class="mt-1 text-xl font-bold text-[#102A43]">
+                        {{ selected_date|date('d/m/Y') }}
+                    </p>
+                </div>
+
+                <a
+                    href="{{ path('app_daily_journal', {date: next_date|date('Y-m-d')}) }}"
+                    class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-[#102A43] transition hover:bg-slate-50"
+                >
+                    Jour suivant →
+                </a>
+
+            </div>
+
+            <form method="get" class="mt-5 flex flex-col gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:items-end sm:justify-center">
+
+                <div class="w-full sm:max-w-xs">
+                    <label for="date" class="mb-2 block text-sm font-semibold text-slate-700">
+                        Choisir une date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="date"
+                        name="date"
+                        value="{{ selected_date|date('Y-m-d') }}"
+                        class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-[#102A43] outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100"
+                    >
+                </div>
+
+                <button
+                    type="submit"
+                    class="rounded-xl bg-[#102A43] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#163A5F]"
+                >
+                    Afficher
+                </button>
+
+                <a
+                    href="{{ path('app_daily_journal') }}"
+                    class="rounded-xl bg-cyan-50 px-6 py-3 text-center text-sm font-bold text-cyan-700 transition hover:bg-cyan-100"
+                >
+                    Aujourd'hui
+                </a>
+
+            </form>
+
+        </section>
+
+
+        {# ================= STATISTIQUES ================= #}
+        <section class="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-50 text-xl">
+                        💧
+                    </span>
+                    <span class="text-2xl font-bold text-[#102A43]">
+                        {{ blood_sugars|length }}
+                    </span>
+                </div>
+                <p class="mt-4 text-sm font-bold text-slate-700">Glycémies</p>
+                <p class="mt-1 text-xs text-slate-400">Mesures enregistrées</p>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-xl">
+                        🍽️
+                    </span>
+                    <span class="text-2xl font-bold text-[#102A43]">
+                        {{ meals|length }}
+                    </span>
+                </div>
+                <p class="mt-4 text-sm font-bold text-slate-700">Repas</p>
+                <p class="mt-1 text-xs text-slate-400">Repas renseignés</p>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-50 text-xl">
+                        💉
+                    </span>
+                    <span class="text-2xl font-bold text-[#102A43]">
+                        {{ insulines|length }}
+                    </span>
+                </div>
+                <p class="mt-4 text-sm font-bold text-slate-700">Insuline</p>
+                <p class="mt-1 text-xs text-slate-400">Injections enregistrées</p>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-50 text-xl">
+                        🏃
+                    </span>
+                    <span class="text-2xl font-bold text-[#102A43]">
+                        {{ activities|length }}
+                    </span>
+                </div>
+                <p class="mt-4 text-sm font-bold text-slate-700">Activités</p>
+                <p class="mt-1 text-xs text-slate-400">Séances enregistrées</p>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-xl">
+                        %
+                    </span>
+                    <span class="text-2xl font-bold text-[#102A43]">
+                        {{ hba1cs|length }}
+                    </span>
+                </div>
+                <p class="mt-4 text-sm font-bold text-slate-700">HbA1c</p>
+                <p class="mt-1 text-xs text-slate-400">Mesures enregistrées</p>
+            </div>
+
+        </section>
+
+
+        {# ================= CONTENU JOURNAL ================= #}
+        <section class="mt-6">
+
+            <div class="mb-5">
+                <p class="text-xs font-bold uppercase tracking-[0.15em] text-cyan-600">
+                    Chronologie
+                </p>
+
+                <h2 class="mt-1 text-2xl font-bold text-[#102A43]">
+                    Événements de la journée
+                </h2>
+            </div>
+
+
+            {% if total_events == 0 %}
+
+                <div class="rounded-[2rem] border border-dashed border-slate-300 bg-white px-6 py-16 text-center shadow-sm">
+
+                    <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-cyan-50 text-3xl">
+                        📅
+                    </div>
+
+                    <h3 class="mt-5 text-xl font-bold text-[#102A43]">
+                        Aucun événement pour cette journée
+                    </h3>
+
+                    <p class="mx-auto mt-2 max-w-lg text-sm leading-6 text-slate-500">
+                        Les glycémies, repas, injections, activités et mesures HbA1c
+                        enregistrés à cette date apparaîtront ici.
+                    </p>
+
+                </div>
+
+            {% else %}
+
+                <div class="space-y-8">
+
+
+                    {# ================= GLYCÉMIE ================= #}
+                    {% if blood_sugars is not empty %}
+
+                        <div>
+                            <div class="mb-3 flex items-center gap-3">
+                                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50">
+                                    💧
+                                </span>
+
+                                <div>
+                                    <h3 class="font-bold text-[#102A43]">Glycémie</h3>
+                                    <p class="text-xs text-slate-400">
+                                        {{ blood_sugars|length }} mesure(s)
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 border-l-2 border-cyan-100 pl-5">
+
+                                {% for bloodSugar in blood_sugars %}
+
+                                    <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md">
+
+                                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+
+                                            <div>
+                                                <p class="text-xs font-semibold uppercase tracking-wider text-cyan-600">
+                                                    {{ bloodSugar.time ? bloodSugar.time|date('H:i') : 'Heure non renseignée' }}
+                                                </p>
+
+                                                <p class="mt-1 text-lg font-bold text-[#102A43]">
+                                                    {{ bloodSugar.value }} mg/dL
+                                                </p>
+                                            </div>
+
+                                            <span class="rounded-full bg-cyan-50 px-3 py-1 text-xs font-bold text-cyan-700">
+                                                Glycémie
+                                            </span>
+
+                                        </div>
+
+                                    </article>
+
+                                {% endfor %}
+
+                            </div>
+                        </div>
+
+                    {% endif %}
+
+
+                    {# ================= REPAS ================= #}
+                    {% if meals is not empty %}
+
+                        <div>
+                            <div class="mb-3 flex items-center gap-3">
+                                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50">
+                                    🍽️
+                                </span>
+
+                                <div>
+                                    <h3 class="font-bold text-[#102A43]">Repas</h3>
+                                    <p class="text-xs text-slate-400">
+                                        {{ meals|length }} repas
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 border-l-2 border-emerald-100 pl-5">
+
+                                {% for meal in meals %}
+
+                                    <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md">
+
+                                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+
+                                            <div>
+                                                <p class="text-xs font-semibold uppercase tracking-wider text-emerald-600">
+                                                    {{ meal.hour ? meal.hour|date('H:i') : 'Heure non renseignée' }}
+                                                </p>
+
+                                                <p class="mt-1 text-lg font-bold text-[#102A43]">
+                                                    {{ meal.dishName }}
+                                                </p>
+
+                                                <p class="mt-1 text-sm text-slate-500">
+                                                    {{ meal.calories }} kcal
+                                                </p>
+                                            </div>
+
+                                            <span class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
+                                                Repas
+                                            </span>
+
+                                        </div>
+
+                                    </article>
+
+                                {% endfor %}
+
+                            </div>
+                        </div>
+
+                    {% endif %}
+
+
+                    {# ================= INSULINE ================= #}
+                    {% if insulines is not empty %}
+
+                        <div>
+                            <div class="mb-3 flex items-center gap-3">
+                                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-50">
+                                    💉
+                                </span>
+
+                                <div>
+                                    <h3 class="font-bold text-[#102A43]">Insuline</h3>
+                                    <p class="text-xs text-slate-400">
+                                        {{ insulines|length }} injection(s)
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 border-l-2 border-violet-100 pl-5">
+
+                                {% for insuline in insulines %}
+
+                                    <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md">
+
+                                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+
+                                            <div>
+                                                <p class="text-xs font-semibold uppercase tracking-wider text-violet-600">
+                                                    {{ insuline.hour is not null ? '%02d:00'|format(insuline.hour) : 'Heure non renseignée' }}
+                                                </p>
+
+                                                <p class="mt-1 text-lg font-bold text-[#102A43]">
+                                                    {{ insuline.dose }} U
+                                                </p>
+
+                                                <p class="mt-1 text-sm text-slate-500">
+                                                    {{ insuline.typeOfInsuline.value|default(insuline.typeOfInsuline) }}
+                                                </p>
+                                            </div>
+
+                                            <span class="rounded-full bg-violet-50 px-3 py-1 text-xs font-bold text-violet-700">
+                                                Insuline
+                                            </span>
+
+                                        </div>
+
+                                    </article>
+
+                                {% endfor %}
+
+                            </div>
+                        </div>
+
+                    {% endif %}
+
+
+                    {# ================= ACTIVITÉ ================= #}
+                    {% if activities is not empty %}
+
+                        <div>
+                            <div class="mb-3 flex items-center gap-3">
+                                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-50">
+                                    🏃
+                                </span>
+
+                                <div>
+                                    <h3 class="font-bold text-[#102A43]">Activité physique</h3>
+                                    <p class="text-xs text-slate-400">
+                                        {{ activities|length }} activité(s)
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 border-l-2 border-orange-100 pl-5">
+
+                                {% for activity in activities %}
+
+                                    <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md">
+
+                                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+
+                                            <div>
+                                                <p class="text-xs font-semibold uppercase tracking-wider text-orange-600">
+                                                    {{ activity.hour ? activity.hour|date('H:i') : 'Heure non renseignée' }}
+                                                </p>
+
+                                                <p class="mt-1 text-lg font-bold text-[#102A43]">
+                                                    {{ activity.typeOfActivity }}
+                                                </p>
+
+                                                <div class="mt-2 flex flex-wrap gap-2 text-xs text-slate-500">
+
+                                                    {% if activity.duration is not null %}
+                                                        <span class="rounded-lg bg-slate-50 px-2 py-1">
+                                                            {{ activity.duration }} min
+                                                        </span>
+                                                    {% endif %}
+
+                                                    {% if activity.calories is not null %}
+                                                        <span class="rounded-lg bg-slate-50 px-2 py-1">
+                                                            {{ activity.calories }} kcal
+                                                        </span>
+                                                    {% endif %}
+
+                                                </div>
+                                            </div>
+
+                                            <span class="rounded-full bg-orange-50 px-3 py-1 text-xs font-bold text-orange-700">
+                                                Activité
+                                            </span>
+
+                                        </div>
+
+                                    </article>
+
+                                {% endfor %}
+
+                            </div>
+                        </div>
+
+                    {% endif %}
+
+
+                    {# ================= HBA1C ================= #}
+                    {% if hba1cs is not empty %}
+
+                        <div>
+                            <div class="mb-3 flex items-center gap-3">
+                                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 font-bold text-blue-700">
+                                    %
+                                </span>
+
+                                <div>
+                                    <h3 class="font-bold text-[#102A43]">HbA1c</h3>
+                                    <p class="text-xs text-slate-400">
+                                        {{ hba1cs|length }} mesure(s)
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 border-l-2 border-blue-100 pl-5">
+
+                                {% for hba1c in hba1cs %}
+
+                                    <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md">
+
+                                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+
+                                            <div>
+                                                <p class="text-xs font-semibold uppercase tracking-wider text-blue-600">
+                                                    {{ hba1c.hour is not null ? '%02d:00'|format(hba1c.hour) : 'Heure non renseignée' }}
+                                                </p>
+
+                                                <p class="mt-1 text-lg font-bold text-[#102A43]">
+                                                    {{ hba1c.value }} %
+                                                </p>
+                                            </div>
+
+                                            <span class="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
+                                                HbA1c
+                                            </span>
+
+                                        </div>
+
+                                    </article>
+
+                                {% endfor %}
+
+                            </div>
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
+        </section>
+
+
+        {# ================= ACTIONS RAPIDES ================= #}
+        <section class="mt-8 rounded-[2rem] bg-[#102A43] p-6 text-white shadow-lg sm:p-8">
+
+            <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-[0.15em] text-cyan-300">
+                        DiabTrack
+                    </p>
+
+                    <h2 class="mt-2 text-xl font-bold">
+                        Ajouter une donnée à votre suivi
+                    </h2>
+
+                    <p class="mt-2 text-sm text-slate-300">
+                        Les nouvelles données apparaîtront automatiquement dans votre journal.
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap gap-2">
+
+                    <a
+                        href="{{ path('app_blood_sugar_index') }}"
+                        class="rounded-xl bg-white px-4 py-3 text-sm font-bold text-[#102A43] transition hover:bg-cyan-50"
+                    >
+                        Glycémie
+                    </a>
+
+                    <a
+                        href="{{ path('app_meal_new') }}"
+                        class="rounded-xl bg-white/10 px-4 py-3 text-sm font-bold text-white transition hover:bg-white/20"
+                    >
+                        Repas
+                    </a>
+
+                    <a
+                        href="{{ path('app_insuline_index') }}"
+                        class="rounded-xl bg-white/10 px-4 py-3 text-sm font-bold text-white transition hover:bg-white/20"
+                    >
+                        Insuline
+                    </a>
+
+                    <a
+                        href="{{ path('app_sporting_activity_index') }}"
+                        class="rounded-xl bg-white/10 px-4 py-3 text-sm font-bold text-white transition hover:bg-white/20"
+                    >
+                        Activité
+                    </a>
+
+                    <a
+                        href="{{ path('app_hba1c_index') }}"
+                        class="rounded-xl bg-white/10 px-4 py-3 text-sm font-bold text-white transition hover:bg-white/20"
+                    >
+                        HbA1c
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+{% endblock %}

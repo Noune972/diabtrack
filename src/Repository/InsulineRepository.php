@@ -23,7 +23,31 @@ class InsulineRepository extends ServiceEntityRepository
      *
      * @return Insuline[]
      */
-    public function findRecentesPourPatient(User $patient, int $limite = 30): array
+    
+    /**
+ * Retourne les injections d'insuline d'un patient
+ * pour une journée donnée, triées chronologiquement.
+ *
+ * @return Insuline[]
+ */
+    public function findForPatientAndDate(User $patient, \DateTimeInterface $date): array
+    {
+    $start = \DateTimeImmutable::createFromInterface($date)->setTime(0, 0, 0);
+    $end = $start->modify('+1 day');
+
+    return $this->createQueryBuilder('i')
+        ->andWhere('i.patient = :patient')
+        ->andWhere('i.date >= :start')
+        ->andWhere('i.date < :end')
+        ->setParameter('patient', $patient)
+        ->setParameter('start', $start)
+        ->setParameter('end', $end)
+        ->orderBy('i.hour', 'ASC')
+        ->getQuery()
+        ->getResult();
+    }
+    
+     public function findRecentesPourPatient(User $patient, int $limite = 30): array
     {
         return $this->createQueryBuilder('i')
             ->andWhere('i.patient = :patient')
