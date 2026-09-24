@@ -6,6 +6,7 @@ use App\Entity\Reminder;
 use App\Enum\ReminderType as ReminderTypeEnum;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -44,6 +45,29 @@ class ReminderType extends AbstractType
                 'placeholder' => 'Choisissez une fréquence',
                 'attr' => [
                     'class' => 'reminder-select',
+                ],
+            ])
+
+            ->add('deliveryMethod', ChoiceType::class, [
+    'label' => 'Mode de notification',
+    'choices' => [
+        '📧 E-mail' => 'email',
+        '🔔 Notification DiabTrack' => 'notification',
+        '📧 + 🔔 E-mail et notification' => 'both',
+    ],
+    'expanded' => true,
+    'multiple' => false,
+    'help' => 'Choisissez comment vous souhaitez recevoir ce rappel.',
+])
+
+            ->add('startDate', DateType::class, [
+                'label' => 'Date de début',
+                'widget' => 'single_text',
+                'input' => 'datetime',
+                'html5' => true,
+                'help' => 'Cette date sert de référence pour calculer les prochaines occurrences du rappel.',
+                'attr' => [
+                    'class' => 'reminder-date',
                 ],
             ])
 

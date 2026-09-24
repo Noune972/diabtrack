@@ -224,6 +224,24 @@
     </span>
 </a>
 
+{# RAPPORT DE SUIVI #}
+
+<a
+    href="{{ path('app_medical_report') }}"
+    class="mb-1.5 flex items-center gap-3 rounded-2xl px-4 py-3.5 text-sm font-bold transition
+    {{ app.request.attributes.get('_route') starts with 'app_medical_report'
+        ? 'bg-gradient-to-r from-teal-500 to-cyan-500 text-white shadow-lg'
+        : 'text-slate-300 hover:bg-white/[0.07] hover:text-white' }}"
+>
+    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-lg">
+        📄
+    </span>
+
+    <span class="flex-1">
+        Rapport de suivi
+    </span>
+</a>
+
 
             {# URGENCES #}
 
@@ -297,6 +315,41 @@
                 </span>
 
             </a>
+
+            {# NOTIFICATIONS #}
+{% set unreadNotifications = unread_notifications_count() %}
+
+<a
+    href="{{ path('app_notification_index') }}"
+    class="mb-1.5 flex items-center gap-3 rounded-2xl px-4 py-3.5 text-sm font-bold transition
+    {{ app.request.attributes.get('_route') starts with 'app_notification'
+        ? 'bg-gradient-to-r from-teal-500 to-cyan-500 text-white shadow-lg'
+        : 'text-slate-300 hover:bg-white/[0.07] hover:text-white' }}"
+>
+    <span class="relative flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-lg">
+        🔔
+
+        {% if unreadNotifications > 0 %}
+            <span
+                class="absolute -right-2 -top-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-black text-white shadow"
+            >
+                {{ unreadNotifications > 99 ? '99+' : unreadNotifications }}
+            </span>
+        {% endif %}
+    </span>
+
+    <span class="flex-1">
+        Notifications
+    </span>
+
+    {% if unreadNotifications > 0 %}
+        <span
+            class="rounded-full bg-teal-400/15 px-2.5 py-1 text-xs font-black text-teal-300"
+        >
+            {{ unreadNotifications }}
+        </span>
+    {% endif %}
+</a>
 
             {# FORUM - route à ajouter plus tard #}
 

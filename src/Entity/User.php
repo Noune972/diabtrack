@@ -123,6 +123,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     #[ORM\OneToOne(mappedBy: 'patient', cascade: ['persist', 'remove'])]
     private ?GlycemicTarget $glycemicTarget = null;
 
+    /**
+     * @var Collection<int, Notification>
+     */
+    #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'patient', orphanRemoval: true)]
+    private Collection $notifications;
+
  
 
     public function getEmailAuthRecipient(): string
@@ -131,9 +137,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     }   
 
  public function getEmailAuthCodeCreatedAt(): ?\DateTimeInterface
-         {
-             return $this->emailAuthCodeCreatedAt;
-         }
+                        {
+                            return $this->emailAuthCodeCreatedAt;
+                        }
 
 public function setEmailAuthCodeCreatedAt(?\DateTimeInterface $date): static
 {
@@ -173,6 +179,7 @@ public function setEmailAuthCode(?string $authCode): void
         $this->topic = new ArrayCollection();
         $this->comment = new ArrayCollection();
         $this->comment_article = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -617,6 +624,36 @@ public function setIsActive(bool $isActive): static
         }
 
         $this->glycemicTarget = $glycemicTarget;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): static
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications->add($notification);
+            $notification->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): static
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getPatient() === $this) {
+                $notification->setPatient(null);
+            }
+        }
 
         return $this;
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Entity;
 
 use App\Enum\ReminderType;
@@ -23,9 +24,18 @@ class Reminder
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTime $time = null;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTime $startDate = null;
+
+    #[ORM\Column(length: 20)]
+    private string $deliveryMethod = 'email';
+
     #[ORM\ManyToOne(inversedBy: 'reminder')]
-   #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $patient = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $lastSentAt = null;
 
     public function getId(): ?int
     {
@@ -40,6 +50,7 @@ class Reminder
     public function setType(ReminderType $type): static
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -51,6 +62,7 @@ class Reminder
     public function setFrequency(string $frequency): static
     {
         $this->frequency = $frequency;
+
         return $this;
     }
 
@@ -62,6 +74,31 @@ class Reminder
     public function setTime(\DateTime $time): static
     {
         $this->time = $time;
+
+        return $this;
+    }
+
+    public function getStartDate(): ?\DateTime
+    {
+        return $this->startDate;
+    }
+
+    public function setStartDate(\DateTime $startDate): static
+    {
+        $this->startDate = $startDate;
+
+        return $this;
+    }
+
+    public function getDeliveryMethod(): string
+    {
+        return $this->deliveryMethod;
+    }
+
+    public function setDeliveryMethod(string $deliveryMethod): static
+    {
+        $this->deliveryMethod = $deliveryMethod;
+
         return $this;
     }
 
@@ -73,6 +110,18 @@ class Reminder
     public function setPatient(?User $patient): static
     {
         $this->patient = $patient;
+
+        return $this;
+    }
+
+    public function getLastSentAt(): ?\DateTimeImmutable
+    {
+        return $this->lastSentAt;
+    }
+
+    public function setLastSentAt(?\DateTimeImmutable $lastSentAt): static
+    {
+        $this->lastSentAt = $lastSentAt;
 
         return $this;
     }
