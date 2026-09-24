@@ -24,10 +24,16 @@ class BloodSugar
     private ?\DateTime $time = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $relation = null; // stocke la classification: hypoglycemie / normale / hyperglycemie
+    private ?string $relation = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $context = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $note = null;
 
     #[ORM\ManyToOne(inversedBy: 'bloodSugars')]
-   #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $patient = null;
 
     public function getId(): ?int
@@ -79,6 +85,30 @@ class BloodSugar
     public function setRelation(string $relation): static
     {
         $this->relation = $relation;
+
+        return $this;
+    }
+
+    public function getContext(): ?string
+    {
+        return $this->context;
+    }
+
+    public function setContext(?string $context): static
+    {
+        $this->context = $context;
+
+        return $this;
+    }
+
+    public function getNote(): ?string
+    {
+        return $this->note;
+    }
+
+    public function setNote(?string $note): static
+    {
+        $this->note = $note;
 
         return $this;
     }

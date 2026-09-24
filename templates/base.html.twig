@@ -206,6 +206,24 @@
 
 </a>
 
+{# MES OBJECTIFS GLYCÉMIQUES #}
+
+<a
+    href="{{ path('app_glycemic_target') }}"
+    class="mb-1.5 flex items-center gap-3 rounded-2xl px-4 py-3.5 text-sm font-bold transition
+    {{ app.request.attributes.get('_route') == 'app_glycemic_target'
+        ? 'bg-gradient-to-r from-teal-500 to-cyan-500 text-white shadow-lg'
+        : 'text-slate-300 hover:bg-white/[0.07] hover:text-white' }}"
+>
+    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-lg">
+        🎯
+    </span>
+
+    <span class="flex-1">
+        Mes objectifs
+    </span>
+</a>
+
 
             {# URGENCES #}
 

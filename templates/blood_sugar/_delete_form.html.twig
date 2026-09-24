@@ -1,4 +1,18 @@
-<form method="post" action="{{ path('app_blood_sugar_delete', {'id': blood_sugar.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément?');">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ blood_sugar.id) }}">
-    <button class="btn">Delete</button>
+<form
+    method="post"
+    action="{{ path('app_blood_sugar_delete', {'id': blood_sugar.id}) }}"
+    onsubmit="return confirm('Voulez-vous vraiment supprimer cette mesure de glycémie ? Cette action est définitive.');"
+>
+    <input
+        type="hidden"
+        name="_token"
+        value="{{ csrf_token('delete' ~ blood_sugar.id) }}"
+    >
+
+    <button
+        type="submit"
+        class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-red-200 bg-white px-4 py-3 text-xs font-black text-red-600 transition hover:border-red-300 hover:bg-red-600 hover:text-white"
+    >
+        🗑️ Supprimer la mesure
+    </button>
 </form>

@@ -1,4 +1,132 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+<div class="space-y-5">
+
+    {# VALEUR #}
+    <div>
+        <label class="mb-2 block text-xs font-black uppercase tracking-wider text-slate-500">
+            Valeur de la glycémie
+        </label>
+
+        <div class="relative">
+            {{ form_widget(form.value, {
+                'attr': {
+                    'class': 'w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 pr-20 text-sm font-bold text-[#102A43] outline-none transition focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-100',
+                    'placeholder': 'Ex. 105'
+                }
+            }) }}
+
+            <span class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-black text-slate-400">
+                mg/dL
+            </span>
+        </div>
+
+        <div class="mt-1 text-xs text-red-600">
+            {{ form_errors(form.value) }}
+        </div>
+    </div>
+
+
+    {# DATE + HEURE #}
+    <div class="grid gap-5 md:grid-cols-2">
+
+        <div>
+            <label class="mb-2 block text-xs font-black uppercase tracking-wider text-slate-500">
+                Date
+            </label>
+
+            {{ form_widget(form.date, {
+                'attr': {
+                    'class': 'w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-[#102A43] outline-none transition focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-100'
+                }
+            }) }}
+
+            <div class="mt-1 text-xs text-red-600">
+                {{ form_errors(form.date) }}
+            </div>
+        </div>
+
+
+        <div>
+            <label class="mb-2 block text-xs font-black uppercase tracking-wider text-slate-500">
+                Heure
+            </label>
+
+            {{ form_widget(form.time, {
+                'attr': {
+                    'class': 'w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-[#102A43] outline-none transition focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-100'
+                }
+            }) }}
+
+            <div class="mt-1 text-xs text-red-600">
+                {{ form_errors(form.time) }}
+            </div>
+        </div>
+
+    </div>
+
+
+    {# CONTEXTE #}
+    <div>
+        <label class="mb-2 block text-xs font-black uppercase tracking-wider text-slate-500">
+            Contexte de la mesure
+        </label>
+
+        {{ form_widget(form.context, {
+            'attr': {
+                'class': 'w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-[#102A43] outline-none transition focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-100'
+            }
+        }) }}
+
+        <div class="mt-1 text-xs text-red-600">
+            {{ form_errors(form.context) }}
+        </div>
+    </div>
+
+
+    {# NOTE #}
+    <div>
+        <div class="mb-2 flex items-center justify-between gap-3">
+            <label class="block text-xs font-black uppercase tracking-wider text-slate-500">
+                Note personnelle
+            </label>
+
+            <span class="text-[11px] font-semibold text-slate-400">
+                Facultatif
+            </span>
+        </div>
+
+        {{ form_widget(form.note, {
+            'attr': {
+                'class': 'min-h-[120px] w-full resize-y rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm leading-6 text-[#102A43] outline-none transition placeholder:text-slate-300 focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-100'
+            }
+        }) }}
+
+        <div class="mt-1 text-xs text-red-600">
+            {{ form_errors(form.note) }}
+        </div>
+
+        <p class="mt-2 text-xs leading-5 text-slate-400">
+            Repas inhabituel, activité physique, stress, fatigue,
+            symptômes ou toute autre information utile.
+        </p>
+    </div>
+
+
+    {# ERREURS GLOBALES #}
+    <div class="text-sm text-red-600">
+        {{ form_errors(form) }}
+    </div>
+
+
+    {# BOUTON #}
+    <button
+        type="submit"
+        class="inline-flex w-full items-center justify-center rounded-2xl bg-gradient-to-r from-teal-500 to-cyan-500 px-6 py-4 text-sm font-black text-white shadow-lg shadow-teal-500/20 transition hover:-translate-y-0.5 hover:shadow-xl"
+    >
+        💾 {{ button_label|default('Enregistrer la mesure') }}
+    </button>
+
+</div>
+
 {{ form_end(form) }}

@@ -50,9 +50,45 @@ class BloodSugarController extends AbstractController
         ]);
     }
 
+    #[Route('/new', name: 'app_blood_sugar_new', methods: ['GET', 'POST'])]
+public function new(
+    Request $request,
+    EntityManagerInterface $em
+): Response {
+    $bloodSugar = new BloodSugar();
+
+    $now = new \DateTime();
+    $bloodSugar->setDate($now);
+    $bloodSugar->setTime($now);
+    $bloodSugar->setPatient($this->getUser());
+
+    $form = $this->createForm(BloodSugarType::class, $bloodSugar);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $bloodSugar->calculerClassification();
+
+        $em->persist($bloodSugar);
+        $em->flush();
+
+        $this->addFlash(
+            'success',
+            'Votre mesure de glycémie a été enregistrée avec succès.'
+        );
+
+        return $this->redirectToRoute('app_blood_sugar_index');
+    }
+
+    return $this->render('blood_sugar/new.html.twig', [
+        'blood_sugar' => $bloodSugar,
+        'form' => $form,
+    ]);
+}
+
     #[Route('/{id}', name: 'app_blood_sugar_show', methods: ['GET'])]
     public function show(BloodSugar $bloodSugar): Response
     {
+        $this->checkOwnership($bloodSugar);
         return $this->render('blood_sugar/show.html.twig', [
             'blood_sugar' => $bloodSugar,
         ]);
@@ -61,6 +97,7 @@ class BloodSugarController extends AbstractController
     #[Route('/{id}/edit', name: 'app_blood_sugar_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, BloodSugar $bloodSugar, EntityManagerInterface $em): Response
     {
+        $this->checkOwnership($bloodSugar);
         $form = $this->createForm(BloodSugarType::class, $bloodSugar);
         $form->handleRequest($request);
 
@@ -79,9 +116,19 @@ class BloodSugarController extends AbstractController
         ]);
     }
 
+    private function checkOwnership(BloodSugar $bloodSugar): void
+{
+    if ($bloodSugar->getPatient()?->getId() !== $this->getUser()?->getId()) {
+        throw $this->createAccessDeniedException(
+            'Vous ne pouvez pas accéder à cette mesure.'
+        );
+    }
+}
+
     #[Route('/{id}/delete', name: 'app_blood_sugar_delete', methods: ['POST'])]
     public function delete(Request $request, BloodSugar $bloodSugar, EntityManagerInterface $em): Response
     {
+        $this->checkOwnership($bloodSugar);
         if ($this->isCsrfTokenValid('delete'.$bloodSugar->getId(), $request->getPayload()->getString('_token'))) {
             $em->remove($bloodSugar);
             $em->flush();

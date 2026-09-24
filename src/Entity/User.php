@@ -120,6 +120,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     #[ORM\OneToMany(targetEntity: CommentArticle::class, mappedBy: 'patient')]
     private Collection $comment_article;
 
+    #[ORM\OneToOne(mappedBy: 'patient', cascade: ['persist', 'remove'])]
+    private ?GlycemicTarget $glycemicTarget = null;
+
  
 
     public function getEmailAuthRecipient(): string
@@ -128,9 +131,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     }   
 
  public function getEmailAuthCodeCreatedAt(): ?\DateTimeInterface
-{
-    return $this->emailAuthCodeCreatedAt;
-}
+         {
+             return $this->emailAuthCodeCreatedAt;
+         }
 
 public function setEmailAuthCodeCreatedAt(?\DateTimeInterface $date): static
 {
@@ -597,6 +600,23 @@ public function setIsActive(bool $isActive): static
                 $commentArticle->setPatient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getGlycemicTarget(): ?GlycemicTarget
+    {
+        return $this->glycemicTarget;
+    }
+
+    public function setGlycemicTarget(GlycemicTarget $glycemicTarget): static
+    {
+        // set the owning side of the relation if necessary
+        if ($glycemicTarget->getPatient() !== $this) {
+            $glycemicTarget->setPatient($this);
+        }
+
+        $this->glycemicTarget = $glycemicTarget;
 
         return $this;
     }

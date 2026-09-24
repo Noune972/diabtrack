@@ -1,46 +1,246 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}BloodSugar{% endblock %}
+{% block title %}Détail de la glycémie | DiabTrack{% endblock %}
 
 {% block body %}
-<h1>BloodSugar</h1>
 
-<table class="table">
-<tbody>
-<tr>
-<th>Id</th>
-<td>{{ blood_sugar.id }}</td>
-</tr>
-<tr>
-<th>Value</th>
-<td>{{ blood_sugar.value }} mg/dL</td>
-</tr>
-<tr>
-<th>Date</th>
-<td>{{ blood_sugar.date ? blood_sugar.date|date('Y-m-d') : '' }}</td>
-</tr>
-<tr>
-<th>Time</th>
-<td>{{ blood_sugar.time ? blood_sugar.time|date('H:i:s') : '' }}</td>
-</tr>
-<tr>
-<th>Classification</th>
-<td>
-    {% if blood_sugar.relation == 'hypoglycemie' %}
-        ⚠️ Hypoglycémie
-    {% elseif blood_sugar.relation == 'hyperglycemie' %}
-        🔴 Hyperglycémie
-    {% else %}
-        ✅ Normale
-    {% endif %}
-</td>
-</tr>
-</tbody>
-</table>
+{% set context_labels = {
+    'reveil': '🌅 Au réveil',
+    'avant_petit_dejeuner': '🥐 Avant le petit-déjeuner',
+    'apres_petit_dejeuner': '🥐 Après le petit-déjeuner',
+    'avant_dejeuner': '🍽️ Avant le déjeuner',
+    'apres_dejeuner': '🍽️ Après le déjeuner',
+    'avant_diner': '🌙 Avant le dîner',
+    'apres_diner': '🌙 Après le dîner',
+    'coucher': '😴 Avant le coucher',
+    'avant_activite': '🏃 Avant une activité physique',
+    'apres_activite': '🏃 Après une activité physique',
+    'controle': '🩸 Contrôle ponctuel',
+    'autre': '📋 Autre'
+} %}
 
-<a href="{{ path('app_blood_sugar_index') }}">back to list</a>
+<div class="min-h-screen bg-[#F5F9FC]">
 
-<a href="{{ path('app_blood_sugar_edit', {'id': blood_sugar.id}) }}">edit</a>
+    {# HERO #}
+    <section class="bg-gradient-to-br from-[#102A43] via-[#123B56] to-[#0F766E] px-6 py-10 text-white">
 
-    {{ include('blood_sugar/_delete_form.html.twig') }}
+        <div class="mx-auto max-w-5xl">
+
+            <a
+                href="{{ path('app_blood_sugar_index') }}"
+                class="mb-6 inline-flex items-center gap-2 text-sm font-bold text-cyan-100 transition hover:text-white"
+            >
+                ← Retour à la glycémie
+            </a>
+
+            <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+
+                <div>
+                    <div class="mb-3 inline-flex rounded-full bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-100">
+                        🩸 Mesure glycémique
+                    </div>
+
+                    <h1 class="text-3xl font-black tracking-tight md:text-4xl">
+                        Détail de la mesure
+                    </h1>
+
+                    <p class="mt-3 max-w-xl text-sm leading-6 text-slate-200">
+                        Retrouvez la valeur, le moment de la mesure,
+                        son contexte et vos observations personnelles.
+                    </p>
+                </div>
+
+                <a
+                    href="{{ path('app_blood_sugar_edit', {'id': blood_sugar.id}) }}"
+                    class="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-black text-[#102A43] shadow-lg transition hover:-translate-y-0.5"
+                >
+                    ✏️ Modifier
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <div class="mx-auto max-w-5xl px-6 py-8">
+
+        {# VALEUR PRINCIPALE #}
+        <section class="mb-6 overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm">
+
+            <div class="p-7 md:p-8">
+
+                <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+
+                    <div>
+                        <p class="text-xs font-black uppercase tracking-[0.16em] text-slate-400">
+                            Glycémie enregistrée
+                        </p>
+
+                        <div class="mt-3 flex items-end gap-2">
+                            <span class="text-5xl font-black tracking-tight text-[#102A43]">
+                                {{ blood_sugar.value }}
+                            </span>
+
+                            <span class="pb-1 text-sm font-bold text-slate-400">
+                                mg/dL
+                            </span>
+                        </div>
+                    </div>
+
+                    <div>
+                        {% if blood_sugar.relation == 'hypoglycemie' %}
+
+                            <span class="inline-flex rounded-2xl bg-blue-50 px-5 py-3 text-sm font-black text-blue-700">
+                                ⚠️ Hypoglycémie
+                            </span>
+
+                        {% elseif blood_sugar.relation == 'hyperglycemie' %}
+
+                            <span class="inline-flex rounded-2xl bg-red-50 px-5 py-3 text-sm font-black text-red-700">
+                                🔴 Hyperglycémie
+                            </span>
+
+                        {% else %}
+
+                            <span class="inline-flex rounded-2xl bg-emerald-50 px-5 py-3 text-sm font-black text-emerald-700">
+                                ✓ Dans la plage enregistrée comme normale
+                            </span>
+
+                        {% endif %}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        {# INFORMATIONS #}
+        <section class="grid gap-5 md:grid-cols-3">
+
+            <div class="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+
+                <div class="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-50 text-xl">
+                    📅
+                </div>
+
+                <p class="text-xs font-black uppercase tracking-wider text-slate-400">
+                    Date
+                </p>
+
+                <p class="mt-2 text-lg font-black text-[#102A43]">
+                    {{ blood_sugar.date ? blood_sugar.date|date('d/m/Y') : '—' }}
+                </p>
+
+            </div>
+
+
+            <div class="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+
+                <div class="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-teal-50 text-xl">
+                    🕐
+                </div>
+
+                <p class="text-xs font-black uppercase tracking-wider text-slate-400">
+                    Heure
+                </p>
+
+                <p class="mt-2 text-lg font-black text-[#102A43]">
+                    {{ blood_sugar.time ? blood_sugar.time|date('H:i') : '—' }}
+                </p>
+
+            </div>
+
+
+            <div class="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+
+                <div class="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-50 text-xl">
+                    📍
+                </div>
+
+                <p class="text-xs font-black uppercase tracking-wider text-slate-400">
+                    Contexte
+                </p>
+
+                <p class="mt-2 text-sm font-black leading-6 text-[#102A43]">
+                    {% if blood_sugar.context %}
+                        {{ context_labels[blood_sugar.context]|default(blood_sugar.context) }}
+                    {% else %}
+                        Non renseigné
+                    {% endif %}
+                </p>
+
+            </div>
+
+        </section>
+
+
+        {# NOTE #}
+        <section class="mt-5 rounded-[28px] border border-slate-200 bg-white p-7 shadow-sm">
+
+            <div class="flex items-start gap-4">
+
+                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-50 text-xl">
+                    📝
+                </div>
+
+                <div class="min-w-0">
+
+                    <p class="text-xs font-black uppercase tracking-[0.14em] text-slate-400">
+                        Note personnelle
+                    </p>
+
+                    {% if blood_sugar.note %}
+
+                        <p class="mt-3 whitespace-pre-line text-sm leading-7 text-slate-600">
+                            {{ blood_sugar.note }}
+                        </p>
+
+                    {% else %}
+
+                        <p class="mt-3 text-sm text-slate-400">
+                            Aucune note n'a été ajoutée à cette mesure.
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        {# ACTIONS #}
+        <section class="mt-6 flex flex-col gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
+
+            <a
+                href="{{ path('app_blood_sugar_index') }}"
+                class="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-600 transition hover:bg-slate-50"
+            >
+                ← Retour à l'historique
+            </a>
+
+            <div class="flex flex-col gap-3 sm:flex-row">
+
+                <a
+                    href="{{ path('app_blood_sugar_edit', {'id': blood_sugar.id}) }}"
+                    class="inline-flex items-center justify-center rounded-2xl bg-[#102A43] px-5 py-3 text-sm font-black text-white transition hover:bg-[#163A59]"
+                >
+                    ✏️ Modifier
+                </a>
+
+                {{ include('blood_sugar/_delete_form.html.twig') }}
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
 {% endblock %}

@@ -41,6 +41,14 @@
                 </div>
 
 
+<a
+    href="{{ path('app_blood_sugar_new') }}"
+    class="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3.5 text-sm font-black text-[#102A43] shadow-lg transition hover:-translate-y-0.5 hover:bg-cyan-50 hover:shadow-xl"
+>
+    <span class="text-lg">＋</span>
+    Nouvelle mesure
+</a>
+
                 {% if blood_sugars|first %}
 
                     {% set heroLast = blood_sugars|first %}
@@ -327,6 +335,53 @@
                                 {{ form_errors(form.time) }}
 
                             </div>
+
+                        </div>
+
+                                                {# CONTEXTE DE LA MESURE #}
+                        <div>
+
+                            <label class="mb-2 block text-xs font-bold text-slate-500">
+                                Contexte de la mesure
+                            </label>
+
+                            {{ form_widget(form.context, {
+                                'attr': {
+                                    'class': 'w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-xs font-semibold text-[#102A43] outline-none transition focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-100'
+                                }
+                            }) }}
+
+                            <div class="mt-1 text-xs text-red-600">
+                                {{ form_errors(form.context) }}
+                            </div>
+
+                        </div>
+
+
+                        {# NOTE PERSONNELLE #}
+                        <div>
+
+                            <label class="mb-2 block text-xs font-bold text-slate-500">
+                                Note personnelle
+                                <span class="font-medium text-slate-400">
+                                    (facultatif)
+                                </span>
+                            </label>
+
+                            {{ form_widget(form.note, {
+                                'attr': {
+                                    'class': 'min-h-[110px] w-full resize-y rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-[#102A43] outline-none transition placeholder:text-slate-300 focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-100'
+                                }
+                            }) }}
+
+                            <div class="mt-1 text-xs text-red-600">
+                                {{ form_errors(form.note) }}
+                            </div>
+
+                            <p class="mt-2 text-[11px] leading-5 text-slate-400">
+                                Vous pouvez indiquer un repas inhabituel, une activité,
+                                du stress, de la fatigue ou tout autre élément utile.
+                            </p>
 
                         </div>
 
@@ -621,6 +676,9 @@
                                         <th class="px-6 py-4">
                                             Heure
                                         </th>
+                                        <th class="px-6 py-4">
+                                          Contexte
+                                          </th>
 
                                         <th class="px-6 py-4">
                                             Valeur
@@ -652,6 +710,48 @@
                                         <td class="whitespace-nowrap px-6 py-5 text-sm text-slate-500">
                                             {{ blood_sugar.time|date('H:i') }}
                                         </td>
+
+                                        <td class="px-6 py-5">
+
+    {% set context_labels = {
+        'reveil': '🌅 Au réveil',
+        'avant_petit_dejeuner': '🥐 Avant petit-déjeuner',
+        'apres_petit_dejeuner': '🥐 Après petit-déjeuner',
+        'avant_dejeuner': '🍽️ Avant déjeuner',
+        'apres_dejeuner': '🍽️ Après déjeuner',
+        'avant_diner': '🌙 Avant dîner',
+        'apres_diner': '🌙 Après dîner',
+        'coucher': '😴 Avant le coucher',
+        'avant_activite': '🏃 Avant activité',
+        'apres_activite': '🏃 Après activité',
+        'controle': '🩸 Contrôle ponctuel',
+        'autre': '📋 Autre'
+    } %}
+
+    {% if blood_sugar.context %}
+
+        <span class="inline-flex rounded-full bg-cyan-50 px-3 py-1.5 text-xs font-black text-cyan-700">
+            {{ context_labels[blood_sugar.context]|default(blood_sugar.context) }}
+        </span>
+
+        {% if blood_sugar.note %}
+            <p
+                class="mt-2 max-w-[220px] truncate text-[11px] text-slate-400"
+                title="{{ blood_sugar.note }}"
+            >
+                📝 {{ blood_sugar.note }}
+            </p>
+        {% endif %}
+
+    {% else %}
+
+        <span class="text-xs text-slate-300">
+            —
+        </span>
+
+    {% endif %}
+
+</td>
 
 
                                         <td class="whitespace-nowrap px-6 py-5">
@@ -832,7 +932,434 @@
 
 <script type="module">
 
-    {# COLLE ICI exactement les lignes de ton script actuel #}
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const canvas = document.getElementById('glycemieChart');
+
+        if (!canvas || typeof window.Chart === 'undefined') {
+            return;
+        }
+
+        /*
+         * Toutes les mesures venant de Symfony/Twig.
+         * On les transforme en données JavaScript.
+         */
+        const allMeasurements = [
+            {% for blood_sugar in blood_sugars %}
+                {
+                    date: '{{ blood_sugar.date|date('Y-m-d') }}',
+                    time: '{{ blood_sugar.time|date('H:i') }}',
+                    value: {{ blood_sugar.value }},
+                    relation: '{{ blood_sugar.relation|e('js') }}'
+                }{% if not loop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        /*
+         * Conversion date + heure en véritable objet Date.
+         */
+        allMeasurements.forEach((measurement) => {
+            measurement.datetime = new Date(
+                `${measurement.date}T${measurement.time}:00`
+            );
+        });
+
+        /*
+         * Ordre chronologique pour le graphique.
+         */
+        allMeasurements.sort(
+            (a, b) => a.datetime - b.datetime
+        );
+
+
+        /*
+         * Couleur d'un point selon la classification.
+         */
+        const getPointColor = (value) => {
+
+            if (value < 70) {
+                return '#3B82F6';
+            }
+
+            if (value <= 110) {
+                return '#10B981';
+            }
+
+            return '#EF4444';
+        };
+
+
+        /*
+         * Création du graphique.
+         */
+        const chart = new window.Chart(canvas, {
+
+            type: 'line',
+
+            data: {
+                labels: [],
+                datasets: [
+                    {
+                        label: 'Glycémie',
+                        data: [],
+
+                        borderColor: '#0F766E',
+                        backgroundColor: 'rgba(15, 118, 110, 0.08)',
+
+                        borderWidth: 3,
+
+                        tension: 0.35,
+
+                        fill: true,
+
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+
+                        pointBackgroundColor: [],
+                        pointBorderColor: '#FFFFFF',
+                        pointBorderWidth: 2
+                    }
+                ]
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+
+                plugins: {
+
+                    legend: {
+                        display: false
+                    },
+
+                    tooltip: {
+
+                        backgroundColor: '#102A43',
+
+                        padding: 12,
+
+                        titleFont: {
+                            weight: 'bold'
+                        },
+
+                        callbacks: {
+
+                            label: (context) => {
+                                return ` ${context.parsed.y} mg/dL`;
+                            }
+
+                        }
+                    }
+                },
+
+                scales: {
+
+                    x: {
+
+                        grid: {
+                            display: false
+                        },
+
+                        ticks: {
+                            color: '#64748B',
+                            maxRotation: 0,
+                            autoSkip: true,
+                            maxTicksLimit: 8
+                        }
+
+                    },
+
+                    y: {
+
+                        beginAtZero: false,
+
+                        suggestedMin: 50,
+                        suggestedMax: 180,
+
+                        grid: {
+                            color: 'rgba(148, 163, 184, 0.15)'
+                        },
+
+                        ticks: {
+
+                            color: '#64748B',
+
+                            callback: (value) => {
+                                return `${value} mg/dL`;
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+
+        /*
+         * Met à jour le graphique.
+         */
+        const updateChart = (measurements) => {
+
+            chart.data.labels = measurements.map((measurement) => {
+
+                const date = measurement.datetime;
+
+                return date.toLocaleDateString('fr-FR', {
+                    day: '2-digit',
+                    month: '2-digit'
+                }) + ' ' + measurement.time;
+
+            });
+
+
+            chart.data.datasets[0].data =
+                measurements.map(
+                    (measurement) => measurement.value
+                );
+
+
+            chart.data.datasets[0].pointBackgroundColor =
+                measurements.map(
+                    (measurement) => getPointColor(measurement.value)
+                );
+
+
+            chart.update();
+        };
+
+
+        /*
+         * Retourne le début de la journée.
+         */
+        const startOfDay = (date) => {
+
+            const result = new Date(date);
+
+            result.setHours(0, 0, 0, 0);
+
+            return result;
+        };
+
+
+        /*
+         * Filtres.
+         */
+        const filterMeasurements = (period) => {
+
+            const now = new Date();
+
+            let startDate = null;
+
+
+            /*
+             * JOUR
+             */
+            if (period === 'day') {
+
+                startDate = startOfDay(now);
+
+                return allMeasurements.filter(
+                    (measurement) =>
+                        measurement.datetime >= startDate
+                );
+            }
+
+
+            /*
+             * SEMAINE
+             * 7 derniers jours.
+             */
+            if (period === 'week') {
+
+                startDate = startOfDay(now);
+
+                startDate.setDate(
+                    startDate.getDate() - 6
+                );
+
+                return allMeasurements.filter(
+                    (measurement) =>
+                        measurement.datetime >= startDate
+                );
+            }
+
+
+            /*
+             * MOIS
+             * 30 derniers jours.
+             */
+            if (period === 'month') {
+
+                startDate = startOfDay(now);
+
+                startDate.setDate(
+                    startDate.getDate() - 29
+                );
+
+                return allMeasurements.filter(
+                    (measurement) =>
+                        measurement.datetime >= startDate
+                );
+            }
+
+
+            return allMeasurements;
+        };
+
+
+        /*
+         * Boutons de période.
+         */
+        const periodButtons =
+            document.querySelectorAll('.period-btn');
+
+        const customRange =
+            document.getElementById('customRange');
+
+        const customStart =
+            document.getElementById('customStart');
+
+        const customEnd =
+            document.getElementById('customEnd');
+
+
+        /*
+         * Apparence du bouton actif.
+         */
+        const setActiveButton = (activeButton) => {
+
+            periodButtons.forEach((button) => {
+
+                button.classList.remove(
+                    'bg-[#48742C]',
+                    'text-white'
+                );
+
+                button.classList.add(
+                    'bg-slate-100',
+                    'text-slate-600'
+                );
+
+            });
+
+
+            activeButton.classList.remove(
+                'bg-slate-100',
+                'text-slate-600'
+            );
+
+            activeButton.classList.add(
+                'bg-[#48742C]',
+                'text-white'
+            );
+
+        };
+
+
+        /*
+         * Clic sur Jour / Semaine / Mois / Personnalisé.
+         */
+        periodButtons.forEach((button) => {
+
+            button.addEventListener('click', () => {
+
+                const period =
+                    button.dataset.period;
+
+                setActiveButton(button);
+
+
+                /*
+                 * Période personnalisée.
+                 */
+                if (period === 'custom') {
+
+                    customRange.classList.remove('hidden');
+
+                    return;
+                }
+
+
+                customRange.classList.add('hidden');
+
+                updateChart(
+                    filterMeasurements(period)
+                );
+
+            });
+
+        });
+
+
+        /*
+         * Filtre personnalisé.
+         */
+        const updateCustomRange = () => {
+
+            if (
+                !customStart.value ||
+                !customEnd.value
+            ) {
+                return;
+            }
+
+
+            const start =
+                new Date(`${customStart.value}T00:00:00`);
+
+            const end =
+                new Date(`${customEnd.value}T23:59:59`);
+
+
+            if (start > end) {
+                return;
+            }
+
+
+            const filtered =
+                allMeasurements.filter(
+                    (measurement) =>
+                        measurement.datetime >= start &&
+                        measurement.datetime <= end
+                );
+
+
+            updateChart(filtered);
+
+        };
+
+
+        customStart.addEventListener(
+            'change',
+            updateCustomRange
+        );
+
+        customEnd.addEventListener(
+            'change',
+            updateCustomRange
+        );
+
+
+        /*
+         * Affichage initial :
+         * semaine.
+         */
+        updateChart(
+            filterMeasurements('week')
+        );
+
+    });
 
 </script>
 
