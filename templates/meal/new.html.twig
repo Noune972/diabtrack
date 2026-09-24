@@ -1,78 +1,308 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Meal{% endblock %}
+{% block title %}Ajouter un repas - DiabTrack{% endblock %}
 
 {% block body %}
-<div class="max-w-2xl mx-auto py-8 px-4">
- <h1 class="text-3xl mb-8">
-            <span class="font-extrabold italic text-gray-900">AJOUTER</span>
-            <span class="font-extrabold italic text-green-700">REPAS</span>
-        </h1>
+<div class="min-h-screen bg-[#F5F9FC]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
 
-<img src="{{ asset('images/ajout_plat.jpg') }}" alt="Meal" class=" mb-4">
-<h2 class="text-2xl font-bold mb-6">Ajouter un nouveau repas</h2>
+        {# ===================== HEADER ===================== #}
+        <div class="mb-8">
+            <div class="flex items-center gap-2 text-sm font-semibold text-cyan-700 mb-3">
+                <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
+                Nutrition & alimentation
+            </div>
 
-    {{ form_start(form, {'attr': {'id': 'meal-form'}}) }}
-<div class="mb-4">
-            {{ form_label(form.dishName) }}
-            {{ form_widget(form.dishName, {'attr': {'class': 'border rounded px-3 py-2 w-full'}}) }}
-            {{ form_errors(form.dishName) }}
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#102A43]">
+                Ajouter un repas
+            </h1>
+
+            <p class="mt-2 text-gray-500 max-w-2xl">
+                Enregistrez votre repas et les aliments consommés pour faciliter
+                le suivi de votre alimentation.
+            </p>
+        </div>
+
+
+        {# ===================== CONTENU ===================== #}
+        <div class="grid lg:grid-cols-[0.85fr_1.4fr] gap-7 items-start">
+
+            {# ===================== VISUEL GAUCHE ===================== #}
+            <div class="space-y-5">
+
+                <div class="relative overflow-hidden rounded-3xl bg-[#102A43] shadow-lg">
+                    <img
+                        src="{{ asset('images/ajout_plat.jpg') }}"
+                        alt="Ajouter un repas"
+                        class="w-full h-72 lg:h-80 object-cover opacity-80"
+                    >
+
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#102A43] via-[#102A43]/30 to-transparent"></div>
+
+                    <div class="absolute bottom-0 left-0 right-0 p-6">
+                        <span class="inline-flex items-center rounded-full bg-white/15 backdrop-blur-sm px-3 py-1 text-xs font-bold text-white mb-3">
+                            SUIVI NUTRITIONNEL
+                        </span>
+
+                        <h2 class="text-2xl font-bold text-white">
+                            Votre alimentation au quotidien
+                        </h2>
+
+                        <p class="mt-2 text-sm text-blue-100 leading-relaxed">
+                            Ajoutez les différents aliments de votre repas et
+                            indiquez les quantités consommées.
+                        </p>
+                    </div>
+                </div>
+
+
+                {# Petit encart conseil #}
+                <div class="rounded-2xl border border-cyan-100 bg-cyan-50 p-5">
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm">
+                            <svg class="w-5 h-5 text-cyan-700"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+
+                        <div>
+                            <p class="font-bold text-[#102A43]">
+                                Pourquoi enregistrer vos repas ?
+                            </p>
+                            <p class="mt-1 text-sm text-gray-600 leading-relaxed">
+                                Un suivi régulier permet de mieux visualiser vos
+                                habitudes alimentaires et leur évolution.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            {# ===================== FORMULAIRE ===================== #}
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+
+                <div class="px-6 sm:px-8 py-6 border-b border-slate-100">
+                    <div class="flex items-center gap-4">
+                        <div class="w-11 h-11 rounded-xl bg-[#102A43] flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="M12 4v16m8-8H4"/>
+                            </svg>
+                        </div>
+
+                        <div>
+                            <h2 class="text-xl font-bold text-[#102A43]">
+                                Nouveau repas
+                            </h2>
+                            <p class="text-sm text-gray-500">
+                                Renseignez les informations de votre repas.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+
+                {{ form_start(form, {'attr': {'id': 'meal-form', 'class': 'p-6 sm:p-8'}}) }}
+
+                    {# ===================== NOM ===================== #}
+                    <div class="mb-6">
+                        {{ form_label(form.dishName, null, {
+                            'label_attr': {
+                                'class': 'block text-sm font-bold text-[#102A43] mb-2'
+                            }
+                        }) }}
+
+                        {{ form_widget(form.dishName, {
+                            'attr': {
+                                'class': 'w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-gray-800 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100',
+                                'placeholder': 'Ex. Déjeuner, dîner, collation...'
+                            }
+                        }) }}
+
+                        <div class="text-sm text-red-600 mt-1">
+                            {{ form_errors(form.dishName) }}
+                        </div>
+                    </div>
+
+
+                    {# ===================== DATE / HEURE ===================== #}
+                    <div class="grid sm:grid-cols-2 gap-5 mb-8">
+
+                        <div>
+                            {{ form_label(form.date, null, {
+                                'label_attr': {
+                                    'class': 'block text-sm font-bold text-[#102A43] mb-2'
+                                }
+                            }) }}
+
+                            {{ form_widget(form.date, {
+                                'attr': {
+                                    'class': 'w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-gray-800 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100'
+                                }
+                            }) }}
+
+                            <div class="text-sm text-red-600 mt-1">
+                                {{ form_errors(form.date) }}
+                            </div>
+                        </div>
+
+
+                        <div>
+                            {{ form_label(form.hour, null, {
+                                'label_attr': {
+                                    'class': 'block text-sm font-bold text-[#102A43] mb-2'
+                                }
+                            }) }}
+
+                            {{ form_widget(form.hour, {
+                                'attr': {
+                                    'class': 'w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-gray-800 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100'
+                                }
+                            }) }}
+
+                            <div class="text-sm text-red-600 mt-1">
+                                {{ form_errors(form.hour) }}
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    {# ===================== ALIMENTS ===================== #}
+                    <div class="border-t border-slate-100 pt-7">
+
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
+                            <div>
+                                <h3 class="text-lg font-bold text-[#102A43]">
+                                    Plats de ce repas
+                                </h3>
+
+                                <p class="text-sm text-gray-500 mt-1">
+                                    Ajoutez les aliments et leurs quantités.
+                                </p>
+                            </div>
+
+                            <button
+                                type="button"
+                                id="add-meal-item"
+                                class="inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-50 border border-cyan-200 px-4 py-2.5 text-sm font-bold text-cyan-800 transition hover:bg-cyan-100"
+                            >
+                                <svg class="w-4 h-4"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     viewBox="0 0 24 24">
+                                    <path stroke-linecap="round"
+                                          stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="M12 4v16m8-8H4"/>
+                                </svg>
+
+                                Ajouter un plat
+                            </button>
+                        </div>
+
+
+                        <div
+                            id="meal-items-list"
+                            data-prototype="{{ form_widget(form.mealItems.vars.prototype)|e('html_attr') }}"
+                            data-index="{{ form.mealItems|length }}"
+                            class="space-y-3 mb-7"
+                        >
+
+                            {% for mealItemForm in form.mealItems %}
+
+                                <div class="meal-item-row flex flex-col sm:flex-row sm:items-end gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+
+                                    <div class="flex-1">
+                                        {{ form_widget(mealItemForm.alimentReference, {
+                                            'attr': {
+                                                'class': 'w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100'
+                                            }
+                                        }) }}
+                                    </div>
+
+                                    <div class="sm:w-32">
+                                        {{ form_widget(mealItemForm.quantity, {
+                                            'attr': {
+                                                'class': 'w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100'
+                                            }
+                                        }) }}
+                                    </div>
+
+                                    <button
+                                        type="button"
+                                        class="remove-meal-item flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl border border-red-200 bg-white text-red-600 transition hover:bg-red-50"
+                                        title="Supprimer"
+                                    >
+                                        ✕
+                                    </button>
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+                    </div>
+
+
+                    {# ===================== ACTIONS ===================== #}
+                    <div class="flex flex-col-reverse sm:flex-row gap-3 pt-2">
+
+                        <a
+                            href="{{ path('app_meal_index') }}"
+                            class="sm:w-auto flex items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-3.5 font-bold text-gray-600 transition hover:bg-slate-50"
+                        >
+                            Retour
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="flex-1 flex items-center justify-center gap-2 rounded-xl bg-[#102A43] px-6 py-3.5 font-bold text-white shadow-sm transition hover:bg-[#163A5F] focus:ring-4 focus:ring-blue-100"
+                        >
+                            <svg class="w-5 h-5"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="M5 13l4 4L19 7"/>
+                            </svg>
+
+                            Enregistrer le repas
+                        </button>
+
+                    </div>
+
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="grid grid-cols-2 gap-4 mb-6">
-<div>
-                {{ form_label(form.date) }}
-                {{ form_widget(form.date, {'attr': {'class': 'border rounded px-3 py-2 w-full'}}) }}
-                {{ form_errors(form.date) }}
-</div>
-<div>
-                {{ form_label(form.hour) }}
-                {{ form_widget(form.hour, {'attr': {'class': 'border rounded px-3 py-2 w-full'}}) }}
-                {{ form_errors(form.hour) }}
-</div>
-</div>
 
-<h2 class="text-lg font-bold mb-3">Plats de ce repas</h2>
-
-<div id="meal-items-list"
-data-prototype="{{ form_widget(form.mealItems.vars.prototype)|e('html_attr') }}"
-data-index="{{ form.mealItems|length }}"
-class="space-y-3 mb-4">
-
-            {% for mealItemForm in form.mealItems %}
-<div class="meal-item-row flex items-end gap-3 bg-gray-50 rounded-xl p-3">
-<div class="flex-1">
-                        {{ form_widget(mealItemForm.alimentReference, {'attr': {'class': 'border rounded px-3 py-2 w-full'}}) }}
-</div>
-<div class="w-28">
-                        {{ form_widget(mealItemForm.quantity, {'attr': {'class': 'border rounded px-3 py-2 w-full'}}) }}
-</div>
-<button type="button" class="remove-meal-item text-red-600 font-bold px-2 py-2">✕</button>
-</div>
-            {% endfor %}
-</div>
-
-<button type="button" id="add-meal-item"
-class="bg-gray-200 hover:bg-gray-300 text-sm font-semibold rounded-lg px-4 py-2 mb-6">
-            + Ajouter un plat
-</button>
-
-<button type="submit"
-class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold rounded-xl py-3">
-            Enregistrer le repas
-</button>
-    {{ form_end(form) }}
-
-<a href="{{ path('app_meal_index') }}" class="block text-center mt-4 text-gray-600">retourner à la liste</a>
-</div>
-
+{# ===================== JAVASCRIPT ===================== #}
 <script>
     function initMealForm() {
         const list = document.getElementById('meal-items-list');
         const addButton = document.getElementById('add-meal-item');
 
         if (!list || !addButton) {
-            return; // la page ne contient pas ce formulaire
+            return;
         }
 
         addButton.addEventListener('click', function () {
@@ -80,10 +310,31 @@ class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold rounded-xl py-3
             const prototype = list.dataset.prototype.replace(/__name__/g, index);
 
             const wrapper = document.createElement('div');
-            wrapper.classList.add('meal-item-row', 'flex', 'items-end', 'gap-3', 'bg-gray-50', 'rounded-xl', 'p-3');
+
+            wrapper.classList.add(
+                'meal-item-row',
+                'flex',
+                'flex-col',
+                'sm:flex-row',
+                'sm:items-end',
+                'gap-3',
+                'rounded-2xl',
+                'border',
+                'border-slate-200',
+                'bg-slate-50',
+                'p-4'
+            );
+
             wrapper.innerHTML = `
                 <div class="flex-1">${prototype}</div>
-                <button type="button" class="remove-meal-item text-red-600 font-bold px-2 py-2">✕</button>
+
+                <button
+                    type="button"
+                    class="remove-meal-item flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl border border-red-200 bg-white text-red-600 transition hover:bg-red-50"
+                    title="Supprimer"
+                >
+                    ✕
+                </button>
             `;
 
             list.appendChild(wrapper);
@@ -100,4 +351,5 @@ class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold rounded-xl py-3
     document.addEventListener('DOMContentLoaded', initMealForm);
     document.addEventListener('turbo:load', initMealForm);
 </script>
+
 {% endblock %}
