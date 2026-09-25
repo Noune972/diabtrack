@@ -24,12 +24,15 @@ class AlimentReference
     /**
      * @var Collection<int, MealItem>
      */
-    #[ORM\OneToMany(targetEntity: MealItem::class, mappedBy: 'alimentReference')]
-    private Collection $quantity;
+    #[ORM\OneToMany(
+        mappedBy: 'alimentReference',
+        targetEntity: MealItem::class
+    )]
+    private Collection $mealItems;
 
     public function __construct()
     {
-        $this->quantity = new ArrayCollection();
+        $this->mealItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -64,27 +67,26 @@ class AlimentReference
     /**
      * @return Collection<int, MealItem>
      */
-    public function getQuantity(): Collection
+    public function getMealItems(): Collection
     {
-        return $this->quantity;
+        return $this->mealItems;
     }
 
-    public function addQuantity(MealItem $quantity): static
+    public function addMealItem(MealItem $mealItem): static
     {
-        if (!$this->quantity->contains($quantity)) {
-            $this->quantity->add($quantity);
-            $quantity->setAlimentReference($this);
+        if (!$this->mealItems->contains($mealItem)) {
+            $this->mealItems->add($mealItem);
+            $mealItem->setAlimentReference($this);
         }
 
         return $this;
     }
 
-    public function removeQuantity(MealItem $quantity): static
+    public function removeMealItem(MealItem $mealItem): static
     {
-        if ($this->quantity->removeElement($quantity)) {
-            // set the owning side to null (unless already changed)
-            if ($quantity->getAlimentReference() === $this) {
-                $quantity->setAlimentReference(null);
+        if ($this->mealItems->removeElement($mealItem)) {
+            if ($mealItem->getAlimentReference() === $this) {
+                $mealItem->setAlimentReference(null);
             }
         }
 

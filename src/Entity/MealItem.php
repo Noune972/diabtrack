@@ -13,14 +13,13 @@ class MealItem
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\ManyToOne(inversedBy: 'mealItems')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    #[ORM\JoinColumn(nullable: false)]
     private ?Meal $meal = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?AlimentReference $alimentReference = null;
-
+   #[ORM\ManyToOne(inversedBy: 'mealItems')]
+   #[ORM\JoinColumn(nullable: false)]
+   private ?AlimentReference $alimentReference = null;
     /**
      * Quantité consommée en grammes
      */
@@ -93,9 +92,10 @@ class MealItem
     }
 
     /**
-     * Calcule automatiquement les calories
+     * Calcule automatiquement les calories.
+     *
      * Formule :
-     * (Calories pour 100 g × quantité) / 100
+     * (Calories pour 100 g × quantité consommée) / 100
      */
     public function calculateCalories(): void
     {
