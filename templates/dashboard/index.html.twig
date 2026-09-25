@@ -341,6 +341,10 @@
             <p class="mt-2 text-sm text-slate-500">
                 Météo, qualité de l'air, pollens et activité adaptée aux conditions extérieures.
             </p>
+
+            <p id="environment-location-label" class="mt-2 text-xs font-bold text-teal-700">
+                📍 Recherche de votre position actuelle...
+            </p>
         </div>
 
         <button
@@ -1646,20 +1650,48 @@ setText(
 
 
     // =========================================================
-    // API
+    // API + LOCALISATION
     // =========================================================
 
-    const loadEnvironment = async (latitude, longitude) => {
+    const locationLabel = document.getElementById('environment-location-label');
+
+    const setLocationLabel = (data, fallbackText = 'Position actuelle') => {
+        if (!locationLabel) {
+            return;
+        }
+
+        const location = data?.location ?? {};
+        const parts = [
+            location.name,
+            location.admin1,
+        ].filter(Boolean);
+
+        locationLabel.textContent = parts.length
+            ? `📍 ${parts.join(' · ')}`
+            : `📍 ${fallbackText}`;
+    };
+
+    const setLoadingState = () => {
+        empty.classList.add('hidden');
+        error.classList.add('hidden');
+        content.classList.add('hidden');
+        loading.classList.remove('hidden');
+    };
+
+    const loadEnvironment = async (latitude = null, longitude = null) => {
+        setLoadingState();
 
         try {
-
             const url = new URL(
                 '{{ path('app_environment') }}',
                 window.location.origin
             );
 
-            url.searchParams.set('latitude', latitude);
-            url.searchParams.set('longitude', longitude);
+            // Sans coordonnées, le contrôleur utilise la ville du profil.
+            if (latitude !== null && longitude !== null) {
+                url.searchParams.set('latitude', latitude);
+                url.searchParams.set('longitude', longitude);
+            }
 
             const response = await fetch(url.toString(), {
                 headers: {
@@ -1678,8 +1710,20 @@ setText(
 
             displayEnvironment(result.data);
 
-        } catch (exception) {
+            if (result.data.source === 'profile') {
+                setLocationLabel(result.data, 'Ville du profil');
 
+                if (result.data.location?.name) {
+                    button.innerHTML =
+                        `📍 ${result.data.location.name} · Utiliser ma position actuelle`;
+                }
+            } else {
+                setLocationLabel(result.data, 'Position actuelle');
+                button.innerHTML = '📍 Utiliser ma position actuelle';
+            }
+
+            return true;
+        } catch (exception) {
             loading.classList.add('hidden');
             content.classList.add('hidden');
             error.classList.remove('hidden');
@@ -1687,115 +1731,64 @@ setText(
             errorMessage.textContent =
                 exception.message ??
                 'Les données environnementales sont momentanément indisponibles.';
+
+            return false;
         }
     };
 
-
-    // =========================================================
-    // GÉOLOCALISATION
-    // =========================================================
-
-    // =========================================================
-// 🏡 CHARGEMENT AUTOMATIQUE DE LA VILLE DU PROFIL
-// =========================================================
-
-const loadProfileEnvironment = async () => {
-
-    empty.classList.add('hidden');
-    error.classList.add('hidden');
-    content.classList.add('hidden');
-    loading.classList.remove('hidden');
-
-    try {
-
-        const response = await fetch(
-            '{{ path('app_environment') }}',
-            {
-                headers: {
-                    'Accept': 'application/json'
-                }
-            }
-        );
-
-        const result = await response.json();
-
-        if (!response.ok || !result.success) {
-            throw new Error(
-                result.message ??
-                'Impossible de récupérer la météo de votre ville.'
-            );
+    const loadProfileFallback = async () => {
+        if (locationLabel) {
+            locationLabel.textContent = '🏡 Localisation du profil';
         }
 
-        displayEnvironment(result.data);
+        await loadEnvironment();
+    };
 
-        /*
-         * Si la localisation vient du profil,
-         * on affiche joliment le nom de la ville.
-         */
-        if (
-            result.data.source === 'profile' &&
-            result.data.location?.name
-        ) {
-            button.innerHTML =
-                `🏡 ${result.data.location.name} · Utiliser ma position`;
-        }
-
-    } catch (exception) {
-
-        loading.classList.add('hidden');
-        content.classList.add('hidden');
-        error.classList.remove('hidden');
-
-        errorMessage.textContent =
-            exception.message ??
-            'Impossible de récupérer la météo de votre ville.';
-    }
-};
-
-
-/*
- * ☀️ Dès l'ouverture du dashboard :
- * météo de la ville enregistrée dans le profil.
- */
-loadProfileEnvironment();
-
-    button.addEventListener('click', () => {
-
-        error.classList.add('hidden');
-        content.classList.add('hidden');
-        empty.classList.add('hidden');
-        loading.classList.remove('hidden');
-
+    const loadCurrentPosition = ({ fallbackToProfile = false } = {}) => {
         if (!navigator.geolocation) {
+            if (fallbackToProfile) {
+                loadProfileFallback();
+                return;
+            }
 
             loading.classList.add('hidden');
             error.classList.remove('hidden');
-
             errorMessage.textContent =
                 'Votre navigateur ne prend pas en charge la géolocalisation.';
-
             return;
         }
 
+        setLoadingState();
+
+        if (locationLabel) {
+            locationLabel.textContent = '📍 Recherche de votre position actuelle...';
+        }
 
         navigator.geolocation.getCurrentPosition(
-
-            (position) => {
-
-                loadEnvironment(
+            async (position) => {
+                const loaded = await loadEnvironment(
                     position.coords.latitude,
                     position.coords.longitude
                 );
-            },
 
-            (geolocationError) => {
+                // Si l'API GPS échoue au chargement, on conserve un fallback profil.
+                if (!loaded && fallbackToProfile) {
+                    await loadProfileFallback();
+                }
+            },
+            async (geolocationError) => {
+                if (fallbackToProfile) {
+                    await loadProfileFallback();
+                    return;
+                }
 
                 loading.classList.add('hidden');
+                content.classList.add('hidden');
                 error.classList.remove('hidden');
 
                 if (geolocationError.code === 1) {
                     errorMessage.textContent =
-                        'Vous avez refusé l’accès à votre position.';
+                        'Vous avez refusé l’accès à votre position. La météo de votre profil reste disponible en rechargeant la page.';
                 } else if (geolocationError.code === 2) {
                     errorMessage.textContent =
                         'Votre position actuelle est indisponible.';
@@ -1807,14 +1800,21 @@ loadProfileEnvironment();
                         'Impossible de récupérer votre position actuelle.';
                 }
             },
-
             {
                 enableHighAccuracy: false,
                 timeout: 10000,
-                maximumAge: 300000
+                maximumAge: 60000
             }
         );
+    };
 
+    // Au chargement : priorité à la position GPS réelle.
+    // Si elle est refusée ou indisponible : ville enregistrée dans le profil.
+    loadCurrentPosition({ fallbackToProfile: true });
+
+    // Clic manuel : nouvelle demande de position GPS actuelle.
+    button.addEventListener('click', () => {
+        loadCurrentPosition({ fallbackToProfile: false });
     });
 
 });

@@ -31,7 +31,6 @@ security:
 
             logout:
                 path: app_logout
-                
 
     access_control:
     # Pages publiques

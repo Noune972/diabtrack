@@ -6,15 +6,23 @@
 
 <section class="relative min-h-screen overflow-hidden bg-[#F5F9FC]">
 
-    {# Décoration arrière-plan #}
-    <div class="absolute left-0 top-0 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-200/30 blur-3xl"></div>
-    <div class="absolute bottom-0 right-0 h-96 w-96 translate-x-1/3 translate-y-1/3 rounded-full bg-teal-200/30 blur-3xl"></div>
+    {# =========================
+       DÉCORATION ARRIÈRE-PLAN
+       ========================= #}
+
+    <div class="pointer-events-none absolute left-0 top-0 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-200/30 blur-3xl"></div>
+
+    <div class="pointer-events-none absolute bottom-0 right-0 h-96 w-96 translate-x-1/3 translate-y-1/3 rounded-full bg-teal-200/30 blur-3xl"></div>
+
 
     <div class="relative mx-auto flex min-h-screen max-w-7xl items-center justify-center px-5 py-12">
 
         <div class="w-full max-w-md">
 
-            {# Logo #}
+            {# =========================
+               LOGO DIABTRACK
+               ========================= #}
+
             <div class="mb-8 flex items-center justify-center gap-3">
 
                 <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#102A43] text-2xl text-white shadow-lg">
@@ -28,11 +36,18 @@
             </div>
 
 
-            {# Carte principale #}
+            {# =========================
+               CARTE PRINCIPALE
+               ========================= #}
+
             <div class="overflow-hidden rounded-[30px] bg-white shadow-[0_30px_80px_rgba(15,42,67,0.15)] ring-1 ring-slate-200/60">
 
-                {# Haut de carte #}
-                <div class="bg-gradient-to-br from-[#102A43] via-[#0C4A6E] to-[#0F766E] px-8 py-9 text-center">
+
+                {# =========================
+                   EN-TÊTE
+                   ========================= #}
+
+                <div class="bg-gradient-to-br from-[#102A43] via-[#0C4A6E] to-[#0F766E] px-7 py-9 text-center sm:px-8">
 
                     <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 text-3xl ring-1 ring-white/10">
                         🔐
@@ -47,13 +62,40 @@
                     </h1>
 
                     <p class="mx-auto mt-3 max-w-sm text-sm leading-6 text-slate-300">
-                        Un code de vérification à 6 chiffres vous a été envoyé par e-mail.
+                        Pour sécuriser votre compte, nous venons de vous envoyer
+                        un
+                        <strong class="font-black text-white">
+                            code de vérification à 6 chiffres
+                        </strong>
+                        par e-mail.
                     </p>
+
+
+                    {# Information réception e-mail #}
+
+                    <div class="mx-auto mt-5 max-w-sm rounded-2xl bg-white/10 px-4 py-3 ring-1 ring-white/10">
+
+                        <div class="flex items-center justify-center gap-2 text-sm font-bold text-cyan-50">
+
+                            <span class="text-lg">
+                                📩
+                            </span>
+
+                            <span>
+                                Consultez votre boîte de réception
+                            </span>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
 
-                {# Formulaire #}
+                {# =========================
+                   FORMULAIRE
+                   ========================= #}
+
                 <div class="p-7 sm:p-9">
 
                     <form
@@ -71,6 +113,9 @@
                                 Code reçu par e-mail
                             </label>
 
+
+                            {# Champ code 6 chiffres #}
+
                             <input
                                 type="text"
                                 id="auth_code"
@@ -82,31 +127,60 @@
                                 required
                                 autofocus
                                 placeholder="123456"
+                                aria-label="Code de vérification à 6 chiffres"
                                 class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 text-center text-2xl font-black tracking-[0.5em] text-[#102A43] outline-none transition placeholder:text-slate-300 focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-100"
                             >
 
-                            <p class="mt-3 text-center text-xs text-slate-400">
-                                Saisissez les 6 chiffres reçus dans votre boîte mail.
+
+                            {# Petit rappel #}
+
+                            <p class="mt-3 text-center text-xs font-semibold text-slate-400">
+                                Saisissez les 6 chiffres contenus dans l'e-mail.
                             </p>
+
+
+                            {# Pas reçu le mail #}
+
+                            <div class="mt-5 rounded-2xl bg-amber-50 px-4 py-3 text-center ring-1 ring-amber-100">
+
+                                <p class="text-xs font-black text-amber-800">
+                                    📬 Vous ne trouvez pas l'e-mail ?
+                                </p>
+
+                                <p class="mt-1 text-xs leading-5 text-amber-700">
+                                    Patientez quelques instants et pensez à vérifier votre dossier
+                                    <strong>Spam / Courrier indésirable</strong>.
+                                </p>
+
+                            </div>
 
                         </div>
 
 
+                        {# Bouton validation #}
+
                         <button
                             type="submit"
-                            class="group flex w-full items-center justify-center gap-2 rounded-2xl bg-[#102A43] px-5 py-4 text-sm font-black text-white shadow-lg shadow-slate-900/10 transition duration-300 hover:-translate-y-0.5 hover:bg-[#163B5C] hover:shadow-xl"
+                            class="group flex w-full items-center justify-center gap-2 rounded-2xl bg-[#102A43] px-5 py-4 text-sm font-black text-white shadow-lg shadow-slate-900/10 transition duration-300 hover:-translate-y-0.5 hover:bg-[#163B5C] hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-cyan-100"
                         >
-                            Vérifier mon identité
+
+                            <span>
+                                Vérifier mon code
+                            </span>
 
                             <span class="transition-transform group-hover:translate-x-1">
                                 →
                             </span>
+
                         </button>
 
                     </form>
 
 
-                    {# Information sécurité #}
+                    {# =========================
+                       EXPLICATION SÉCURITÉ
+                       ========================= #}
+
                     <div class="mt-7 rounded-2xl bg-cyan-50 p-4">
 
                         <div class="flex items-start gap-3">
@@ -122,7 +196,9 @@
                                 </p>
 
                                 <p class="mt-1 text-xs leading-5 text-slate-500">
-                                    Cette étape ajoute une protection supplémentaire à votre compte DiabTrack.
+                                    Cette étape ajoute une protection supplémentaire à votre compte
+                                    DiabTrack et permet de vérifier que vous êtes bien à l'origine
+                                    de cette connexion.
                                 </p>
 
                             </div>
@@ -132,17 +208,33 @@
                     </div>
 
 
+                    {# =========================
+                       INDICATEUR SÉCURITÉ
+                       ========================= #}
+
                     <div class="mt-6 flex items-center justify-center gap-2 text-[11px] font-semibold text-slate-400">
 
                         <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
 
-                        Connexion sécurisée • DiabTrack
+                        <span>
+                            Connexion sécurisée • DiabTrack
+                        </span>
 
                     </div>
 
                 </div>
 
             </div>
+
+
+            {# =========================
+               TEXTE BAS DE PAGE
+               ========================= #}
+
+            <p class="mt-6 text-center text-[11px] leading-5 text-slate-400">
+                Le code reçu par e-mail est utilisé uniquement pour vérifier
+                cette tentative de connexion.
+            </p>
 
         </div>
 
