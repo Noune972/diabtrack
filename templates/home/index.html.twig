@@ -154,27 +154,75 @@
                PARTIE VISUELLE
                ========================= #}
 
-            <div class="relative flex min-h-[570px] items-center justify-center">
+            <div class="relative flex min-h-[520px] flex-col items-center justify-center pt-32 sm:min-h-[570px] sm:pt-0">
+
+                {# CARTE MÉTÉO ACCUEIL #}
+                <div
+                    id="home-weather-card"
+                    class="absolute left-1/2 top-3 z-30 hidden w-[calc(100%-2rem)] max-w-[280px] -translate-x-1/2 rounded-3xl bg-white/95 p-4 shadow-xl shadow-slate-900/10 ring-1 ring-white/70 backdrop-blur transition-all duration-500 sm:left-8 sm:top-5 sm:w-auto sm:min-w-[210px] sm:max-w-none sm:translate-x-0 lg:left-auto lg:right-4 lg:top-2"
+                >
+                    <div class="flex items-center gap-3">
+                        <div
+                            id="home-weather-icon"
+                            class="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-3xl"
+                        >
+                            ☀️
+                        </div>
+
+                        <div>
+                            <p
+                                id="home-weather-location"
+                                class="text-[10px] font-black uppercase tracking-[0.15em] text-slate-400"
+                            >
+                                Autour de vous
+                            </p>
+
+                            <div class="flex items-baseline gap-1">
+                                <span
+                                    id="home-weather-temperature"
+                                    class="text-2xl font-black text-[#102A43]"
+                                >
+                                    —
+                                </span>
+                                <span class="text-xs font-bold text-slate-400">°C</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p
+                        id="home-weather-description"
+                        class="mt-3 text-sm font-black text-[#102A43]"
+                    >
+                        Belle journée ☀️
+                    </p>
+
+                    <p
+                        id="home-weather-air"
+                        class="mt-1 text-xs font-semibold text-teal-600"
+                    >
+                        🌬️ Qualité de l'air : —
+                    </p>
+                </div>
 
                 {# GRAND CERCLE #}
-                <div class="absolute h-[470px] w-[470px] rounded-full bg-gradient-to-br from-cyan-100 via-teal-50 to-white shadow-2xl shadow-cyan-900/10 sm:h-[520px] sm:w-[520px]"></div>
+                <div class="absolute h-[330px] w-[330px] rounded-full bg-gradient-to-br from-cyan-100 via-teal-50 to-white shadow-2xl shadow-cyan-900/10 sm:h-[520px] sm:w-[520px]"></div>
 
 
                 {# MOTIF CERCLES #}
-                <div class="absolute h-[390px] w-[390px] rounded-full border border-teal-200/60 sm:h-[440px] sm:w-[440px]"></div>
+                <div class="absolute h-[285px] w-[285px] rounded-full border border-teal-200/60 sm:h-[440px] sm:w-[440px]"></div>
 
-                <div class="absolute h-[320px] w-[320px] rounded-full border border-dashed border-cyan-300/60 sm:h-[370px] sm:w-[370px]"></div>
+                <div class="absolute h-[235px] w-[235px] rounded-full border border-dashed border-cyan-300/60 sm:h-[370px] sm:w-[370px]"></div>
 
 
                 {# MASCOTTE #}
                 <img
                     src="{{ asset('images/mascotte.png') }}"
                     alt="Mascotte DiabTrack"
-                    class="relative z-10 max-h-[440px] max-w-[80%] object-contain drop-shadow-2xl">
+                    class="relative z-10 max-h-[270px] max-w-[58%] object-contain drop-shadow-2xl sm:max-h-[440px] sm:max-w-[80%]">
 
 
                 {# CARTE GLYCEMIE #}
-                <div class="absolute left-0 top-24 z-20 rounded-2xl bg-white/95 p-4 shadow-xl shadow-slate-900/10 backdrop-blur sm:left-2">
+                <div class="absolute left-2 top-[185px] z-20 hidden rounded-2xl bg-white/95 p-4 shadow-xl shadow-slate-900/10 backdrop-blur sm:block sm:left-2 sm:top-24 lg:left-0 lg:top-28">
 
                     <div class="flex items-center gap-3">
 
@@ -208,7 +256,7 @@
 
 
                 {# CARTE ACTIVITE #}
-                <div class="absolute bottom-20 right-0 z-20 rounded-2xl bg-white/95 p-4 shadow-xl shadow-slate-900/10 backdrop-blur sm:right-2">
+                <div class="absolute bottom-12 right-2 z-20 rounded-2xl bg-white/95 p-3 shadow-xl shadow-slate-900/10 backdrop-blur sm:bottom-20 sm:right-2 sm:p-4">
 
                     <div class="flex items-center gap-3">
 
@@ -232,13 +280,13 @@
 
 
                 {# CARTE INSULINE #}
-                <div class="absolute right-5 top-16 z-20 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-2xl shadow-xl shadow-slate-900/10">
+                <div class="absolute right-4 top-[170px] z-20 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-xl shadow-xl shadow-slate-900/10 sm:right-5 sm:top-16 sm:h-14 sm:w-14 sm:text-2xl">
                     💉
                 </div>
 
 
                 {# CARTE ALIMENTATION #}
-                <div class="absolute bottom-16 left-12 z-20 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-2xl shadow-xl shadow-slate-900/10">
+                <div class="absolute bottom-10 left-5 z-20 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-xl shadow-xl shadow-slate-900/10 sm:bottom-16 sm:left-12 sm:h-14 sm:w-14 sm:text-2xl">
                     🥗
                 </div>
 
@@ -387,5 +435,94 @@
     </main>
 
 </div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const card = document.getElementById('home-weather-card');
+
+    if (!card || !navigator.geolocation) {
+        return;
+    }
+
+    const weatherInfo = (code) => {
+        if (code === 0) return { icon: '☀️', label: 'Grand soleil' };
+        if ([1, 2].includes(code)) return { icon: '🌤️', label: 'Quelques éclaircies' };
+        if (code === 3) return { icon: '☁️', label: 'Ciel couvert' };
+        if ([45, 48].includes(code)) return { icon: '🌫️', label: 'Brouillard' };
+        if ([51, 53, 55, 56, 57].includes(code)) return { icon: '🌦️', label: 'Quelques gouttes' };
+        if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return { icon: '🌧️', label: 'Temps pluvieux' };
+        if ([71, 73, 75, 77, 85, 86].includes(code)) return { icon: '❄️', label: 'Temps neigeux' };
+        if ([95, 96, 99].includes(code)) return { icon: '⛈️', label: 'Temps orageux' };
+        return { icon: '🌈', label: 'Conditions variables' };
+    };
+
+    const airLabel = (aqi) => {
+        if (aqi === null || aqi === undefined) return 'indisponible';
+        if (aqi <= 20) return 'bonne';
+        if (aqi <= 40) return 'correcte';
+        if (aqi <= 60) return 'moyenne';
+        if (aqi <= 80) return 'dégradée';
+        if (aqi <= 100) return 'mauvaise';
+        return 'très mauvaise';
+    };
+
+    const showWeather = async (latitude, longitude) => {
+        try {
+            const url = new URL('{{ path('app_environment') }}', window.location.origin);
+            url.searchParams.set('latitude', latitude);
+            url.searchParams.set('longitude', longitude);
+
+            const response = await fetch(url.toString(), {
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (!response.ok) {
+                return;
+            }
+
+            const result = await response.json();
+
+            if (!result.success || !result.data) {
+                return;
+            }
+
+            const weather = result.data.weather ?? {};
+            const air = result.data.airQuality ?? {};
+            const info = weatherInfo(weather.weatherCode);
+
+            document.getElementById('home-weather-icon').textContent = info.icon;
+            document.getElementById('home-weather-temperature').textContent =
+                weather.temperature ?? '—';
+            document.getElementById('home-weather-description').textContent =
+                info.label;
+            document.getElementById('home-weather-air').textContent =
+                `🌬️ Qualité de l'air : ${airLabel(air.europeanAqi)}`;
+
+            card.classList.remove('hidden');
+        } catch (error) {
+            // La météo reste simplement masquée si elle est indisponible.
+        }
+    };
+
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            showWeather(
+                position.coords.latitude,
+                position.coords.longitude
+            );
+        },
+        () => {
+            // Pas d'autorisation : aucune météo n'est affichée.
+        },
+        {
+            enableHighAccuracy: false,
+            timeout: 8000,
+            maximumAge: 300000
+        }
+    );
+});
+</script>
 
 {% endblock %}

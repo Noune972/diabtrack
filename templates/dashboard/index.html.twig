@@ -321,6 +321,416 @@
 
 </section>
 
+{# =========================================================
+   MON ENVIRONNEMENT
+   ========================================================= #}
+
+<section class="mx-auto max-w-7xl px-6 pt-10 lg:px-8">
+
+    <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+
+        <div>
+            <p class="text-xs font-black uppercase tracking-[0.2em] text-teal-600">
+                Autour de moi
+            </p>
+
+            <h2 class="mt-1 text-2xl font-black tracking-tight text-[#102A43] sm:text-3xl">
+                Mon environnement
+            </h2>
+
+            <p class="mt-2 text-sm text-slate-500">
+                Météo, qualité de l'air, pollens et activité adaptée aux conditions extérieures.
+            </p>
+        </div>
+
+        <button
+            type="button"
+            id="environment-location-button"
+            class="inline-flex items-center justify-center gap-2 rounded-xl bg-[#102A43] px-5 py-3 text-sm font-black text-white shadow-sm transition hover:bg-[#163A5F]"
+        >
+            <span>📍</span>
+            Utiliser ma position actuelle
+        </button>
+
+    </div>
+
+
+    {# ÉTAT INITIAL #}
+    <div
+        id="environment-empty"
+        class="rounded-[30px] bg-white p-8 text-center shadow-sm ring-1 ring-slate-200/70"
+    >
+        <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-50 text-2xl">
+            📍
+        </div>
+
+        <h3 class="mt-4 text-lg font-black text-[#102A43]">
+            Découvrez les conditions autour de vous
+        </h3>
+
+        <p class="mx-auto mt-2 max-w-xl text-sm leading-6 text-slate-500">
+            Autorisez temporairement votre localisation pour afficher
+            la météo, la qualité de l'air, les pollens et une suggestion
+            d'activité physique.
+        </p>
+
+        <p class="mt-3 text-xs text-slate-400">
+            Votre position n'est pas enregistrée dans votre profil.
+        </p>
+    </div>
+
+
+    {# CHARGEMENT #}
+    <div
+        id="environment-loading"
+        class="hidden rounded-[30px] bg-white p-8 text-center shadow-sm ring-1 ring-slate-200/70"
+    >
+        <div class="mx-auto h-9 w-9 animate-spin rounded-full border-4 border-slate-200 border-t-teal-600"></div>
+
+        <p class="mt-4 text-sm font-bold text-slate-500">
+            Récupération des conditions autour de vous...
+        </p>
+    </div>
+
+
+    {# ERREUR #}
+    <div
+        id="environment-error"
+        class="hidden rounded-[30px] border border-amber-200 bg-amber-50 p-6"
+    >
+        <div class="flex items-start gap-4">
+
+            <span class="text-2xl">⚠️</span>
+
+            <div>
+                <h3 class="font-black text-[#102A43]">
+                    Localisation indisponible
+                </h3>
+
+                <p
+                    id="environment-error-message"
+                    class="mt-1 text-sm text-amber-800"
+                >
+                    Impossible de récupérer votre position.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+
+    {# DONNÉES ENVIRONNEMENTALES #}
+    <div id="environment-content" class="hidden">
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+
+            {# MÉTÉO #}
+            <div
+                id="environment-weather-card"
+                class="rounded-[26px] bg-white p-6 shadow-sm ring-1 ring-slate-200/70 transition-all duration-500"
+            >
+
+                <div class="flex items-start justify-between">
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-50 text-2xl">
+                        <span id="environment-weather-icon">🌤️</span>
+                    </div>
+
+                    <span class="rounded-full bg-sky-50 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-sky-600">
+                        Météo
+                    </span>
+
+                </div>
+
+                <p class="mt-5 text-xs font-bold uppercase tracking-wider text-slate-400">
+                    Température
+                </p>
+
+                <div class="mt-1 flex items-baseline gap-1">
+
+                    <span
+                        id="environment-temperature"
+                        class="text-3xl font-black text-[#102A43]"
+                    >
+                        —
+                    </span>
+
+                    <span class="text-sm font-bold text-slate-400">
+                        °C
+                    </span>
+
+                </div>
+
+                <p
+                    id="environment-weather-description"
+                    class="mt-2 text-sm font-bold text-slate-600"
+                >
+                    —
+                </p>
+
+                <div
+    id="environment-weather-cheer"
+    class="mt-4 rounded-2xl bg-gradient-to-r from-sky-50 to-amber-50 p-4"
+>
+    <p
+        id="environment-weather-greeting"
+        class="font-black text-[#102A43]"
+    >
+        Une belle journée ! ☀️
+    </p>
+
+    <p
+        id="environment-weather-message"
+        class="mt-1 text-xs leading-5 text-slate-500"
+    >
+        Découvrez les conditions autour de vous.
+    </p>
+</div>
+
+                <div class="mt-4 space-y-1 text-xs text-slate-500">
+
+                    <p>
+                        Ressenti :
+                        <strong
+                            id="environment-apparent-temperature"
+                            class="text-slate-700"
+                        >
+                            —
+                        </strong>
+                    </p>
+
+                    <p>
+                        Min / Max :
+                        <strong
+                            id="environment-min-max"
+                            class="text-slate-700"
+                        >
+                            —
+                        </strong>
+                    </p>
+
+                    <p>
+                        Vent :
+                        <strong
+                            id="environment-wind"
+                            class="text-slate-700"
+                        >
+                            —
+                        </strong>
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {# UV #}
+            <div class="rounded-[26px] bg-white p-6 shadow-sm ring-1 ring-slate-200/70">
+
+                <div class="flex items-start justify-between">
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-2xl">
+                        ☀️
+                    </div>
+
+                    <span class="rounded-full bg-amber-50 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-amber-600">
+                        UV
+                    </span>
+
+                </div>
+
+                <p class="mt-5 text-xs font-bold uppercase tracking-wider text-slate-400">
+                    Indice UV maximum
+                </p>
+
+                <p
+                    id="environment-uv"
+                    class="mt-1 text-3xl font-black text-[#102A43]"
+                >
+                    —
+                </p>
+
+                <p
+                    id="environment-uv-label"
+                    class="mt-2 text-sm font-bold text-slate-500"
+                >
+                    —
+                </p>
+
+            </div>
+
+
+            {# QUALITÉ DE L'AIR #}
+            <div class="rounded-[26px] bg-white p-6 shadow-sm ring-1 ring-slate-200/70">
+
+                <div class="flex items-start justify-between">
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-50 text-2xl">
+                        🌬️
+                    </div>
+
+                    <span class="rounded-full bg-teal-50 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-teal-600">
+                        Air
+                    </span>
+
+                </div>
+
+                <p class="mt-5 text-xs font-bold uppercase tracking-wider text-slate-400">
+                    Indice européen
+                </p>
+
+                <p
+                    id="environment-aqi"
+                    class="mt-1 text-3xl font-black text-[#102A43]"
+                >
+                    —
+                </p>
+
+                <p
+                    id="environment-aqi-label"
+                    class="mt-2 text-sm font-bold text-slate-500"
+                >
+                    —
+                </p>
+
+                <div class="mt-4 flex gap-4 text-xs text-slate-500">
+
+                    <p>
+                        PM2.5
+                        <strong
+                            id="environment-pm25"
+                            class="block text-slate-700"
+                        >
+                            —
+                        </strong>
+                    </p>
+
+                    <p>
+                        PM10
+                        <strong
+                            id="environment-pm10"
+                            class="block text-slate-700"
+                        >
+                            —
+                        </strong>
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {# POLLENS #}
+            <div class="rounded-[26px] bg-white p-6 shadow-sm ring-1 ring-slate-200/70">
+
+                <div class="flex items-start justify-between">
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-2xl">
+                        🌿
+                    </div>
+
+                    <span class="rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-emerald-600">
+                        Pollens
+                    </span>
+
+                </div>
+
+                <p class="mt-5 text-xs font-bold uppercase tracking-wider text-slate-400">
+                    Concentrations actuelles
+                </p>
+
+                <div class="mt-3 space-y-2 text-sm">
+
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">Graminées</span>
+                        <strong id="pollen-grass" class="text-[#102A43]">—</strong>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">Bouleau</span>
+                        <strong id="pollen-birch" class="text-[#102A43]">—</strong>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">Aulne</span>
+                        <strong id="pollen-alder" class="text-[#102A43]">—</strong>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">Armoise</span>
+                        <strong id="pollen-mugwort" class="text-[#102A43]">—</strong>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">Ambroisie</span>
+                        <strong id="pollen-ragweed" class="text-[#102A43]">—</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        {# ===================== SPORT SUGGÉRÉ ===================== #}
+        <div class="relative mt-5 overflow-hidden rounded-[30px] bg-gradient-to-r from-[#0F2D46] to-[#0F766E] p-6 text-white shadow-lg sm:p-7">
+
+            <div class="absolute -right-16 -top-20 h-52 w-52 rounded-full bg-cyan-300/10 blur-2xl"></div>
+
+            <div class="relative flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+
+                <div class="flex items-start gap-4">
+
+                    <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-3xl">
+                        <span id="environment-sport-icon">🏃</span>
+                    </div>
+
+                    <div>
+
+                        <p class="text-xs font-black uppercase tracking-[0.2em] text-cyan-200">
+                            Activité suggérée aujourd'hui
+                        </p>
+
+                        <h3
+                            id="environment-sport-title"
+                            class="mt-1 text-xl font-black"
+                        >
+                            —
+                        </h3>
+
+                        <p
+                            id="environment-sport-description"
+                            class="mt-2 max-w-3xl text-sm leading-6 text-cyan-50/80"
+                        >
+                            —
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <a
+                    href="{{ path('app_sporting_activity_index') }}"
+                    class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-black text-[#102A43] transition hover:bg-cyan-50"
+                >
+                    Mes activités
+                    <span>→</span>
+                </a>
+
+            </div>
+
+            <p class="relative mt-4 text-[11px] leading-5 text-cyan-100/60">
+                Suggestion générale basée sur les conditions environnementales.
+                Adaptez toujours l'activité à votre état de santé et à vos capacités.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
 
     {# =========================================================
        CONTENU
@@ -676,5 +1086,738 @@
     </main>
 
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const button = document.getElementById('environment-location-button');
+    const empty = document.getElementById('environment-empty');
+    const loading = document.getElementById('environment-loading');
+    const error = document.getElementById('environment-error');
+    const errorMessage = document.getElementById('environment-error-message');
+    const content = document.getElementById('environment-content');
+
+    if (!button) {
+        return;
+    }
+
+    const setText = (id, value) => {
+        const element = document.getElementById(id);
+
+        if (element) {
+            element.textContent = value ?? '—';
+        }
+    };
+
+
+    // =========================================================
+    // MÉTÉO
+    // =========================================================
+
+   const getWeather = (code) => {
+
+    // ☀️ GRAND SOLEIL
+    if (code === 0) {
+        return {
+            label: 'Grand soleil',
+            icon: '☀️',
+            greeting: 'Le soleil est de sortie ! ☀️',
+            message: 'Une belle journée pour profiter de l’extérieur.',
+            mood: 'sunny'
+        };
+    }
+
+    // 🌤️ QUELQUES NUAGES
+    if ([1, 2].includes(code)) {
+        return {
+            label: 'Éclaircies',
+            icon: '🌤️',
+            greeting: 'Soleil et petits nuages 🌤️',
+            message: 'Une météo agréable pour prendre l’air.',
+            mood: 'cloudy'
+        };
+    }
+
+    // ☁️ COUVERT
+    if (code === 3) {
+        return {
+            label: 'Ciel couvert',
+            icon: '☁️',
+            greeting: 'Les nuages sont de sortie ☁️',
+            message: 'Pas besoin de grand soleil pour bouger !',
+            mood: 'cloudy'
+        };
+    }
+
+    // 🌫️ BROUILLARD
+    if ([45, 48].includes(code)) {
+        return {
+            label: 'Brouillard',
+            icon: '🌫️',
+            greeting: 'Ambiance brumeuse ce matin 🌫️',
+            message: 'Prenez votre temps si vous sortez.',
+            mood: 'fog'
+        };
+    }
+
+    // 🌦️ BRUINE
+    if ([51, 53, 55, 56, 57].includes(code)) {
+        return {
+            label: 'Bruine',
+            icon: '🌦️',
+            greeting: 'Quelques gouttes aujourd’hui 🌦️',
+            message: 'Un peu de pluie, mais la journée continue !',
+            mood: 'rain'
+        };
+    }
+
+    // 🌧️ PLUIE
+    if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) {
+        return {
+            label: 'Pluie',
+            icon: '🌧️',
+            greeting: 'La pluie s’invite aujourd’hui 🌧️',
+            message: 'Parfait pour trouver une activité sympa en intérieur.',
+            mood: 'rain'
+        };
+    }
+
+    // ❄️ NEIGE
+    if ([71, 73, 75, 77, 85, 86].includes(code)) {
+        return {
+            label: 'Neige',
+            icon: '❄️',
+            greeting: 'Ça se rafraîchit ! ❄️',
+            message: 'Une journée hivernale : restez actif tout en restant prudent.',
+            mood: 'snow'
+        };
+    }
+
+    // ⛈️ ORAGE
+    if ([95, 96, 99].includes(code)) {
+        return {
+            label: 'Orage',
+            icon: '⛈️',
+            greeting: 'Orage dehors, énergie dedans ! ⛈️',
+            message: 'Aujourd’hui, on privilégie une activité à l’intérieur.',
+            mood: 'storm'
+        };
+    }
+
+    return {
+        label: 'Conditions variables',
+        icon: '🌈',
+        greeting: 'Une nouvelle journée commence ! 🌈',
+        message: 'Voyons ce que la météo nous réserve.',
+        mood: 'default'
+    };
+};
+
+    // =========================================================
+    // UV
+    // =========================================================
+
+    const getUvLabel = (uv) => {
+
+        if (uv === null || uv === undefined) {
+            return 'Donnée indisponible';
+        }
+
+        if (uv < 3) {
+            return 'Faible';
+        }
+
+        if (uv < 6) {
+            return 'Modéré';
+        }
+
+        if (uv < 8) {
+            return 'Élevé';
+        }
+
+        if (uv < 11) {
+            return 'Très élevé';
+        }
+
+        return 'Extrême';
+    };
+
+
+    // =========================================================
+    // QUALITÉ DE L'AIR
+    // =========================================================
+
+    const getAqiLabel = (aqi) => {
+
+        if (aqi === null || aqi === undefined) {
+            return 'Donnée indisponible';
+        }
+
+        if (aqi <= 20) {
+            return 'Bonne';
+        }
+
+        if (aqi <= 40) {
+            return 'Correcte';
+        }
+
+        if (aqi <= 60) {
+            return 'Moyenne';
+        }
+
+        if (aqi <= 80) {
+            return 'Dégradée';
+        }
+
+        if (aqi <= 100) {
+            return 'Mauvaise';
+        }
+
+        return 'Très mauvaise';
+    };
+
+
+    // =========================================================
+    // SUGGESTION SPORTIVE
+    // =========================================================
+
+    const getSportSuggestion = (weather, airQuality) => {
+
+        const temperature = weather?.temperature ?? null;
+        const uv = weather?.uvIndex ?? null;
+        const wind = weather?.windSpeed ?? null;
+        const weatherCode = weather?.weatherCode ?? null;
+        const aqi = airQuality?.europeanAqi ?? null;
+
+        const pollen = airQuality?.pollen ?? {};
+
+        const maxPollen = Math.max(
+            pollen.alder ?? 0,
+            pollen.birch ?? 0,
+            pollen.grass ?? 0,
+            pollen.mugwort ?? 0,
+            pollen.ragweed ?? 0
+        );
+
+
+        // ORAGE
+        if ([95, 96, 99].includes(weatherCode)) {
+            return {
+                icon: '🏠',
+                title: 'Activité en intérieur',
+                description:
+                    'Des orages sont présents. Une séance en intérieur est plus adaptée aux conditions extérieures.'
+            };
+        }
+
+
+        // FORTE CHALEUR
+        if (temperature !== null && temperature >= 30) {
+            return {
+                icon: '🧘',
+                title: 'Activité douce ou en intérieur',
+                description:
+                    'La température est élevée. Privilégiez une activité modérée dans un endroit frais ou aux heures les moins chaudes.'
+            };
+        }
+
+
+        // QUALITÉ DE L'AIR
+        if (aqi !== null && aqi > 80) {
+            return {
+                icon: '🏠',
+                title: 'Sport en intérieur',
+                description:
+                    'La qualité de l’air est actuellement dégradée. Une activité physique en intérieur peut être préférable.'
+            };
+        }
+
+
+        // PLUIE
+        if (
+            weatherCode !== null &&
+            [51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(weatherCode)
+        ) {
+            return {
+                icon: '🏋️',
+                title: 'Renforcement ou activité en intérieur',
+                description:
+                    'Le temps est pluvieux. C’est une bonne occasion de privilégier une séance en intérieur.'
+            };
+        }
+
+
+        // NEIGE
+        if (
+            weatherCode !== null &&
+            [71, 73, 75, 77, 85, 86].includes(weatherCode)
+        ) {
+            return {
+                icon: '🏠',
+                title: 'Activité en intérieur',
+                description:
+                    'Les conditions neigeuses peuvent rendre les déplacements plus difficiles. Une activité intérieure est plus adaptée.'
+            };
+        }
+
+
+        // VENT
+        if (wind !== null && wind >= 40) {
+            return {
+                icon: '🚶',
+                title: 'Marche légère ou activité en intérieur',
+                description:
+                    'Le vent est assez fort. Évitez les activités extérieures où les rafales pourraient être gênantes.'
+            };
+        }
+
+
+        // UV
+        if (uv !== null && uv >= 8) {
+            return {
+                icon: '🏊',
+                title: 'Activité à l’abri du soleil',
+                description:
+                    'L’indice UV est élevé. Privilégiez une activité à l’ombre, en intérieur ou aux heures où le soleil est moins intense.'
+            };
+        }
+
+
+        // POLLENS
+        if (maxPollen >= 50) {
+            return {
+                icon: '🏠',
+                title: 'Activité intérieure',
+                description:
+                    'Les concentrations de certains pollens sont importantes. Si vous y êtes sensible, une activité en intérieur peut être plus confortable.'
+            };
+        }
+
+
+        // FROID
+        if (temperature !== null && temperature < 5) {
+            return {
+                icon: '🚶',
+                title: 'Marche dynamique',
+                description:
+                    'Il fait froid. Une marche dynamique ou une activité intérieure permet de rester actif tout en limitant une exposition prolongée.'
+            };
+        }
+
+
+        // CONDITIONS IDÉALES
+        if (
+            temperature !== null &&
+            temperature >= 12 &&
+            temperature <= 25 &&
+            (aqi === null || aqi <= 40)
+        ) {
+            return {
+                icon: '🏃',
+                title: 'Marche, vélo ou footing léger',
+                description:
+                    'Les conditions extérieures sont favorables. Une activité d’endurance modérée en extérieur peut être agréable aujourd’hui.'
+            };
+        }
+
+
+        // CAS GÉNÉRAL
+        return {
+            icon: '🚶',
+            title: 'Marche ou activité modérée',
+            description:
+                'Les conditions permettent une activité modérée. Adaptez la durée et l’intensité à votre forme du moment.'
+        };
+    };
+
+
+    // =========================================================
+    // AFFICHAGE
+    // =========================================================
+
+    const displayEnvironment = (data) => {
+
+        const weather = data.weather ?? {};
+        const airQuality = data.airQuality ?? {};
+        const pollen = airQuality.pollen ?? {};
+
+        const weatherInfo = getWeather(weather.weatherCode);
+
+        // =========================================================
+        // 🎨 AMBIANCE VISUELLE SELON LA MÉTÉO
+        // =========================================================
+        const weatherCard = document.getElementById('environment-weather-card');
+        const weatherCheer = document.getElementById('environment-weather-cheer');
+
+        if (weatherCard && weatherCheer) {
+            weatherCard.classList.remove(
+                'bg-gradient-to-br', 'from-amber-50', 'via-yellow-50', 'to-white',
+                'from-sky-50', 'via-cyan-50', 'from-slate-100', 'via-slate-50',
+                'from-blue-50', 'via-sky-50', 'from-indigo-100', 'via-slate-100'
+            );
+
+            weatherCheer.className = 'mt-4 rounded-2xl p-4 transition-all duration-500';
+
+            switch (weatherInfo.mood) {
+                case 'sunny':
+                    weatherCard.classList.add('bg-gradient-to-br', 'from-amber-50', 'via-yellow-50', 'to-white');
+                    weatherCheer.classList.add('bg-amber-100/70');
+                    break;
+                case 'cloudy':
+                    weatherCard.classList.add('bg-gradient-to-br', 'from-sky-50', 'via-slate-50', 'to-white');
+                    weatherCheer.classList.add('bg-sky-100/70');
+                    break;
+                case 'rain':
+                    weatherCard.classList.add('bg-gradient-to-br', 'from-blue-50', 'via-sky-50', 'to-white');
+                    weatherCheer.classList.add('bg-blue-100/70');
+                    break;
+                case 'snow':
+                    weatherCard.classList.add('bg-gradient-to-br', 'from-cyan-50', 'via-sky-50', 'to-white');
+                    weatherCheer.classList.add('bg-cyan-100/70');
+                    break;
+                case 'storm':
+                    weatherCard.classList.add('bg-gradient-to-br', 'from-indigo-100', 'via-slate-100', 'to-white');
+                    weatherCheer.classList.add('bg-indigo-100');
+                    break;
+                case 'fog':
+                    weatherCard.classList.add('bg-gradient-to-br', 'from-slate-100', 'via-slate-50', 'to-white');
+                    weatherCheer.classList.add('bg-slate-200/70');
+                    break;
+                default:
+                    weatherCard.classList.add('bg-gradient-to-br', 'from-sky-50', 'via-cyan-50', 'to-white');
+                    weatherCheer.classList.add('bg-cyan-100/60');
+            }
+        }
+
+
+
+        // MÉTÉO
+
+        setText(
+            'environment-temperature',
+            weather.temperature ?? '—'
+        );
+
+        setText(
+            'environment-weather-icon',
+            weatherInfo.icon
+        );
+
+        setText(
+            'environment-weather-description',
+            weatherInfo.label
+        );
+
+        setText(
+    'environment-weather-greeting',
+    weatherInfo.greeting
+);
+
+setText(
+    'environment-weather-message',
+    weatherInfo.message
+);
+
+        setText(
+            'environment-apparent-temperature',
+            weather.apparentTemperature !== null &&
+            weather.apparentTemperature !== undefined
+                ? `${weather.apparentTemperature} °C`
+                : '—'
+        );
+
+        setText(
+            'environment-min-max',
+            weather.temperatureMin !== null &&
+            weather.temperatureMin !== undefined &&
+            weather.temperatureMax !== null &&
+            weather.temperatureMax !== undefined
+                ? `${weather.temperatureMin} °C / ${weather.temperatureMax} °C`
+                : '—'
+        );
+
+        setText(
+            'environment-wind',
+            weather.windSpeed !== null &&
+            weather.windSpeed !== undefined
+                ? `${weather.windSpeed} km/h`
+                : '—'
+        );
+
+
+        // UV
+
+        setText(
+            'environment-uv',
+            weather.uvIndex ?? '—'
+        );
+
+        setText(
+            'environment-uv-label',
+            getUvLabel(weather.uvIndex)
+        );
+
+
+        // AIR
+
+        setText(
+            'environment-aqi',
+            airQuality.europeanAqi ?? '—'
+        );
+
+        setText(
+            'environment-aqi-label',
+            getAqiLabel(airQuality.europeanAqi)
+        );
+
+        setText(
+            'environment-pm25',
+            airQuality.pm25 !== null &&
+            airQuality.pm25 !== undefined
+                ? `${airQuality.pm25} µg/m³`
+                : '—'
+        );
+
+        setText(
+            'environment-pm10',
+            airQuality.pm10 !== null &&
+            airQuality.pm10 !== undefined
+                ? `${airQuality.pm10} µg/m³`
+                : '—'
+        );
+
+
+        // POLLENS
+
+        setText(
+            'pollen-grass',
+            pollen.grass ?? '—'
+        );
+
+        setText(
+            'pollen-birch',
+            pollen.birch ?? '—'
+        );
+
+        setText(
+            'pollen-alder',
+            pollen.alder ?? '—'
+        );
+
+        setText(
+            'pollen-mugwort',
+            pollen.mugwort ?? '—'
+        );
+
+        setText(
+            'pollen-ragweed',
+            pollen.ragweed ?? '—'
+        );
+
+
+        // SPORT
+
+        const sport = getSportSuggestion(
+            weather,
+            airQuality
+        );
+
+        setText(
+            'environment-sport-icon',
+            sport.icon
+        );
+
+        setText(
+            'environment-sport-title',
+            sport.title
+        );
+
+        setText(
+            'environment-sport-description',
+            sport.description
+        );
+
+
+        loading.classList.add('hidden');
+        error.classList.add('hidden');
+        empty.classList.add('hidden');
+        content.classList.remove('hidden');
+    };
+
+
+    // =========================================================
+    // API
+    // =========================================================
+
+    const loadEnvironment = async (latitude, longitude) => {
+
+        try {
+
+            const url = new URL(
+                '{{ path('app_environment') }}',
+                window.location.origin
+            );
+
+            url.searchParams.set('latitude', latitude);
+            url.searchParams.set('longitude', longitude);
+
+            const response = await fetch(url.toString(), {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(
+                    result.message ??
+                    'Impossible de récupérer les données environnementales.'
+                );
+            }
+
+            displayEnvironment(result.data);
+
+        } catch (exception) {
+
+            loading.classList.add('hidden');
+            content.classList.add('hidden');
+            error.classList.remove('hidden');
+
+            errorMessage.textContent =
+                exception.message ??
+                'Les données environnementales sont momentanément indisponibles.';
+        }
+    };
+
+
+    // =========================================================
+    // GÉOLOCALISATION
+    // =========================================================
+
+    // =========================================================
+// 🏡 CHARGEMENT AUTOMATIQUE DE LA VILLE DU PROFIL
+// =========================================================
+
+const loadProfileEnvironment = async () => {
+
+    empty.classList.add('hidden');
+    error.classList.add('hidden');
+    content.classList.add('hidden');
+    loading.classList.remove('hidden');
+
+    try {
+
+        const response = await fetch(
+            '{{ path('app_environment') }}',
+            {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(
+                result.message ??
+                'Impossible de récupérer la météo de votre ville.'
+            );
+        }
+
+        displayEnvironment(result.data);
+
+        /*
+         * Si la localisation vient du profil,
+         * on affiche joliment le nom de la ville.
+         */
+        if (
+            result.data.source === 'profile' &&
+            result.data.location?.name
+        ) {
+            button.innerHTML =
+                `🏡 ${result.data.location.name} · Utiliser ma position`;
+        }
+
+    } catch (exception) {
+
+        loading.classList.add('hidden');
+        content.classList.add('hidden');
+        error.classList.remove('hidden');
+
+        errorMessage.textContent =
+            exception.message ??
+            'Impossible de récupérer la météo de votre ville.';
+    }
+};
+
+
+/*
+ * ☀️ Dès l'ouverture du dashboard :
+ * météo de la ville enregistrée dans le profil.
+ */
+loadProfileEnvironment();
+
+    button.addEventListener('click', () => {
+
+        error.classList.add('hidden');
+        content.classList.add('hidden');
+        empty.classList.add('hidden');
+        loading.classList.remove('hidden');
+
+        if (!navigator.geolocation) {
+
+            loading.classList.add('hidden');
+            error.classList.remove('hidden');
+
+            errorMessage.textContent =
+                'Votre navigateur ne prend pas en charge la géolocalisation.';
+
+            return;
+        }
+
+
+        navigator.geolocation.getCurrentPosition(
+
+            (position) => {
+
+                loadEnvironment(
+                    position.coords.latitude,
+                    position.coords.longitude
+                );
+            },
+
+            (geolocationError) => {
+
+                loading.classList.add('hidden');
+                error.classList.remove('hidden');
+
+                if (geolocationError.code === 1) {
+                    errorMessage.textContent =
+                        'Vous avez refusé l’accès à votre position.';
+                } else if (geolocationError.code === 2) {
+                    errorMessage.textContent =
+                        'Votre position actuelle est indisponible.';
+                } else if (geolocationError.code === 3) {
+                    errorMessage.textContent =
+                        'La récupération de votre position a pris trop de temps.';
+                } else {
+                    errorMessage.textContent =
+                        'Impossible de récupérer votre position actuelle.';
+                }
+            },
+
+            {
+                enableHighAccuracy: false,
+                timeout: 10000,
+                maximumAge: 300000
+            }
+        );
+
+    });
+
+});
+</script>
 
 {% endblock %}
