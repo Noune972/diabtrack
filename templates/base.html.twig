@@ -442,24 +442,19 @@
         <div class="border-t border-white/10 p-5">
 
 
-            {# Le fichier d'origine utilise app_account_delete
-               pour Profil. On conserve cette route pour le moment. #}
+          {# Accès au profil utilisateur #}
+<a
+    href="{{ path('app_account') }}"
+    class="mb-2 flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold text-slate-300 transition hover:bg-white/[0.07] hover:text-white"
+>
+    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-lg">
+        👤
+    </span>
 
-            <a
-                href="{{ path('app_account_delete') }}"
-                class="mb-2 flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold text-slate-300 transition hover:bg-white/[0.07] hover:text-white"
-            >
-
-                <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-lg">
-                    👤
-                </span>
-
-                <span class="flex-1">
-                    Mon profil
-                </span>
-
-            </a>
-
+    <span class="flex-1">
+        Mon profil
+    </span>
+</a>
 
             <a
                 href="{{ path('app_logout') }}"

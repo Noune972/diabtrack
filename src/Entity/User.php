@@ -129,6 +129,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'patient', orphanRemoval: true)]
     private Collection $notifications;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $phone = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $adress = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $postalCode = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $city = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $height = null;
+
  
 
     public function getEmailAuthRecipient(): string
@@ -137,9 +152,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     }   
 
  public function getEmailAuthCodeCreatedAt(): ?\DateTimeInterface
-                        {
-                            return $this->emailAuthCodeCreatedAt;
-                        }
+                                                                     {
+                                                                         return $this->emailAuthCodeCreatedAt;
+                                                                     }
 
 public function setEmailAuthCodeCreatedAt(?\DateTimeInterface $date): static
 {
@@ -654,6 +669,66 @@ public function setIsActive(bool $isActive): static
                 $notification->setPatient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): static
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getAdress(): ?string
+    {
+        return $this->adress;
+    }
+
+    public function setAdress(?string $adress): static
+    {
+        $this->adress = $adress;
+
+        return $this;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(?string $postalCode): static
+    {
+        $this->postalCode = $postalCode;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(?string $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getHeight(): ?int
+    {
+        return $this->height;
+    }
+
+    public function setHeight(?int $height): static
+    {
+        $this->height = $height;
 
         return $this;
     }
