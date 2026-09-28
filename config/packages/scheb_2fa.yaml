@@ -6,6 +6,6 @@ scheb_two_factor:
 
     email:
         enabled: true
-        sender_email: 'nonetheless338@gmail.com'
+        sender_email: 'contact@lestudiotempo.fr'
         sender_name: 'DiabTrack'
         digits: 6
