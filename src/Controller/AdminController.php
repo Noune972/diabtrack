@@ -15,6 +15,7 @@ use App\Entity\Hba1c;
 use App\Entity\Meal;
 use App\Entity\SportingActivity;
 use App\Entity\Insuline;
+use App\Entity\PlatformVisit;
 
 final class AdminController extends AbstractController
 {
@@ -72,6 +73,36 @@ $numberOfActivities = $entityManager
 $numberOfInsulines = $entityManager
     ->getRepository(Insuline::class)
     ->count([]);
+    // Activité de la plateforme sur les 7 derniers jours
+$startDate = new \DateTimeImmutable('today -6 days');
+
+$platformVisits = $entityManager
+    ->getRepository(PlatformVisit::class)
+    ->createQueryBuilder('visit')
+    ->where('visit.visitedAt >= :startDate')
+    ->setParameter('startDate', $startDate)
+    ->orderBy('visit.visitedAt', 'ASC')
+    ->getQuery()
+    ->getResult();
+
+    $weeklyActivity = [];
+
+for ($i = 0; $i < 7; $i++) {
+    $date = $startDate->modify("+{$i} days");
+
+    $weeklyActivity[$date->format('Y-m-d')] = [
+        'label' => ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'][(int) $date->format('w')],
+        'count' => 0,
+    ];
+}
+
+foreach ($platformVisits as $visit) {
+    $day = $visit->getVisitedAt()->format('Y-m-d');
+
+    if (isset($weeklyActivity[$day])) {
+        $weeklyActivity[$day]['count']++;
+    }
+}
 
         // Récupération des commentaires en attente
         $pendingComments = $entityManager
@@ -95,7 +126,8 @@ $numberOfInsulines = $entityManager
             'numberOfMeals' => $numberOfMeals,
             'numberOfActivities' => $numberOfActivities,
             'numberOfInsulines' => $numberOfInsulines,
-
+            'weeklyActivity' => $weeklyActivity,
+            
             'pendingComments' => $pendingComments,
         ]);
     }
