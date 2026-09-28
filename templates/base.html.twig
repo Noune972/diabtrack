@@ -351,24 +351,7 @@
     {% endif %}
 </a>
 
-            {# FORUM - route à ajouter plus tard #}
-
-            <div class="mb-1.5 flex items-center gap-3 rounded-2xl px-4 py-3.5 text-sm font-bold text-slate-500">
-
-                <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 text-lg">
-                    💬
-                </span>
-
-                <span class="flex-1">
-                    Forum
-                </span>
-
-                <span class="rounded-full bg-white/5 px-2 py-1 text-[8px] font-black uppercase tracking-wider">
-                    Bientôt
-                </span>
-
-            </div>
-
+           
 
             {# =================================================
                ADMINISTRATION
@@ -624,9 +607,48 @@
 
 
 {# ============================================================
-   MENU MOBILE
-   ============================================================ #}
+   FOOTER
+============================================================ #}
 
+<footer class="border-t border-slate-200 bg-white">
+
+    <div class="mx-auto flex max-w-7xl flex-col items-center justify-between
+                gap-3 px-6 py-5
+                text-xs text-slate-500
+                sm:flex-row lg:px-8">
+
+        <p>
+            © {{ "now"|date("Y") }} DiabTrack — Tous droits réservés
+        </p>
+
+        <nav class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2"
+             aria-label="Informations légales">
+
+            <a href="{{ path('app_mentions_legales') }}"
+               class="transition-colors hover:text-teal-600">
+                Mentions légales
+            </a>
+
+            <a href="{{ path('app_confidentialite') }}"
+               class="transition-colors hover:text-teal-600">
+                Politique de confidentialité
+            </a>
+
+            <a href="{{ path('app_cgu') }}"
+               class="transition-colors hover:text-teal-600">
+                CGU
+            </a>
+
+        </nav>
+
+    </div>
+
+</footer>
+
+
+{# ============================================================
+   MENU MOBILE
+============================================================ #}
 <script>
 
     function toggleDiabTrackMenu()
