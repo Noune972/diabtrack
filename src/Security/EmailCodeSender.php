@@ -26,7 +26,7 @@ class EmailCodeSender
         $this->em->flush();
 
         $email = (new Email())
-            ->from('no-reply@diabtrack.fr')
+            ->from('contact@lestudiotempo.fr')
             ->to($user->getEmail())
             ->subject('Votre code de connexion DiabTrack')
             ->html("
