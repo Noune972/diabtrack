@@ -23,6 +23,11 @@ class SecurityController extends AbstractController
             'error' => $error,
         ]);
     }
+    #[Route(path: '/login/2fa-redirect', name: 'app_2fa_redirect')]
+    public function twoFactorRedirect(): Response
+    {
+        return $this->redirectToRoute('app_home');
+    }
 
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void

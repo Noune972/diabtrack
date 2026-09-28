@@ -21,7 +21,7 @@ security:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
-                default_target_path: app_home
+                default_target_path: app_2fa_redirect
 
             two_factor:
                 prepare_on_login: true
@@ -33,21 +33,21 @@ security:
                 path: app_logout
 
     access_control:
-    # Pages publiques
-    - { path: ^/$, roles: PUBLIC_ACCESS }
-    - { path: ^/login, roles: PUBLIC_ACCESS }
-    - { path: ^/register, roles: PUBLIC_ACCESS }
-    - { path: ^/reset-password, roles: PUBLIC_ACCESS }
-    - { path: ^/logout, roles: PUBLIC_ACCESS }
+        # 2FA — doit être vérifiée en premier
+        - { path: ^/2fa, roles: IS_AUTHENTICATED_2FA_IN_PROGRESS }
 
-    # 2FA
-    - { path: ^/2fa, roles: IS_AUTHENTICATED_2FA_IN_PROGRESS }
+        # Pages publiques
+        - { path: ^/$, roles: PUBLIC_ACCESS }
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/register, roles: PUBLIC_ACCESS }
+        - { path: ^/reset-password, roles: PUBLIC_ACCESS }
+        - { path: ^/logout, roles: PUBLIC_ACCESS }
 
-    # Administration
-    - { path: ^/admin, roles: ROLE_ADMIN }
+        # Administration
+        - { path: ^/admin, roles: ROLE_ADMIN }
 
-    # Tout le reste nécessite un compte
-    - { path: ^/, roles: ROLE_USER }
+        # Tout le reste nécessite un compte
+        - { path: ^/, roles: ROLE_USER }
 
 when@test:
     security:
