@@ -16,7 +16,6 @@ class PlatformVisitSubscriber implements EventSubscriberInterface
 
     public function onResponseEvent(ResponseEvent $event): void
     {
-        // Ne compter que la requête principale.
         if (!$event->isMainRequest()) {
             return;
         }
@@ -24,14 +23,12 @@ class PlatformVisitSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
         $response = $event->getResponse();
 
-        // Ne compter que les consultations GET réussies.
         if (!$request->isMethod('GET') || !$response->isSuccessful()) {
             return;
         }
 
         $path = $request->getPathInfo();
 
-        // Exclure les pages techniques et l'administration.
         $excludedPrefixes = [
             '/admin',
             '/assets',
@@ -47,12 +44,23 @@ class PlatformVisitSubscriber implements EventSubscriberInterface
             }
         }
 
+        // Une même session de navigateur n'est comptée
+        // qu'une seule fois par jour.
+        $session = $request->getSession();
+        $today = (new \DateTimeImmutable())->format('Y-m-d');
+
+        if ($session->get('platform_visit_day') === $today) {
+            return;
+        }
+
         $visit = new PlatformVisit();
         $visit->setVisitedAt(new \DateTimeImmutable());
         $visit->setPath($path);
 
         $this->entityManager->persist($visit);
         $this->entityManager->flush();
+
+        $session->set('platform_visit_day', $today);
     }
 
     public static function getSubscribedEvents(): array
